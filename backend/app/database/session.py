@@ -1,19 +1,25 @@
 """
 文件名称：session.py
 文件作用：数据库会话管理，提供依赖注入式的数据库会话获取。
-当前阶段仅定义会话工厂框架，具体逻辑后续实现。
+由 FastAPI 在每次请求中创建并关闭同步 SQLAlchemy 会话。
 """
 
-# TODO: 实现数据库会话管理（sessionmaker + yield 依赖注入）
-# from sqlalchemy.orm import sessionmaker
-# from app.database.connection import engine
+from collections.abc import Generator
 
-# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+from sqlalchemy.orm import Session, sessionmaker
 
-# def get_db():
-#     """FastAPI 依赖注入：获取数据库会话"""
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
+from app.database.connection import get_engine
+
+
+def get_session_factory() -> sessionmaker[Session]:
+    """基于当前数据库引擎创建会话工厂。"""
+    return sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
+
+
+def get_db() -> Generator[Session, None, None]:
+    """FastAPI 依赖注入：获取数据库会话并在请求结束后关闭。"""
+    database_session = get_session_factory()()
+    try:
+        yield database_session
+    finally:
+        database_session.close()
