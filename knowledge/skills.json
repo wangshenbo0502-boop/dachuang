@@ -1,0 +1,59 @@
+[
+  {
+    "_comment": "文件名称：skills.json | 文件作用：技能知识库数据，存储技能分类、名称和所属领域。当前阶段仅提供示例数据，后续按需扩展。",
+    "id": "skill_001",
+    "name": "JavaScript",
+    "category": "编程语言",
+    "sub_category": "前端",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  },
+  {
+    "id": "skill_002",
+    "name": "Python",
+    "category": "编程语言",
+    "sub_category": "通用",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  },
+  {
+    "id": "skill_003",
+    "name": "Java",
+    "category": "编程语言",
+    "sub_category": "后端",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  },
+  {
+    "id": "skill_004",
+    "name": "Vue.js",
+    "category": "框架",
+    "sub_category": "前端",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  },
+  {
+    "id": "skill_005",
+    "name": "Spring Boot",
+    "category": "框架",
+    "sub_category": "后端",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  },
+  {
+    "id": "skill_006",
+    "name": "MySQL",
+    "category": "数据库",
+    "sub_category": "关系型",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  },
+  {
+    "id": "skill_007",
+    "name": "Git",
+    "category": "工具",
+    "sub_category": "版本控制",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  },
+  {
+    "id": "skill_008",
+    "name": "Docker",
+    "category": "工具",
+    "sub_category": "容器化",
+    "proficiency_levels": ["了解", "熟悉", "掌握", "精通"]
+  }
+]

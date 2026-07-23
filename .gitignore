@@ -1,0 +1,37 @@
+# ============================================
+# 文件名称：.gitignore
+# 文件作用：Git 版本控制忽略规则，排除不需要提交的文件。
+# ============================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+*.egg
+
+# --- 环境变量（敏感信息） ---
+.env
+.env.local
+.env.*.local
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- 前端 ---
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# --- 操作系统 ---
+.DS_Store
+Thumbs.db
+Desktop.ini

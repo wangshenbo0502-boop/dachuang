@@ -1,0 +1,53 @@
+[
+  {
+    "_comment": "文件名称：jobs.json | 文件作用：岗位知识库数据，存储岗位名称、分类、技能要求等信息。当前阶段仅提供示例数据，后续按需扩展。",
+    "id": "job_001",
+    "title": "前端开发工程师",
+    "category": "前端",
+    "level": "初级",
+    "skills_required": ["HTML", "CSS", "JavaScript", "Vue.js", "React"],
+    "description": "负责Web前端页面开发与维护",
+    "salary_range": "8K-15K",
+    "tags": ["web", "vue", "react"]
+  },
+  {
+    "id": "job_002",
+    "title": "Java后端开发工程师",
+    "category": "后端",
+    "level": "初级",
+    "skills_required": ["Java", "Spring Boot", "MySQL", "Redis"],
+    "description": "负责后端服务开发与数据库设计",
+    "salary_range": "10K-18K",
+    "tags": ["java", "spring", "backend"]
+  },
+  {
+    "id": "job_003",
+    "title": "Python数据分析师",
+    "category": "数据",
+    "level": "初级",
+    "skills_required": ["Python", "Pandas", "NumPy", "SQL"],
+    "description": "负责数据清洗、分析与可视化",
+    "salary_range": "10K-20K",
+    "tags": ["python", "data", "analysis"]
+  },
+  {
+    "id": "job_004",
+    "title": "AI算法工程师",
+    "category": "AI",
+    "level": "中级",
+    "skills_required": ["Python", "PyTorch", "TensorFlow", "机器学习", "深度学习"],
+    "description": "负责AI模型训练与部署",
+    "salary_range": "20K-40K",
+    "tags": ["ai", "machine-learning", "deep-learning"]
+  },
+  {
+    "id": "job_005",
+    "title": "全栈开发工程师",
+    "category": "全栈",
+    "level": "中级",
+    "skills_required": ["React", "Node.js", "TypeScript", "MongoDB", "Docker"],
+    "description": "负责全栈Web应用开发",
+    "salary_range": "15K-30K",
+    "tags": ["fullstack", "react", "node"]
+  }
+]
