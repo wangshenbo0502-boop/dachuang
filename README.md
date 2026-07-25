@@ -165,7 +165,7 @@ cd backend
 # 创建虚拟环境（推荐）
 python -m venv venv
 # Windows 激活
-venv\Scripts\activate
+.\venv\Scripts\Activate.ps1
 # macOS/Linux 激活
 # source venv/bin/activate
 
