@@ -1,0 +1,18 @@
+{
+  "_comment": "文件名称：update_log.json | 作用：知识库更新日志。",
+  "_version": "0.3.0",
+
+  "logs": [
+    {
+      "date": "2026-07-28",
+      "version": "0.3.0",
+      "changes": [
+        "知识库从 JSON 格式迁移为 Markdown 格式",
+        "新增 RAG 架构模块：loader/parser/chunk/indexing/retrieval/workflow",
+        "新增预留模块：embedding/vector_store/reranker",
+        "新增 metatada/config/cache 配置体系",
+        "删除旧目录 01-04 工程层架构"
+      ]
+    }
+  ]
+}

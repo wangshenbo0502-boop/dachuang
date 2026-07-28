@@ -1,0 +1,30 @@
+{
+  "_comment": "文件名称：knowledge_config.json | 作用：知识库全局配置，定义数据路径、加载策略等。",
+  "_version": "0.3.0",
+
+  "paths": {
+    "documents_root": "documents/",
+    "corpus_root": "corpus/",
+    "prompts_root": "prompts/",
+    "cache_root": "cache/",
+    "ingestion": {"path": "ingestion/", "description": "数据摄取流水线"},
+    "schemas": {"path": "schemas/", "description": "数据模型定义"},
+    "evaluation": {"path": "evaluation/", "description": "RAG评估模块"},
+    "graph": {"path": "graph/", "description": "知识图谱模块"}
+  },
+
+  "document_categories": [
+    "jobs", "companies", "skills", "interview", "projects",
+    "roadmap", "resume", "market", "competition", "policies"
+  ],
+
+  "file_types": {
+    "supported": [".md", ".json"],
+    "future": [".pdf", ".docx", ".xlsx", ".html"]
+  },
+
+  "loading_strategy": {
+    "current": "on_demand",
+    "description": "当前按需加载，每次检索时扫描 documents/ 目录。未来升级为索引预加载。"
+  }
+}

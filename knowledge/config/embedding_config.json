@@ -1,0 +1,37 @@
+{
+  "_comment": "文件名称：embedding_config.json | 作用：Embedding 模型配置。当前关闭，未来升级时启用。",
+  "_version": "0.3.0",
+
+  "enabled": false,
+
+  "models": {
+    "bge-m3": {
+      "provider": "BAAI",
+      "dimensions": 1024,
+      "max_tokens": 8192,
+      "description": "BGE-M3 多语言模型，支持中英文，社区活跃",
+      "status": "recommended"
+    },
+    "qwen3-embedding": {
+      "provider": "Alibaba",
+      "dimensions": 2048,
+      "max_tokens": 32768,
+      "description": "通义千问 Embedding，中文能力强",
+      "status": "candidate"
+    },
+    "jina-embedding": {
+      "provider": "Jina AI",
+      "dimensions": 1024,
+      "max_tokens": 8192,
+      "description": "Jina Embedding v3，多语言支持",
+      "status": "candidate"
+    },
+    "sentence-transformer": {
+      "provider": "UKP Lab",
+      "dimensions": "variable",
+      "max_tokens": 512,
+      "description": "通用 SentenceTransformer，生态完善",
+      "status": "compatible"
+    }
+  }
+}

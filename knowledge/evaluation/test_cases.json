@@ -1,0 +1,5 @@
+{
+  "_comment": "文件名称：test_cases.json | 作用：RAG 评估测试用例集。当前为空，后续填充具体测试数据。",
+  "_version": "0.3.0",
+  "test_cases": []
+}

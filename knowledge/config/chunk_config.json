@@ -1,0 +1,19 @@
+{
+  "_comment": "文件名称：chunk_config.json | 作用：文本切块配置。当前关闭，未来 Embedding 阶段启用。",
+  "_version": "0.3.0",
+
+  "enabled": false,
+
+  "default": {
+    "chunk_size": 512,
+    "chunk_overlap": 50,
+    "separators": ["\n## ", "\n### ", "\n", "。", ".", " "]
+  },
+
+  "by_document_type": {
+    "jobs": {"chunk_size": 800, "description": "岗位文档较长，使用较大chunk"},
+    "skills": {"chunk_size": 600, "description": "技能文档按阶段分节"},
+    "projects": {"chunk_size": 600, "description": "项目文档按功能列表分节"},
+    "interview": {"chunk_size": 400, "description": "面试题较短，按题目切分"}
+  }
+}

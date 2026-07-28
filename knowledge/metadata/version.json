@@ -1,0 +1,15 @@
+{
+  "_comment": "文件名称：version.json | 作用：知识库版本记录。",
+  "_version": "0.3.0",
+
+  "knowledge_base_version": "0.3.0",
+  "last_updated": "2026-07-28",
+  "migration_from": "JSON-based (v0.2.0)",
+  "current_format": "Markdown",
+  "current_retrieval": "Keyword",
+  "planned_upgrades": [
+    {"version": "0.4.0", "feature": "Embedding + FAISS", "eta": "TBD"},
+    {"version": "0.5.0", "feature": "Hybrid Retrieval", "eta": "TBD"},
+    {"version": "1.0.0", "feature": "Milvus + Full RAG Pipeline", "eta": "TBD"}
+  ]
+}

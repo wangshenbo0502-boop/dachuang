@@ -1,0 +1,11 @@
+{
+  "_comment": "文件名称：llm_config.json | 作用：LLM 调用配置。",
+  "_version": "0.3.0",
+
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "max_tokens": 4096,
+  "temperature": 0.3,
+  "stream": false,
+  "timeout_ms": 30000
+}

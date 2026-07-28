@@ -1,0 +1,13 @@
+{
+  "_comment": "文件名称：tags.json | 作用：统一标签体系定义。",
+  "_version": "0.3.0",
+
+  "tags": {
+    "tech_stack": ["前端", "后端", "全栈", "数据", "AI", "DevOps", "移动端"],
+    "language": ["JavaScript", "TypeScript", "Python", "Java", "Go", "C++"],
+    "framework": ["Vue.js", "React", "Spring Boot", "FastAPI", "Express.js", "PyTorch", "TensorFlow"],
+    "difficulty": ["入门", "进阶", "挑战"],
+    "company_tier": ["大厂", "中厂", "创业公司"],
+    "region": ["北京", "上海", "深圳", "杭州", "广州", "成都", "武汉"]
+  }
+}

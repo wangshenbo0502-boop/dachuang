@@ -1,0 +1,10 @@
+{
+  "_comment": "文件名称：query_cache.json | 作用：查询缓存，存储已检索过的查询结果，提升重复查询性能。",
+  "_version": "0.3.0",
+
+  "enabled": false,
+  "description": "当前关闭。未来开启后可缓存检索结果，避免重复扫描文档。",
+  "max_entries": 1000,
+  "ttl_seconds": 3600,
+  "cache": {}
+}

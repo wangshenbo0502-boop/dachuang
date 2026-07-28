@@ -1,0 +1,12 @@
+{
+  "_comment": "文件名称：source.json | 作用：知识来源追溯。",
+  "_version": "0.3.0",
+
+  "sources": [
+    {"name": "公开招聘JD", "type": "web", "reliability": "high", "update_frequency": "monthly"},
+    {"name": "技术官方文档", "type": "official", "reliability": "high", "update_frequency": "quarterly"},
+    {"name": "行业薪资报告", "type": "report", "reliability": "medium", "update_frequency": "yearly"},
+    {"name": "面经社区（牛客/脉脉）", "type": "community", "reliability": "medium", "update_frequency": "weekly"},
+    {"name": "企业官网", "type": "official", "reliability": "high", "update_frequency": "monthly"}
+  ]
+}

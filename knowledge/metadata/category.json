@@ -1,0 +1,17 @@
+{
+  "_comment": "文件名称：category.json | 作用：知识分类体系定义。",
+  "_version": "0.3.0",
+
+  "categories": {
+    "jobs": {"name": "岗位知识", "description": "IT岗位要求、职责、技能列表"},
+    "companies": {"name": "企业知识", "description": "企业招聘特点、技术栈、面试风格"},
+    "skills": {"name": "技能知识", "description": "技术技能的学习路线和提升方法"},
+    "interview": {"name": "面试知识", "description": "面试题库、笔试策略、备考方案"},
+    "projects": {"name": "项目案例", "description": "练手项目推荐、技术栈、难度分级"},
+    "roadmap": {"name": "学习路线", "description": "职业发展路径、晋升规划"},
+    "resume": {"name": "简历知识", "description": "简历规范、ATS技巧、常见错误"},
+    "market": {"name": "市场分析", "description": "薪资行情、需求趋势、就业数据"},
+    "competition": {"name": "竞赛知识", "description": "编程竞赛信息（ACM/Kaggle等）"},
+    "policies": {"name": "政策知识", "description": "就业政策、人才引进、落户等"}
+  }
+}
