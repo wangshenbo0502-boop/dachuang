@@ -9,18 +9,31 @@
 """
 
 
+import re
+
+
 class ContextBuilder:
     def __init__(self, max_tokens: int = 3000):
         self.max_tokens = max_tokens
 
     def build(self, documents: list[dict], scenario: str = "default") -> str:
-        """TODO: 将检索结果组装为 LLM 上下文文本"""
-        pass
+        parts = []
+        for i, doc in enumerate(documents):
+            content = doc.get("content", "")
+            title = doc.get("metadata", {}).get("title", "") or doc.get("filename", "")
+            parts.append(f"## 文档 {i+1}: {title}\n\n{content}")
+
+        context = "\n\n---\n\n".join(parts)
+        estimated = self.estimate_tokens(context)
+        if estimated > self.max_tokens:
+            ratio = self.max_tokens / estimated * 0.8
+            context = context[:int(len(context) * ratio)] + "\n\n...(内容已截断)"
+        return context
 
     def format_as_markdown(self, documents: list[dict]) -> str:
-        """TODO: 将文档格式化为 Markdown 引用格式"""
-        pass
+        return self.build(documents)
 
     def estimate_tokens(self, text: str) -> int:
-        """TODO: 估算文本的 Token 数量"""
-        pass
+        chinese_chars = len(re.findall(r'[\u4e00-\u9fff]', text))
+        other_chars = len(text) - chinese_chars
+        return int(chinese_chars * 0.5 + other_chars * 0.25)

@@ -9,11 +9,17 @@
 """
 
 
+import re
+
+
 class QueryRewriter:
     def rewrite(self, query: str, context: dict = None) -> str:
-        """TODO: 改写用户查询，扩展关键词"""
-        pass
+        return query.strip()
 
     def extract_keywords(self, query: str) -> list[str]:
-        """TODO: 提取查询中的关键词"""
-        pass
+        keywords = []
+        en_keywords = re.findall(r'[a-zA-Z0-9_+#.]+', query)
+        keywords.extend([k.lower() for k in en_keywords if len(k) >= 2])
+        chinese = re.findall(r'[\u4e00-\u9fff]+', query)
+        keywords.extend(chinese)
+        return keywords

@@ -18,9 +18,18 @@ class KeywordRetriever:
         self.index = index
 
     def retrieve(self, query: str, top_k: int = 10, category: str = None) -> list[dict]:
-        """TODO: 执行关键词检索，返回 [{doc_id, content, metadata, score}, ...]"""
-        pass
+        results = self.index.search(query, top_k=top_k * 2 if category else top_k)
+        if category:
+            filtered = []
+            for r in results:
+                meta_category = r.get("metadata", {}).get("category", "")
+                if meta_category == category:
+                    filtered.append(r)
+                if len(filtered) >= top_k:
+                    break
+            return filtered
+        return results[:top_k]
 
     def search_by_tags(self, tags: list[str], top_k: int = 10) -> list[dict]:
-        """TODO: 按标签检索文档"""
-        pass
+        query = " ".join(tags)
+        return self.retrieve(query, top_k=top_k)

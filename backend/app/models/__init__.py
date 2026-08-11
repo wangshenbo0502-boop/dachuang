@@ -4,5 +4,6 @@
 """
 
 from app.models.user import User, UserProject, UserSkill
+from app.models.job import JobMatchRecord
 
-__all__ = ["User", "UserProject", "UserSkill"]
+__all__ = ["User", "UserProject", "UserSkill", "JobMatchRecord"]

@@ -19,5 +19,6 @@ class SearchEngine:
         self.query_rewriter = query_rewriter
 
     def search(self, query: str, top_k: int = 10, category: str = None) -> list[dict]:
-        """TODO: 统一检索入口：改写 → 检索 → 返回"""
-        pass
+        if self.query_rewriter:
+            query = self.query_rewriter.rewrite(query)
+        return self.retriever.retrieve(query, top_k=top_k, category=category)
