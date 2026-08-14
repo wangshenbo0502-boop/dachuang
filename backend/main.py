@@ -11,23 +11,24 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import user, job_match, analysis, resume, growth
+from app.api import user, job_match, analysis, resume, growth, streaming
+from app.config import get_settings
 from app.utils.exceptions import AppException
-from app.utils.middleware import request_logging_middleware
+from app.utils.middleware import request_logging_middleware, configure_logging
 from app.utils.response import error, success, ErrorCode
+from app.ai.deepseek_client import DeepSeekClient
 
 load_dotenv()
 
-
-def get_cors_origins() -> list[str]:
-    origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
-    return [origin.strip() for origin in origins.split(",") if origin.strip()]
-
+# 初始化配置和日志
+settings = get_settings()
+configure_logging()
 
 app = FastAPI(
-    title="AI就业竞争力分析助手",
+    title=settings.APP_NAME,
     description="针对计算机专业大学生的AI就业竞争力分析平台 - 后端API",
-    version="1.0.0",
+    version=settings.APP_VERSION,
+    debug=settings.APP_DEBUG,
 )
 
 # ── 中间件注册 ──
@@ -36,7 +37,7 @@ app.middleware("http")(request_logging_middleware)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=get_cors_origins(),
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -75,24 +76,37 @@ async def handle_unexpected_error(_: Request, exc: Exception) -> JSONResponse:
 @app.get("/")
 def root():
     return success({
-        "service": "AI就业竞争力分析助手 API",
-        "version": "1.0.0",
+        "service": f"{settings.APP_NAME} API",
+        "version": settings.APP_VERSION,
         "status": "running",
+        "environment": settings.APP_ENV,
     })
 
 
 @app.get("/api/health")
 def health_check():
+    ai_client = DeepSeekClient.instance()
     return success({
         "status": "healthy",
+        "environment": settings.APP_ENV,
+        "ai_mode": "mock" if ai_client.is_mock_mode else "live",
         "modules": [
             "用户管理（含竞赛/实习经历）",
-            "岗位匹配（关键词+AI增强）",
+            "岗位匹配（关键词+AI增强+同义词映射）",
             "AI就业画像分析",
             "AI简历优化",
             "AI成长规划",
+            "AI流式响应（SSE）",
+            "Token用量统计",
         ]
     })
+
+
+@app.get("/api/usage")
+def get_ai_usage():
+    """GET /api/usage — 获取AI Token用量和成本统计"""
+    stats = DeepSeekClient.get_usage_stats()
+    return success(stats, message="Token用量统计")
 
 
 # 注册路由
@@ -101,8 +115,4 @@ app.include_router(job_match.router, prefix="/api", tags=["岗位匹配"])
 app.include_router(analysis.router)
 app.include_router(resume.router)
 app.include_router(growth.router)
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+app.include_router(streaming.router)  # 流式响应路由

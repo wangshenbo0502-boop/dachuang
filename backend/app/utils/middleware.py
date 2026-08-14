@@ -25,12 +25,11 @@ logger = logging.getLogger("api.access")
 
 
 def configure_logging() -> None:
-    """配置全局日志格式，包含请求ID"""
+    """配置全局日志格式"""
     settings = get_settings()
-    log_format = settings.LOG_FORMAT
     logging.basicConfig(
         level=getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO),
-        format=log_format,
+        format="%(asctime)s | %(levelname)s | %(message)s",
     )
     # 降低第三方库日志级别
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)

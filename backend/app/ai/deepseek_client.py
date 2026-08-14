@@ -2,7 +2,7 @@
 文件名称：deepseek_client.py
 文件作用：DeepSeek API 调用客户端，封装 API 请求与响应处理。
 使用 OpenAI 兼容 SDK 调用 DeepSeek API。
-支持重试机制、外部Prompt加载、动态Mock数据。
+支持重试机制、外部Prompt加载、动态Mock数据、Token用量统计、流式响应。
 """
 
 import json
@@ -10,16 +10,107 @@ import os
 import re
 import time
 import random
+import threading
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Generator, Optional
 
 from dotenv import load_dotenv
 from openai import OpenAI, APIError, RateLimitError, APITimeoutError, APIConnectionError
+from openai.types.chat import ChatCompletionChunk
+
+from app.config import get_settings
 
 load_dotenv()
 
 # 知识库Prompt目录
 PROMPT_DIR = Path(__file__).resolve().parent.parent.parent.parent / "knowledge" / "prompts"
+
+
+class TokenUsageTracker:
+    """Token 用量与成本追踪器（线程安全）。"""
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._total_prompt_tokens: int = 0
+        self._total_completion_tokens: int = 0
+        self._total_cost: float = 0.0
+        self._call_count: int = 0
+        self._last_reset_date: str = time.strftime("%Y-%m-%d")
+
+    def _check_daily_reset(self) -> None:
+        """跨天自动重置计数器"""
+        today = time.strftime("%Y-%m-%d")
+        if today != self._last_reset_date:
+            self._total_prompt_tokens = 0
+            self._total_completion_tokens = 0
+            self._total_cost = 0.0
+            self._call_count = 0
+            self._last_reset_date = today
+
+    def record(self, prompt_tokens: int, completion_tokens: int, model: str = "deepseek-chat") -> None:
+        """记录一次API调用的Token用量和成本。
+
+        DeepSeek 定价（参考）：
+        - deepseek-chat: 输入 $0.14/1M tokens, 输出 $0.28/1M tokens
+        """
+        with self._lock:
+            self._check_daily_reset()
+            self._total_prompt_tokens += prompt_tokens
+            self._total_completion_tokens += completion_tokens
+            self._call_count += 1
+
+            # 成本估算
+            input_cost = prompt_tokens / 1_000_000 * 0.14
+            output_cost = completion_tokens / 1_000_000 * 0.28
+            self._total_cost += input_cost + output_cost
+
+    @property
+    def daily_cost(self) -> float:
+        with self._lock:
+            self._check_daily_reset()
+            return self._total_cost
+
+    @property
+    def daily_call_count(self) -> int:
+        with self._lock:
+            self._check_daily_reset()
+            return self._call_count
+
+    @property
+    def daily_prompt_tokens(self) -> int:
+        with self._lock:
+            self._check_daily_reset()
+            return self._total_prompt_tokens
+
+    @property
+    def daily_completion_tokens(self) -> int:
+        with self._lock:
+            self._check_daily_reset()
+            return self._total_completion_tokens
+
+    def is_over_budget(self) -> bool:
+        """检查是否超过每日成本预算"""
+        settings = get_settings()
+        return self.daily_cost >= settings.AI_COST_BUDGET_PER_DAY
+
+    def is_near_budget_limit(self) -> bool:
+        """检查是否接近预算上限（80%阈值）"""
+        settings = get_settings()
+        threshold = settings.AI_COST_BUDGET_PER_DAY * settings.AI_COST_WARNING_THRESHOLD
+        return self.daily_cost >= threshold
+
+    def to_dict(self) -> dict:
+        with self._lock:
+            self._check_daily_reset()
+            return {
+                "daily_prompt_tokens": self._total_prompt_tokens,
+                "daily_completion_tokens": self._total_completion_tokens,
+                "daily_total_tokens": self._total_prompt_tokens + self._total_completion_tokens,
+                "daily_cost_usd": round(self._total_cost, 6),
+                "daily_call_count": self._call_count,
+                "is_over_budget": self.is_over_budget(),
+                "is_near_limit": self.is_near_budget_limit(),
+            }
 
 
 class DeepSeekClient:
@@ -30,19 +121,24 @@ class DeepSeekClient:
     - 3次指数退避重试
     - 区分不同错误类型
     - 动态Mock数据生成
+    - Token用量统计和成本控制
+    - 流式响应（SSE）
     """
 
     _instance: Optional["DeepSeekClient"] = None
+    _usage_tracker: TokenUsageTracker = TokenUsageTracker()
 
     def __init__(self) -> None:
-        api_key = os.getenv("DEEPSEEK_API_KEY", "")
-        base_url = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
-        self.model = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
-        self.timeout = float(os.getenv("AI_TIMEOUT", "60"))
-        self.max_retries = int(os.getenv("AI_MAX_RETRIES", "3"))
-        self.temperature = float(os.getenv("AI_TEMPERATURE", "0.7"))
+        settings = get_settings()
+        api_key = settings.DEEPSEEK_API_KEY
+        base_url = settings.DEEPSEEK_BASE_URL
+        self.model = settings.DEEPSEEK_MODEL
+        self.timeout = settings.AI_TIMEOUT
+        self.max_retries = settings.AI_MAX_RETRIES
+        self.temperature = settings.AI_TEMPERATURE
+        self.max_tokens = settings.AI_MAX_TOKENS
 
-        if not api_key or api_key == "your_deepseek_api_key_here":
+        if not settings.ai_enabled:
             self._client = None
             self._mock_mode = True
         else:
@@ -63,6 +159,11 @@ class DeepSeekClient:
     def reset_instance(cls) -> None:
         """重置单例（用于测试或配置变更后重连）"""
         cls._instance = None
+
+    @classmethod
+    def get_usage_stats(cls) -> dict:
+        """获取全局Token用量统计"""
+        return cls._usage_tracker.to_dict()
 
     @property
     def is_mock_mode(self) -> bool:
@@ -91,10 +192,10 @@ class DeepSeekClient:
         self,
         messages: list[dict[str, str]],
         temperature: float = None,
-        max_tokens: int = 4000,
+        max_tokens: int = None,
         response_format: Optional[dict[str, str]] = None,
     ) -> str:
-        """发送对话请求并返回响应文本（带重试）
+        """发送对话请求并返回响应文本（带重试 + Token统计）
 
         Args:
             messages: 消息列表
@@ -110,6 +211,8 @@ class DeepSeekClient:
 
         if temperature is None:
             temperature = self.temperature
+        if max_tokens is None:
+            max_tokens = self.max_tokens
 
         kwargs: dict[str, Any] = {
             "model": self.model,
@@ -125,7 +228,17 @@ class DeepSeekClient:
         for attempt in range(self.max_retries):
             try:
                 response = self._client.chat.completions.create(**kwargs)
-                return response.choices[0].message.content or ""
+                content = response.choices[0].message.content or ""
+
+                # 记录Token用量
+                if response.usage:
+                    self._usage_tracker.record(
+                        prompt_tokens=response.usage.prompt_tokens,
+                        completion_tokens=response.usage.completion_tokens,
+                        model=self.model,
+                    )
+
+                return content
             except RateLimitError as e:
                 last_error = e
                 if attempt < self.max_retries - 1:
@@ -136,7 +249,6 @@ class DeepSeekClient:
                 if attempt < self.max_retries - 1:
                     time.sleep(1 + attempt)
             except APIError as e:
-                # 非重试型错误（如401鉴权失败、400参数错误）直接抛出
                 raise AIServiceError(
                     f"AI API错误: {e.status_code or '?'} - {str(e)}",
                     error_type=AIServiceError.TYPE_API_ERROR,
@@ -149,11 +261,56 @@ class DeepSeekClient:
             error_type=AIServiceError.TYPE_RETRY_EXHAUSTED,
         )
 
+    def chat_stream(
+        self,
+        messages: list[dict[str, str]],
+        temperature: float = None,
+        max_tokens: int = None,
+    ) -> Generator[str, None, None]:
+        """流式对话请求，逐块返回响应文本（SSE）。
+
+        Args:
+            messages: 消息列表
+            temperature: 温度参数
+            max_tokens: 最大生成token数
+
+        Yields:
+            每次返回一个文本片段
+        """
+        if self._mock_mode:
+            # 模拟流式输出
+            mock_text = self._mock_response(messages)
+            for i in range(0, len(mock_text), 10):
+                yield mock_text[i : i + 10]
+                time.sleep(0.02)
+            return
+
+        if temperature is None:
+            temperature = self.temperature
+        if max_tokens is None:
+            max_tokens = self.max_tokens
+
+        kwargs: dict[str, Any] = {
+            "model": self.model,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "stream": True,
+        }
+
+        try:
+            stream = self._client.chat.completions.create(**kwargs)
+            for chunk in stream:
+                if chunk.choices and chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+        except Exception as e:
+            yield f"\n[AI流式响应出错: {str(e)}]"
+
     def chat_json(
         self,
         messages: list[dict[str, str]],
         temperature: float = 0.3,
-        max_tokens: int = 4000,
+        max_tokens: int = None,
     ) -> dict:
         """发送对话请求并解析为JSON"""
         json_instruction = {

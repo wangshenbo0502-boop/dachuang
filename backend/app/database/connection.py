@@ -1,22 +1,19 @@
 """
 文件名称：connection.py
-文件作用：MySQL 数据库连接配置。
-通过环境变量创建 SQLAlchemy 引擎，并提供全项目复用的 ORM Base。
+文件作用：数据库连接配置。
+通过配置模块获取数据库连接参数，支持 SQLite 和 MySQL 双驱动。
 """
 
-import os
 from functools import lru_cache
 
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import StaticPool
 
+from app.config import get_settings
 from app.utils.exceptions import DatabaseConfigurationError
-
-load_dotenv()
 
 
 class Base(DeclarativeBase):
@@ -25,8 +22,9 @@ class Base(DeclarativeBase):
 
 @lru_cache
 def get_database_url() -> str:
-    """读取数据库连接地址，缺失时返回可识别的配置错误。"""
-    database_url = os.getenv("DATABASE_URL")
+    """读取数据库连接地址。"""
+    settings = get_settings()
+    database_url = settings.DATABASE_URL
     if not database_url:
         raise DatabaseConfigurationError("未配置 DATABASE_URL，请检查 backend/.env 文件")
     return database_url
@@ -35,16 +33,22 @@ def get_database_url() -> str:
 @lru_cache
 def get_engine() -> Engine:
     """创建并缓存 SQLAlchemy 数据库引擎。"""
+    settings = get_settings()
     database_url = get_database_url()
     engine_options: dict[str, object] = {
         "pool_pre_ping": True,
-        "pool_recycle": 3600,
+        "pool_recycle": settings.DB_POOL_RECYCLE,
+        "echo": settings.DB_ECHO,
     }
 
     if database_url.startswith("sqlite"):
         engine_options["connect_args"] = {"check_same_thread": False}
         if database_url in {"sqlite://", "sqlite:///:memory:"}:
             engine_options["poolclass"] = StaticPool
+    else:
+        # MySQL 连接池配置
+        engine_options["pool_size"] = settings.DB_POOL_SIZE
+        engine_options["max_overflow"] = settings.DB_POOL_SIZE * 2
 
     try:
         return create_engine(database_url, **engine_options)
