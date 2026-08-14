@@ -1,6 +1,6 @@
 """
 文件名称：user.py
-文件作用：提供学生资料、技能、项目经历和 AI 用户上下文的 REST API。
+文件作用：提供学生资料、技能、项目经历、竞赛经历、实习经历和 AI 用户上下文的 REST API。
 """
 
 from typing import Any
@@ -16,6 +16,8 @@ from app.schemas.user import (
     UserProfileResponse,
     UserProjectsReplace,
     UserSkillsReplace,
+    UserCompetitionsReplace,
+    UserInternshipsReplace,
     UserUpdate,
 )
 from app.services.user_service import UserService
@@ -25,7 +27,6 @@ router = APIRouter(prefix="/api/users", tags=["学生资料"])
 
 
 def serialize_model(model: BaseModel) -> dict[str, Any]:
-    """将 Pydantic 模型转换为可直接放入统一响应的数据。"""
     return model.model_dump(mode="json")
 
 
@@ -42,7 +43,7 @@ def get_user(
     user_id: int = Path(ge=1),
     database_session: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """获取包含技能和项目经历的学生资料。"""
+    """获取包含全部关联数据的学生资料。"""
     user = UserService(database_session).get_user(user_id)
     response = UserProfileResponse.model_validate(user)
     return success(serialize_model(response))
@@ -87,6 +88,36 @@ def replace_projects(
     return success(
         [serialize_model(project) for project in response.projects],
         message="学生项目经历更新成功",
+    )
+
+
+@router.put("/{user_id}/competitions")
+def replace_competitions(
+    data: UserCompetitionsReplace,
+    user_id: int = Path(ge=1),
+    database_session: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """整组替换学生竞赛经历。"""
+    user = UserService(database_session).replace_competitions(user_id, data)
+    response = UserProfileResponse.model_validate(user)
+    return success(
+        [serialize_model(c) for c in response.competitions],
+        message="竞赛经历更新成功",
+    )
+
+
+@router.put("/{user_id}/internships")
+def replace_internships(
+    data: UserInternshipsReplace,
+    user_id: int = Path(ge=1),
+    database_session: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """整组替换学生实习经历。"""
+    user = UserService(database_session).replace_internships(user_id, data)
+    response = UserProfileResponse.model_validate(user)
+    return success(
+        [serialize_model(i) for i in response.internships],
+        message="实习经历更新成功",
     )
 
 
