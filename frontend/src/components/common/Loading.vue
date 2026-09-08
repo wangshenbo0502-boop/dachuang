@@ -1,18 +1,15 @@
 <!--
   文件名称：Loading.vue
-  文件作用：全局加载状态组件，用于页面/数据加载时展示 loading 动画。
-  当前阶段仅搭建组件骨架，具体动画效果后续实现。
+  文件作用：全局加载状态组件，霓虹渐变旋转动画。
 -->
 <template>
-  <div class="loading-wrapper">
-    <!-- TODO: Loading 动画效果 -->
-    <div class="loading-spinner"></div>
-    <p v-if="text">{{ text }}</p>
+  <div class="loading-wrapper" role="status">
+    <div class="spinner"></div>
+    <p v-if="text" class="text">{{ text }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
-// Loading 组件逻辑
 defineProps<{
   text?: string;
 }>();
@@ -24,6 +21,25 @@ defineProps<{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  gap: 16px;
+  padding: 48px 20px;
+}
+.spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid rgba(91, 124, 255, 0.2);
+  border-top-color: var(--cyan);
+  animation: spin 0.9s linear infinite;
+  box-shadow: var(--glow-cyan);
+}
+.text {
+  color: var(--text-1);
+  font-size: 14px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

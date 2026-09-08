@@ -17,12 +17,11 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    // TODO: 配置后端代理（将 /api 请求代理到 FastAPI 后端）
-    // proxy: {
-    //   "/api": {
-    //     target: "http://localhost:8000",
-    //     changeOrigin: true,
-    //   },
-    // },
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+      },
+    },
   },
 });

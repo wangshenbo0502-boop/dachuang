@@ -1,22 +1,29 @@
 <!--
   文件名称：Footer.vue
-  文件作用：底部信息栏公共组件，展示版权、联系方式等信息。
-  当前阶段仅搭建组件骨架，具体样式和内容后续实现。
+  文件作用：底部信息栏。
 -->
 <template>
   <footer class="footer">
-    <!-- TODO: 版权信息 -->
-    <!-- TODO: 联系方式 -->
-    <!-- TODO: 友情链接 -->
+    <p>AI 就业竞争力分析助手 · 面向计算机专业大学生的智能求职平台</p>
+    <p class="muted">数据与 AI 结果仅供参考 · 演示环境</p>
   </footer>
 </template>
 
-<script setup lang="ts">
-// 底部信息栏逻辑
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .footer {
-  /* TODO: 底部样式 */
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 30px 20px 40px;
+  color: var(--text-2);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+.footer .muted {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.75;
 }
 </style>

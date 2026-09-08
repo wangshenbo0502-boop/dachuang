@@ -1,19 +1,29 @@
 /**
  * 文件名称：growth.ts
- * 文件作用：成长规划相关 API 请求封装。
- * 当前阶段仅定义请求函数框架，具体接口后续实现。
+ * 文件作用：AI 成长规划相关 API 请求封装（契约见 docs/02-API接口文档.md 第 8 章）。
  */
 
 import http from "./index";
+import type {
+  ApiResponse,
+  GrowthHistoryItem,
+  GrowthPlanRequest,
+  GrowthPlanResponse,
+} from "./types";
 
-// TODO: 生成成长规划
-export function generatePlan(data: object) {}
+/** POST /api/growth — 生成成长规划（落库） */
+export function generatePlan(data: GrowthPlanRequest): Promise<ApiResponse<GrowthPlanResponse>> {
+  return http.post<unknown, ApiResponse<GrowthPlanResponse>>("/growth", data, {
+    timeout: 60000,
+  });
+}
 
-// TODO: 获取成长规划详情
-export function getPlanDetail(id: string) {}
+/** GET /api/growth/{plan_id} — 规划记录详情 */
+export function getPlan(planId: number): Promise<ApiResponse<GrowthPlanResponse>> {
+  return http.get<unknown, ApiResponse<GrowthPlanResponse>>(`/growth/${planId}`);
+}
 
-// TODO: 更新学习进度
-export function updateProgress(data: object) {}
-
-// TODO: 获取推荐学习资源
-export function getRecommendResources() {}
+/** GET /api/growth/user/{user_id} — 历史规划列表 */
+export function getPlanHistory(userId: number): Promise<ApiResponse<GrowthHistoryItem[]>> {
+  return http.get<unknown, ApiResponse<GrowthHistoryItem[]>>(`/growth/user/${userId}`);
+}

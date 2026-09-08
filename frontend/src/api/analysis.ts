@@ -1,16 +1,31 @@
 /**
  * 文件名称：analysis.ts
- * 文件作用：AI 就业画像分析相关 API 请求封装。
- * 当前阶段仅定义请求函数框架，具体接口后续实现。
+ * 文件作用：AI 就业画像分析相关 API 请求封装（契约见 docs/02-API接口文档.md 第 6 章）。
  */
 
 import http from "./index";
+import type {
+  AnalysisHistoryItem,
+  ApiResponse,
+  ProfileAnalysisRequest,
+  ProfileAnalysisResponse,
+} from "./types";
 
-// TODO: 触发就业画像分析
-export function startAnalysis(data: object) {}
+/** POST /api/analysis — AI 就业画像分析（落库） */
+export function startAnalysis(
+  data: ProfileAnalysisRequest
+): Promise<ApiResponse<ProfileAnalysisResponse>> {
+  return http.post<unknown, ApiResponse<ProfileAnalysisResponse>>("/analysis", data, {
+    timeout: 60000,
+  });
+}
 
-// TODO: 获取分析报告
-export function getAnalysisReport(id: string) {}
+/** GET /api/analysis/{analysis_id} — 分析记录详情 */
+export function getAnalysis(analysisId: number): Promise<ApiResponse<ProfileAnalysisResponse>> {
+  return http.get<unknown, ApiResponse<ProfileAnalysisResponse>>(`/analysis/${analysisId}`);
+}
 
-// TODO: 获取历史分析记录
-export function getAnalysisHistory() {}
+/** GET /api/analysis/user/{user_id} — 历史分析列表 */
+export function getAnalysisHistory(userId: number): Promise<ApiResponse<AnalysisHistoryItem[]>> {
+  return http.get<unknown, ApiResponse<AnalysisHistoryItem[]>>(`/analysis/user/${userId}`);
+}
