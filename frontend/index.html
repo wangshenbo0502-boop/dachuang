@@ -1,18 +1,67 @@
-<!--
-  文件名称：index.html
-  文件作用：Vue3 应用入口 HTML 页面。
-  当前阶段仅定义基础 HTML 结构。
--->
 <!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preload" as="image" href="/textures/paper-texture.webp" type="image/webp" fetchpriority="high" crossorigin="anonymous" />
+    <link rel="icon" type="image/png" href="/favico.png" />
+    <link rel="apple-touch-icon" href="/favico.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI就业竞争力分析助手</title>
+    <meta name="theme-color" content="#fafafa" />
+
+    <title>AI就业竞争力分析助手 — 沉浸式 3D 体验</title>
+    <meta name="description" content="面向计算机专业大学生的 AI 就业竞争力分析平台。在手绘风 3D 走廊中探索就业画像、岗位匹配、简历优化与成长规划。" />
+    <meta name="keywords" content="AI就业,就业竞争力,岗位匹配,简历优化,成长规划,大学生求职,3D作品集" />
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AI就业竞争力分析助手" />
+    <meta property="og:description" content="AI 驱动的就业画像、岗位匹配、简历优化与成长规划 — 沉浸式 3D 交互体验。" />
+    <meta property="og:image" content="/og-image.webp" />
+    <meta property="og:locale" content="zh_CN" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AI就业竞争力分析助手" />
+    <meta name="twitter:description" content="AI 驱动的就业画像、岗位匹配、简历优化与成长规划。" />
+    <meta name="twitter:image" content="/og-image.webp" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Gloria+Hallelujah&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+      .sr-only-seo {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <div id="seo-content" class="sr-only-seo">
+      <header>
+        <h1>AI就业竞争力分析助手 — 沉浸式 3D 求职导航</h1>
+        <p>面向计算机专业大学生，结合大模型与岗位知识库，提供就业画像、岗位匹配、简历优化与成长规划。</p>
+      </header>
+      <nav aria-label="主导航">
+        <ul>
+          <li><a href="/">首页 — 3D 走廊</a></li>
+          <li><a href="/about">就业画像</a></li>
+          <li><a href="/gallery">岗位匹配</a></li>
+          <li><a href="/studio">AI 工作台</a></li>
+          <li><a href="/contact">联系反馈</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <noscript>请启用 JavaScript 以体验 AI 就业竞争力分析助手的 3D 交互界面。</noscript>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

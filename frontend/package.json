@@ -1,24 +1,40 @@
 {
   "name": "ai-job-competitiveness-frontend",
-  "version": "0.1.0",
   "private": true,
-  "description": "AI就业竞争力分析助手 - 前端项目",
+  "version": "0.2.0",
+  "description": "AI就业竞争力分析助手 - 3D 沉浸式前端",
+  "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "vue": "^3.5.0",
-    "vue-router": "^4.4.0",
-    "pinia": "^2.2.0",
-    "axios": "^1.7.0"
+    "@gsap/react": "^2.1.2",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
+    "@react-three/postprocessing": "^3.0.4",
+    "@types/three": "^0.182.0",
+    "axios": "^1.7.0",
+    "gsap": "^3.14.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three": "^0.182.0",
+    "vara": "^1.4.1"
   },
   "devDependencies": {
-    "@types/node": "^20.14.0",
-    "@vitejs/plugin-vue": "^5.1.0",
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "sass": "^1.97.1",
     "typescript": "^5.5.0",
-    "vite": "^5.4.0",
-    "vue-tsc": "^2.1.0"
+    "vite": "^7.2.4",
+    "vite-plugin-compression": "^0.5.1"
   }
 }
