@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useScene } from '../../context/SceneContext';
+import { toProfileFormOverlay } from '../../adapters/profile';
 import { useAudio } from '../../context/AudioManager';
 import { setMusicVolume, getMusicVolume } from '../../utils/audioManager';
 import { useAchievements } from '../../context/AchievementsContext';
@@ -21,7 +22,7 @@ const ROOMS = [
 const PIN_START_POSITION = { x: 50.5, y: 97 };
 
 const NavigationUI = () => {
-    const { currentRoom, isInRoom, requestExit, hasEntered, teleportTo, isTeleporting } = useScene();
+    const { currentRoom, isInRoom, requestExit, hasEntered, teleportTo, isTeleporting, openOverlay } = useScene();
     const { isMuted, toggleMute, globalVolume, setGlobalVolume } = useAudio();
     const { showTutorial, unlockAchievement } = useAchievements();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -270,6 +271,15 @@ const NavigationUI = () => {
                             </svg>
                         )}
                     </button>
+                    {currentRoom === 'about' && (
+                        <button
+                            className="nav-btn profile-btn"
+                            onClick={() => openOverlay(toProfileFormOverlay())}
+                            aria-label="就业档案"
+                        >
+                            <span className="nav-btn-text">档</span>
+                        </button>
+                    )}
                     {/* Achievements Toggle Button */}
                     <button
                         className={`nav-btn achievements-btn ${isAchievementsOpen ? 'open' : ''}`}
@@ -317,7 +327,7 @@ const NavigationUI = () => {
 
                     <div className="map-content-clipped">
                         <div className="map-header">
-                            <h3>MAP</h3>
+                            <h3>地图</h3>
                             <button
                                 ref={mapCloseRef}
                                 className="close-btn"

@@ -7,7 +7,8 @@ import SkyChunk, { CHUNK_LENGTH, ROOM_Z } from './SkyChunk';
 import { useScene } from '../../../../context/SceneContext';
 import '../../shaders/RevealBasicMaterial'; // Registers brush-stroke reveal for BasicMaterial
 import { isTouchDevice } from '../../../../utils/deviceDetect';
-import { useAwards } from '../../../../hooks/useSanityData';
+import { useUser } from '../../../../context/UserContext';
+import { toExperienceOverlays, toIntroView, toJourneyView, toProfileFormOverlay, toSkillBalloonLabels } from '../../../../adapters/profile';
 
 // Reusable Vector3 to avoid allocations in event handlers
 const _tempVec3 = new THREE.Vector3();
@@ -262,6 +263,9 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
     const avatarTexture = useLoader(THREE.TextureLoader, '/textures/about/awatarnachmurce.webp');
     const { camera, viewport } = useThree();
     const isTouch = isTouchDevice();
+    const { profile } = useUser();
+    const { openOverlay } = useScene();
+    const intro = toIntroView(profile);
 
     // Refs for all animated elements
     const groupRef = useRef();
@@ -352,7 +356,7 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 anchorY="middle"
                 font="/fonts/RubikScribble-Regular.ttf"
             >
-                TOMASZ SZMAJDA
+                {intro.name}
             </Text>
 
             {/* Subtitle - Brand (spreads right) */}
@@ -365,11 +369,20 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 anchorY="middle"
                 font="/fonts/CabinSketch-Regular.ttf"
             >
-                (ITOM)
+                {intro.brand}
             </Text>
 
             {/* Avatar on cloud - floating + spreads up-left */}
-            <mesh ref={avatarRef} position={[0, baseY, 0]}>
+            <mesh
+                ref={avatarRef}
+                position={[0, baseY, 0]}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    openOverlay(toProfileFormOverlay());
+                }}
+                onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+                onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+            >
                 <planeGeometry args={[avatarWidth, avatarHeight]} />
                 <meshBasicMaterial color="#e0e0e0"
                     map={avatarTexture}
@@ -390,7 +403,7 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 font="/fonts/CabinSketch-Regular.ttf"
                 fontStyle="italic"
             >
-                "Crafting digital experiences
+                {intro.motto1}
             </Text>
 
             {/* Motto - Line 2 (spreads left) */}
@@ -404,7 +417,7 @@ const IntroMilestone = ({ z, scrollProgressRef }) => {
                 font="/fonts/CabinSketch-Regular.ttf"
                 fontStyle="italic"
             >
-                that push creative boundaries"
+                {intro.motto2}
             </Text>
         </group>
     );
@@ -475,9 +488,8 @@ const AWARDS_DATA = {
  * SOTY (center), SOTD, SOTM, Featured (behind)
  */
 const AwardsMilestone = ({ z, scrollProgressRef }) => {
-    // Pobieranie danych nagród z Sanity (z fallbackiem)
-    const sanityAwards = useAwards();
-    const awardsData = sanityAwards || AWARDS_DATA;
+    const { profile } = useUser();
+    const awardsData = toExperienceOverlays(profile);
 
     const { camera, viewport } = useThree();
     const isTouch = isTouchDevice();
@@ -624,7 +636,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                 anchorY="middle"
                 font="/fonts/RubikScribble-Regular.ttf"
             >
-                AWARDS
+                经历
             </Text>
 
             {/* === SOTD (behind SOTY, rendered second) === */}
@@ -655,7 +667,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                 <AwardButton
                     onClick={(e) => {
                         e.stopPropagation();
-                        openOverlay(awardsData.sotd);
+                        openOverlay(awardsData.competitions);
                     }}
                     texture={buttonTexture}
                     paintedTexture={buttonPaintedTexture}
@@ -673,7 +685,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    SOTD
+                    竞赛
                 </Text>
                 {/* AWARD COUNT */}
                 <Text
@@ -684,7 +696,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    {awardsData.sotd.items.length}
+                    {awardsData.competitions.items.length}
                 </Text>
             </group>
 
@@ -716,7 +728,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                 <AwardButton
                     onClick={(e) => {
                         e.stopPropagation();
-                        openOverlay(awardsData.sotm);
+                        openOverlay(awardsData.internships);
                     }}
                     texture={buttonTexture}
                     paintedTexture={buttonPaintedTexture}
@@ -734,7 +746,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    SOTM
+                    实习
                 </Text>
                 {/* AWARD COUNT */}
                 <Text
@@ -745,7 +757,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    {awardsData.sotm.items.length}
+                    {awardsData.internships.items.length}
                 </Text>
             </group>
 
@@ -776,7 +788,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                 <AwardButton
                     onClick={(e) => {
                         e.stopPropagation();
-                        openOverlay(awardsData.other);
+                        openOverlay(awardsData.projects);
                     }}
                     texture={buttonTexture}
                     paintedTexture={buttonPaintedTexture}
@@ -794,7 +806,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    OTHER
+                    项目
                 </Text>
                 {/* AWARD COUNT */}
                 <Text
@@ -805,7 +817,7 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    {awardsData.other.items.length}
+                    {awardsData.projects.items.length}
                 </Text>
             </group>
         </group>
@@ -819,6 +831,8 @@ const AwardsMilestone = ({ z, scrollProgressRef }) => {
 const JourneyMilestone = ({ z, scrollProgressRef }) => {
     const { camera, viewport } = useThree();
     const isTouch = isTouchDevice();
+    const { profile } = useUser();
+    const journey = toJourneyView(profile);
     const groupRef = useRef();
     const uoRef = useRef();
     const freelanceRef = useRef();
@@ -903,7 +917,7 @@ const JourneyMilestone = ({ z, scrollProgressRef }) => {
                 anchorY="middle"
                 font="/fonts/RubikScribble-Regular.ttf"
             >
-                JOURNEY
+                旅程
             </Text>
 
             {/* Subtitle */}
@@ -915,7 +929,7 @@ const JourneyMilestone = ({ z, scrollProgressRef }) => {
                 anchorY="middle"
                 font="/fonts/CabinSketch-Regular.ttf"
             >
-                My path so far...
+                {journey.subtitle}
             </Text>
 
             {/* === UO ISLAND (Left) === */}
@@ -937,7 +951,7 @@ const JourneyMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    2025-NOW
+                    {journey.left}
                 </Text>
             </group>
 
@@ -960,7 +974,7 @@ const JourneyMilestone = ({ z, scrollProgressRef }) => {
                     anchorY="middle"
                     font="/fonts/CabinSketch-Bold.ttf"
                 >
-                    2023-NOW
+                    {journey.right}
                 </Text>
             </group>
         </group>
@@ -1334,7 +1348,12 @@ const SkillBalloon = ({ config, revealFactorRef, spreadFactorRef, timeRef }) => 
 const SkillsMilestone = ({ z, scrollProgressRef }) => {
     const { camera, viewport } = useThree();
     const isTouch = isTouchDevice();
+    const { profile } = useUser();
     const groupRef = useRef();
+    const balloonConfigs = useMemo(() => {
+        const labels = toSkillBalloonLabels(profile, BALLOON_CONFIG.map((c) => c.label));
+        return BALLOON_CONFIG.map((c, i) => ({ ...c, label: labels[i] }));
+    }, [profile]);
     // P2: Use refs instead of state to avoid 60 re-renders/sec inside useFrame
     const revealFactorRef = useRef(0);
     const spreadFactorRef = useRef(0);
@@ -1399,7 +1418,7 @@ const SkillsMilestone = ({ z, scrollProgressRef }) => {
                 anchorY="middle"
                 font="/fonts/RubikScribble-Regular.ttf"
             >
-                SKILLS
+                技能
             </Text>
 
             {/* Subtitle */}
@@ -1411,11 +1430,11 @@ const SkillsMilestone = ({ z, scrollProgressRef }) => {
                 anchorY="middle"
                 font="/fonts/CabinSketch-Regular.ttf"
             >
-                Technologies I love working with
+                {profile?.skills?.length ? '点击气球查看技能名' : '打开档案添加技能后会显示在气球上'}
             </Text>
 
             {/* === FLOATING BALLOONS === */}
-            {BALLOON_CONFIG.map((config, index) => (
+            {balloonConfigs.map((config, index) => (
                 <SkillBalloon
                     key={index}
                     config={config}

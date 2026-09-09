@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useScene } from '../../context/SceneContext';
+import { useUser } from '../../context/UserContext';
+import { toAnalysisOverlay } from '../../adapters/profile';
+import ProfileOverlay, { AnalysisReport } from './ProfileOverlay';
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin';
 import '../../styles/GlobalOverlay.scss';
@@ -312,7 +315,7 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                         pointerEvents: 'auto', // Re-enable clicks for the card
                         ...cardStyle,
                         // Override styles for grid layout to be centered and wider
-                        ...(content.layout === 'certificate_grid' ? {
+                        ...(['certificate_grid', 'profile_form', 'analysis_report', 'experience_list'].includes(content.layout) ? {
                             // Make it centered and wide on desktop
                             width: isMobile ? '95vw' : 'clamp(300px, 90vw, 1200px)',
                             height: 'clamp(500px, 85vh, 900px)',
@@ -406,8 +409,19 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                         </button>
                     </div>
 
-                    {/* === LAYOUT: CERTIFICATE GRID === */}
-                    {content.layout === 'certificate_grid' ? (
+                    {/* === LAYOUT: PROFILE FORM === */}
+                    {content.layout === 'profile_form' ? (
+                        <ProfileFormBody isOpen={isOpen} getStaggerStyle={getStaggerStyle} />
+                    ) : content.layout === 'analysis_report' ? (
+                        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, ...getStaggerStyle(150) }}>
+                            <AnalysisReport analysis={content.analysis} />
+                            {!content.analysis && (
+                                <p style={{ color: '#666' }}>{content.emptyText || '暂无画像结果'}</p>
+                            )}
+                        </div>
+                    ) : content.layout === 'experience_list' ? (
+                        <ExperienceListBody content={content} isOpen={isOpen} getStaggerStyle={getStaggerStyle} scrollContainerRef={scrollContainerRef} />
+                    ) : content.layout === 'certificate_grid' ? (
                         <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
                             <div
                                 ref={scrollContainerRef}
@@ -438,7 +452,10 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                                     }}
                                         onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
                                         onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                                        onClick={() => window.open(item.url || content.url || '#', '_blank')}
+                                        onClick={() => {
+                                            const href = item.url || content.url;
+                                            if (href && href !== '#') window.open(href, '_blank');
+                                        }}
                                     >
                                         <div style={{
                                             position: 'relative',
@@ -527,6 +544,7 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                             </p>
 
                             {/* Action Button */}
+                            {content.url ? (
                             <div style={{
                                 marginTop: 'auto',
                                 paddingTop: '1rem',
@@ -538,9 +556,10 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                                     rel="noopener noreferrer"
                                     className="studio-action-button"
                                 >
-                                    Open Link ↗
+                                    打开链接 ↗
                                 </a>
                             </div>
+                            ) : null}
                         </>
                     )}
                 </div>
@@ -548,5 +567,54 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
         </div>
     );
 };
+
+function ProfileFormBody({ getStaggerStyle }) {
+    const { openOverlay } = useScene();
+    const { analysisHistory } = useUser();
+    return (
+        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', ...getStaggerStyle(120) }}>
+            <ProfileOverlay
+                onShowReport={(data) => openOverlay(toAnalysisOverlay(data, analysisHistory))}
+            />
+        </div>
+    );
+}
+
+function ExperienceListBody({ content, getStaggerStyle, scrollContainerRef }) {
+    const items = content.items || [];
+    return (
+        <div
+            ref={scrollContainerRef}
+            style={{
+                flex: 1,
+                minHeight: 0,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.8rem',
+                ...getStaggerStyle(150),
+            }}
+        >
+            {items.length === 0 && (
+                <p style={{ color: '#555', lineHeight: 1.6 }}>{content.emptyText || '暂无数据'}</p>
+            )}
+            {items.map((item, index) => (
+                <div
+                    key={`${item.label}-${index}`}
+                    style={{
+                        border: '2px solid #1a1a1a',
+                        padding: '0.85rem 1rem',
+                        background: '#f9f9f9',
+                        boxShadow: '3px 3px 0 rgba(0,0,0,0.08)',
+                    }}
+                >
+                    <h4 style={{ margin: '0 0 0.35rem', fontFamily: "'Rubik Scribble', cursive" }}>{item.label}</h4>
+                    <div style={{ fontSize: '0.9rem', color: '#555' }}>{item.date}</div>
+                    {item.description ? <p style={{ margin: '0.5rem 0 0', color: '#333' }}>{item.description}</p> : null}
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export default GlobalOverlay;

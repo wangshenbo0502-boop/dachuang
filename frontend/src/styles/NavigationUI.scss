@@ -76,6 +76,17 @@
         transform: translateY(1px);
     }
 
+    .nav-btn-text {
+        position: relative;
+        z-index: 1;
+        font-family: 'Cabin Sketch', cursive, sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a1a;
+        line-height: 1;
+        margin-top: -4px;
+    }
+
     svg {
         width: 22px;
         height: 22px;

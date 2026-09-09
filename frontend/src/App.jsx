@@ -217,6 +217,7 @@ function AppContent() {
 }
 
 import { AchievementsProvider } from './context/AchievementsContext';
+import { UserProvider } from './context/UserContext';
 
 export default function App() {
   // Preload browser-based images (for standard <img> tags) immediately upon mounting App
@@ -226,14 +227,15 @@ export default function App() {
     loadSanityData();
 
     const filteredImages = filterTexturesByDevice(IMAGE_ASSETS, supportsHover);
-    // console.log(`[Preload] Triggering browser-level image preloads for ${filteredImages.length} assets.`);
     filteredImages.forEach(path => preloadBrowserImage(path));
   }, []);
 
   return (
     <PerformanceProvider>
       <AchievementsProvider>
-        <AppContent />
+        <UserProvider>
+          <AppContent />
+        </UserProvider>
       </AchievementsProvider>
     </PerformanceProvider>
   );
