@@ -14,7 +14,7 @@ import '../../styles/NavigationUI.scss';
 const ROOMS = [
     { id: 'about', label: '就业画像', x: 43, y: 38 },
     { id: 'gallery', label: '岗位匹配', x: 43, y: 72 },
-    { id: 'contact', label: '联系反馈', x: 57, y: 25 },
+    { id: 'contact', label: '联系我们', x: 57, y: 25 },
     { id: 'studio', label: 'AI 工作台', x: 57, y: 55 },
 ];
 
@@ -378,7 +378,7 @@ const NavigationUI = () => {
                                 onFocus={() => setHoveredRoom('contact')}
                                 onBlur={() => setHoveredRoom(null)}
                                 onClick={() => handleRoomClick('contact')}
-                                aria-label="Teleport to Contact room"
+                                aria-label="传送到联系我们"
                             />
                             <button
                                 type="button"
@@ -394,7 +394,7 @@ const NavigationUI = () => {
                             {/* Permanent Map Text Labels */}
                             <div className="map-room-label about">ABOUT</div>
                             <div className="map-room-label gallery">THE<br />GALLERY</div>
-                            <div className="map-room-label contact">CONTACT</div>
+                            <div className="map-room-label contact">联系我们</div>
                             <div className="map-room-label studio">THE<br />STUDIO</div>
 
                             {/* Pin slot markers - 4 locations */}

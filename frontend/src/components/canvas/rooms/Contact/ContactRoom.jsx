@@ -9,6 +9,7 @@ import { useScene } from '../../../../context/SceneContext';
 import GalleryClouds from '../Gallery/GalleryClouds';
 import { useAchievements } from '../../../../context/AchievementsContext';
 import { useAudio } from '../../../../context/AudioManager';
+import { CONTACT_INFO } from '../../../../config/contactInfo';
 
 // ============================================
 // ============================================
@@ -93,7 +94,7 @@ const PHASE = {
 
 const ContactRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
     const { camera } = useThree();
-    const { isTeleporting } = useScene();
+    const { isTeleporting, openOverlay } = useScene();
     const { showTutorial, unlockAchievement, hidePopup } = useAchievements();
     const { globalVolume, isMuted } = useAudio();
     const effectiveVolume = isMuted ? 0 : AUDIO_SETTINGS.volume * globalVolume;
@@ -248,42 +249,43 @@ const ContactRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
     }, [hasSignaledReady.current, showRoom, camera]);
 
     const handleMailSelect = () => {
-        // Awaryjne przekierowanie mailto:
-        window.location.href = 'mailto:tomszma12@gmail.com';
-
-        /* 
+        unlockAchievement('contact_choose');
         setShowSelection(false);
 
-        // Trigger the look down sequence
         hasAnimatedDown.current = true;
         hasExitTriggered.current = false;
 
-        // Capture landing rotation (usually 0,0,0)
         targetRotX.current = camera.rotation.x;
         targetRotY.current = camera.rotation.y;
         targetRotZ.current = camera.rotation.z;
 
-        // Start sequence directly
         setCurrentPhase(PHASE.LOOKING_DOWN);
-
-        // 1. SET X (Looking down)
         targetRotX.current = CAMERA_SETTINGS.lookDownAngle;
-
-        // 2. SET Y (Turning)
         if (CAMERA_SETTINGS.forceCenterY !== null) {
             targetRotY.current = CAMERA_SETTINGS.forceCenterY;
         }
-
-        // 3. SET Z (Tilt)
         if (CAMERA_SETTINGS.forceStraightZ !== null) {
             targetRotZ.current = CAMERA_SETTINGS.forceStraightZ;
         }
 
-        // Phase transition
         setTimeout(() => {
             setCurrentPhase(PHASE.WRITING);
         }, 1500);
-        */
+    };
+
+    const handleTeamIntro = () => {
+        unlockAchievement('contact_choose');
+        openOverlay({
+            id: 'contact-team',
+            layout: 'experience_list',
+            title: CONTACT_INFO.teamName,
+            items: [
+                { label: '团队介绍', date: 'asffga', description: CONTACT_INFO.intro },
+                { label: '邮箱', date: CONTACT_INFO.email },
+                { label: '电话', date: CONTACT_INFO.phone },
+            ],
+            platformConfig: { label: '联系我们' },
+        });
     };
 
     // Frame Loop
@@ -398,52 +400,53 @@ const ContactRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
             </group>
 
             {/* 🛢️ SOCIAL BARRELS (Floating in water) */}
-            {/* LINKEDIN */}
             <SocialBarrel
                 position={isMobile ? [-1.2, 0.5, -10] : [-3, 0.5, -10]}
                 rotation={[0, 0.2, 0]}
                 texturePath="/textures/contact/beczka.webp"
-                label="LINKEDIN"
-                onClick={() => window.open('https://www.linkedin.com/in/tomasz-szmajda-259337305/', '_blank')}
+                label="邮箱"
+                onClick={() => {
+                    unlockAchievement('contact_choose');
+                    window.location.href = `mailto:${CONTACT_INFO.email}`;
+                }}
                 paintOnBeforeCompile={onBeforeCompile}
                 paintUniforms={uniformsData}
             />
-            {/* GITHUB */}
             <SocialBarrel
                 position={isMobile ? [-1.5, -0.3, -7] : [-5, -0.3, -8]}
                 rotation={[0, 0.3, 0]}
                 texturePath="/textures/contact/beczka.webp"
-                label="GITHUB"
-                onClick={() => window.open('https://github.com/ITomPoland', '_blank')}
+                label="电话"
+                onClick={() => {
+                    unlockAchievement('contact_choose');
+                    window.location.href = `tel:${CONTACT_INFO.phone}`;
+                }}
                 paintOnBeforeCompile={onBeforeCompile}
                 paintUniforms={uniformsData}
             />
-            {/* FACEBOOK */}
             <SocialBarrel
                 position={isMobile ? [1.2, 0.5, -10] : [3, 0.5, -10]}
                 rotation={[0, -0.2, 0]}
                 texturePath="/textures/contact/beczka.webp"
-                label="FACEBOOK"
-                onClick={() => window.open('https://www.facebook.com/people/ITom/61586563487664/', '_blank')}
+                label="团队"
+                onClick={handleTeamIntro}
                 paintOnBeforeCompile={onBeforeCompile}
                 paintUniforms={uniformsData}
             />
-            {/* INSTAGRAM */}
             <SocialBarrel
                 position={isMobile ? [1.5, -0.3, -7] : [5, -0.3, -8]}
                 rotation={[0, -0.3, 0]}
                 texturePath="/textures/contact/beczka.webp"
-                label="INSTAGRAM"
-                onClick={() => window.open('https://www.instagram.com/itom.dev/', '_blank')}
+                label="资料"
+                onClick={handleTeamIntro}
                 paintOnBeforeCompile={onBeforeCompile}
                 paintUniforms={uniformsData}
             />
-            {/* MAIL (Triggers animation) */}
             <SocialBarrel
                 position={isMobile ? [0, -0.7, -6] : [0, -0.7, -7]}
                 rotation={[0, 0, 0]}
                 texturePath="/textures/contact/beczka.webp"
-                label="MESSAGE"
+                label="留言"
                 onClick={handleMailSelect}
                 paintOnBeforeCompile={onBeforeCompile}
                 paintUniforms={uniformsData}

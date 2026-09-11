@@ -1138,7 +1138,7 @@ const DoorSection = ({
                                 anchorY="middle"
                                 position={[0, 0, 0.01]}
                             >
-                                联系反馈
+                                联系我们
                             </Text>
                         )}
                     </group>
