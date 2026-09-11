@@ -6,7 +6,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 # ── 请求体 ──
@@ -25,6 +25,15 @@ class GrowthPlanRequest(BaseModel):
 
     # 可选：传入之前的画像分析结果
     profile_analysis: Optional[dict] = Field(default=None, description="之前的画像分析结果（可选）")
+
+    @model_validator(mode="after")
+    def require_user_or_inline_profile(self) -> "GrowthPlanRequest":
+        if self.user_id is not None:
+            return self
+        missing = [field for field in ("name", "major", "grade") if not getattr(self, field)]
+        if missing:
+            raise ValueError("未提供 user_id 时，name、major、grade 为必填字段")
+        return self
 
 
 # ── 响应体 ──

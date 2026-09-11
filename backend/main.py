@@ -13,6 +13,7 @@ from fastapi.responses import JSONResponse
 
 from app.api import user, job_match, analysis, resume, growth, streaming
 from app.config import get_settings
+from app.database.bootstrap import initialize_database_schema
 from app.utils.exceptions import AppException
 from app.utils.middleware import request_logging_middleware, configure_logging
 from app.utils.response import error, success, ErrorCode
@@ -30,6 +31,12 @@ app = FastAPI(
     version=settings.APP_VERSION,
     debug=settings.APP_DEBUG,
 )
+
+
+@app.on_event("startup")
+def initialize_database() -> None:
+    """Create missing tables and upgrade legacy local SQLite user profiles."""
+    initialize_database_schema()
 
 # ── 中间件注册 ──
 
@@ -55,9 +62,16 @@ async def handle_app_exception(_: Request, exc: AppException) -> JSONResponse:
 
 @app.exception_handler(RequestValidationError)
 async def handle_validation_error(_: Request, exc: RequestValidationError) -> JSONResponse:
+    details = []
+    for item in exc.errors():
+        detail = dict(item)
+        # Pydantic may include a non-JSON-serializable ValueError in `ctx`.
+        if "ctx" in detail:
+            detail["ctx"] = {key: str(value) for key, value in detail["ctx"].items()}
+        details.append(detail)
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content=error(code=ErrorCode.PARAM_VALIDATION_ERROR.value, message="参数校验失败", data=exc.errors()),
+        content=error(code=ErrorCode.PARAM_VALIDATION_ERROR.value, message="参数校验失败", data=details),
     )
 
 

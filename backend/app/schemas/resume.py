@@ -6,7 +6,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 # ── 请求体 ──
@@ -21,6 +21,12 @@ class ResumeOptimizationRequest(BaseModel):
     skills: list[dict] = Field(default_factory=list, description="技能列表")
     projects: list[dict] = Field(default_factory=list, description="项目列表")
     original_resume: Optional[str] = Field(default="", max_length=10000, description="原始简历文本（可选）")
+
+    @model_validator(mode="after")
+    def require_user_or_name(self) -> "ResumeOptimizationRequest":
+        if self.user_id is None and not self.name:
+            raise ValueError("未提供 user_id 时，name 为必填字段")
+        return self
 
 
 # ── 响应体 ──

@@ -22,17 +22,8 @@ if not os.getenv("DATABASE_URL") or "your_password" in os.getenv("DATABASE_URL",
     print("未配置MySQL，使用SQLite数据库: ai_job_analysis.db")
 
 
-from app.database.connection import Base, get_engine, reset_database_connection
-# 导入所有模型以确保它们被注册
-from app.models import (
-    User,
-    UserSkill,
-    UserProject,
-    JobMatchRecord,
-    ProfileAnalysis,
-    ResumeOptimization,
-    GrowthPlan,
-)
+from app.database.bootstrap import initialize_database_schema
+from app.database.connection import get_engine, reset_database_connection
 
 
 def init_database():
@@ -42,9 +33,11 @@ def init_database():
 
     engine = get_engine()
 
-    print("正在创建数据库表...")
-    Base.metadata.create_all(bind=engine)
-    print("数据库表创建成功！")
+    print("正在创建数据库表并执行兼容迁移...")
+    added_columns = initialize_database_schema(engine)
+    if added_columns:
+        print(f"已补齐 users 表字段: {', '.join(added_columns)}")
+    print("数据库初始化完成！")
 
     # 打印创建的表
     from sqlalchemy import inspect

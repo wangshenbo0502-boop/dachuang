@@ -6,7 +6,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 # ── 请求体 ──
@@ -27,6 +27,15 @@ class ProfileAnalysisRequest(BaseModel):
     skills: list[dict] = Field(default_factory=list, description="技能列表")
     projects: list[dict] = Field(default_factory=list, description="项目列表")
     target_job: Optional[str] = Field(default=None, max_length=100, description="目标岗位（可选）")
+
+    @model_validator(mode="after")
+    def require_user_or_inline_profile(self) -> "ProfileAnalysisRequest":
+        if self.user_id is not None:
+            return self
+        missing = [field for field in ("name", "school", "major", "grade") if not getattr(self, field)]
+        if missing:
+            raise ValueError("未提供 user_id 时，name、school、major、grade 为必填字段")
+        return self
 
 
 # ── 响应体 ──

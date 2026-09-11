@@ -14,6 +14,8 @@ from app.ai.prompts import SystemPrompts, JobMatchPrompts
 from app.knowledge.knowledge_service import KnowledgeService
 from app.knowledge.skill_synonyms import normalize_skill, is_skill_match
 from app.models.job import JobMatchRecord
+from app.models.user import User
+from app.utils.exceptions import ResourceNotFoundError
 from app.schemas.job import (
     JobBrief,
     JobDetail,
@@ -241,6 +243,8 @@ class JobMatchService:
     # ── 匹配记录持久化 ──
 
     def save_match_record(self, db: Session, request: JobMatchRequest, response: JobMatchResponse) -> JobMatchRecord:
+        if request.user_id is not None and db.get(User, request.user_id) is None:
+            raise ResourceNotFoundError(f"用户 {request.user_id} 不存在")
         top_match = response.matches[0] if response.matches else None
         record = JobMatchRecord(
             user_id=request.user_id,

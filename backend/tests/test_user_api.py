@@ -4,14 +4,18 @@ Purpose: Verify student profile API behavior against an isolated SQLite database
 """
 
 import os
+import sys
 import unittest
+from pathlib import Path
 
 os.environ["DATABASE_URL"] = "sqlite://"
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from fastapi.testclient import TestClient
 
 import app.models
-from app.database.connection import Base, get_engine
+from app.config import get_settings
+from app.database.connection import Base, get_engine, reset_database_connection
 from app.database.session import get_db, get_session_factory
 from main import app
 
@@ -21,6 +25,8 @@ class UserApiTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        get_settings.cache_clear()
+        reset_database_connection()
         Base.metadata.create_all(get_engine())
 
     def setUp(self) -> None:
