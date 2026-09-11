@@ -16,7 +16,7 @@ const ScreenReaderOverlay = () => {
     const roomNames = {
         about: '就业画像',
         gallery: '岗位匹配',
-        contact: '联系反馈',
+        contact: '联系我们',
         studio: 'AI 工作台',
     };
 
@@ -50,7 +50,7 @@ const ScreenReaderOverlay = () => {
                             </li>
                             <li>
                                 <button onClick={() => teleportTo('contact')} type="button">
-                                    联系反馈 — 提交建议与问题
+                                    联系我们 — 团队介绍与留言
                                 </button>
                             </li>
                             <li>
@@ -108,9 +108,9 @@ const ScreenReaderOverlay = () => {
                             </div>
                         )}
                         {currentRoom === 'contact' && (
-                            <div aria-label="联系反馈内容">
-                                <h3>联系反馈</h3>
-                                <p>填写反馈表单，或查看联系方式。</p>
+                            <div aria-label="联系我们">
+                                <h3>联系我们</h3>
+                                <p>asffga 团队。邮箱 3477399270@qq.com，电话 13233334444。可点击木桶查看介绍，或写留言打开邮箱草稿。</p>
                             </div>
                         )}
                         {currentRoom === 'studio' && (
@@ -139,7 +139,7 @@ const ScreenReaderOverlay = () => {
                                 <li><button onClick={() => teleportTo('gallery')} type="button">前往岗位匹配</button></li>
                             )}
                             {currentRoom !== 'contact' && (
-                                <li><button onClick={() => teleportTo('contact')} type="button">前往联系反馈</button></li>
+                                <li><button onClick={() => teleportTo('contact')} type="button">前往联系我们</button></li>
                             )}
                             {currentRoom !== 'studio' && (
                                 <li><button onClick={() => teleportTo('studio')} type="button">前往 AI 工作台</button></li>

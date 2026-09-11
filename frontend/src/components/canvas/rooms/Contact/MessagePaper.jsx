@@ -3,6 +3,8 @@ import { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Text, useTexture, Html, useCursor } from '@react-three/drei';
 import * as THREE from 'three';
+import { useUser } from '../../../../context/UserContext';
+import { mailtoUrl } from '../../../../config/contactInfo';
 
 const PAPER_WIDTH = 1.51; // Legacy ratio 1197/1340
 const PAPER_HEIGHT = 1.7;
@@ -146,18 +148,6 @@ const SmoothButton = ({ texture, onClick, position, size, text, fontPath }) => {
     );
 };
 
-// Web3Forms API Key — loaded from environment variable so it's not exposed in the repo.
-// Set VITE_WEB3FORMS_KEY in .env (local dev) and in Cloudflare Pages dashboard (production).
-const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || '';
-
-// Only these domains are allowed to submit the form.
-// Anyone cloning the repo and running on localhost will be silently blocked.
-const ALLOWED_ORIGINS = [
-    'itomdev.com',
-    'www.itomdev.com',
-    'portfolio-itom.pages.dev',
-];
-
 // ═══════════════════════════════════════════════════════════════════════
 // 2026 Advanced Anti-Spam System
 // Multi-layer defense: Bigram NLP analysis, rate limiting, timing traps
@@ -215,9 +205,13 @@ const scoreWord = (word) => {
 
 // Main content analyzer — scores every word and computes an aggregate
 const analyzeContentAI = (text, isSubject = false) => {
-    if (!text || text.trim().length < (isSubject ? 2 : 3)) return { isSpam: true, reason: 'Message too short' };
+    if (!text || text.trim().length < (isSubject ? 2 : 3)) return { isSpam: true, reason: '内容过短' };
 
     const cleaned = text.trim();
+    // 中文留言不做英文 bigram 误判
+    if (/[\u4e00-\u9fff]/.test(cleaned)) {
+        return { isSpam: false };
+    }
 
     // Single-word messages under 15 chars without a space are suspicious (but completely normal for subjects)
     if (!isSubject && cleaned.length <= 15 && !cleaned.includes(' ')) {
@@ -265,7 +259,7 @@ const analyzeContentAI = (text, isSubject = false) => {
 // Not bulletproof (localStorage can be cleared), but stops 95% of casual spam.
 // ═══════════════════════════════════════════════════════════════════════
 const RATE_LIMIT_MINUTES = 30;
-const RATE_LIMIT_KEY = 'portfolio_contact_rl';
+const RATE_LIMIT_KEY = 'aijob_contact_rl';
 
 const checkRateLimit = () => {
     try {
@@ -292,6 +286,7 @@ const recordSubmission = () => {
 
 
 const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
+    const { profile, hasUser, saveBasic } = useUser();
     const groupRef = useRef();
     const paperRef = useRef();
     const backPaperRef = useRef(); // Back side of paper (white)
@@ -307,6 +302,14 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
     const [cursorVisible, setCursorVisible] = useState(true);
     const [botcheck, setBotcheck] = useState(''); // Honeypot state
     const formLoadedAt = useRef(Date.now()); // Timing trap: track when form mounted
+    const emailPrefillDone = useRef(false);
+
+    useEffect(() => {
+        if (!emailPrefillDone.current && profile?.email) {
+            setEmail(profile.email);
+            emailPrefillDone.current = true;
+        }
+    }, [profile]);
 
     // Validation & Submit State
     const [errors, setErrors] = useState({});
@@ -319,10 +322,10 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
     // Form validation
     const validateForm = () => {
         const newErrors = {};
-        if (!email.trim()) newErrors.email = 'Email required';
-        else if (!isValidEmail(email)) newErrors.email = 'Invalid email format';
-        if (!subject.trim()) newErrors.subject = 'Subject required';
-        if (!message.trim()) newErrors.message = 'Message required';
+        if (!email.trim()) newErrors.email = '请填写邮箱';
+        else if (!isValidEmail(email)) newErrors.email = '邮箱格式不正确';
+        if (!subject.trim()) newErrors.subject = '请填写主题';
+        if (!message.trim()) newErrors.message = '请填写留言';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -366,9 +369,8 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
         }
     }, []);
 
-    // Handle send button click - Submit to Web3Forms
+    // Handle send button click — 无留言接口，改用 mailto 发到团队邮箱
     const handleButtonClick = useCallback(async () => {
-        // Reset previous status
         setSubmitStatus(null);
 
         if (!validateForm()) {
@@ -379,110 +381,67 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
         setErrors({});
 
         try {
-            // --- 0. Rate Limiting (1 message per 30 min) ---
             const rateCheck = checkRateLimit();
             if (!rateCheck.allowed) {
-                setErrors({ message: `Please wait ${rateCheck.minutesLeft} min before sending again.` });
+                setErrors({ message: `请等待 ${rateCheck.minutesLeft} 分钟后再发送` });
                 setIsSubmitting(false);
                 return;
             }
 
-            // --- 0b. Timing Trap (must spend >3s on form) ---
             const timeOnForm = Date.now() - formLoadedAt.current;
             if (timeOnForm < 3000) {
-                // Bots submit instantly — silently fake success
                 setSubmitStatus('success');
                 setIsSubmitting(false);
                 return;
             }
 
-            // --- 0c. Origin / Domain Lock ---
-            // Block submissions from cloned repos running on unauthorized domains
-            const currentHost = window.location.hostname;
-            const isAllowedOrigin = ALLOWED_ORIGINS.some(d => currentHost === d || currentHost.endsWith('.' + d));
-            if (!isAllowedOrigin) {
-                // Silently fake success so attacker thinks it worked
-                setSubmitStatus('success');
-                setIsSubmitting(false);
-                return;
-            }
-
-            // --- 1. Honeypot check (Silent block) ---
             if (botcheck) {
-                // If botcheck is filled out, act like it succeeded to fool the bot
                 setSubmitStatus('success');
                 setIsSubmitting(false);
                 return;
             }
 
-            // --- 2. Modern 2026 AI Content Verification ---
             const subjectAnalysis = analyzeContentAI(subject, true);
             const messageAnalysis = analyzeContentAI(message, false);
 
             if (subjectAnalysis.isSpam || messageAnalysis.isSpam) {
-                setErrors({ message: 'Our AI flagged this as spam. Please write clearly.' });
+                setErrors({ message: '内容被判定为无效留言，请写清楚一些' });
                 setIsSubmitting(false);
                 return;
             }
 
-            // --- 3. Email Domain MX Record Validation (DoH) ---
-            const domain = email.split('@')[1];
-            if (domain) {
+            if (hasUser && profile) {
                 try {
-                    const dnsRes = await fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=MX`, {
-                        headers: { 'Accept': 'application/dns-json' }
+                    await saveBasic({
+                        name: profile.name,
+                        school: profile.school,
+                        major: profile.major,
+                        grade: profile.grade,
+                        email: email.trim(),
                     });
-                    const dnsData = await dnsRes.json();
-                    
-                    // Status 0 is NOERROR. If no MX records (type 15), domain can't receive mail.
-                    // Status 3 is NXDOMAIN (domain doesn't exist at all).
-                    if (dnsData.Status === 3 || (dnsData.Status === 0 && (!dnsData.Answer || !dnsData.Answer.some(a => a.type === 15)))) {
-                        setErrors({ email: 'Domain does not exist or cannot receive emails.' });
-                        setIsSubmitting(false);
-                        return;
-                    }
-                } catch (dnsErr) {
-                    console.warn('DNS validation failed, bypassing...', dnsErr);
+                } catch {
+                    /* 邮箱回写失败不阻断 mailto */
                 }
             }
 
-            const response = await fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    access_key: WEB3FORMS_KEY,
-                    from_name: 'Portfolio Contact',
-                    email: email,
-                    subject: subject,
-                    message: message
-                })
+            window.location.href = mailtoUrl({
+                subject: subject.trim(),
+                body: message.trim(),
+                fromEmail: email.trim(),
             });
 
-            const result = await response.json();
-
-            if (result.success) {
-                setSubmitStatus('success');
-                recordSubmission(); // Record for rate limiting
-                onSend?.({ message, email, subject });
-
-                // Clear form after success
-                setMessage('');
-                setEmail('');
-                setSubject('');
-                formLoadedAt.current = Date.now(); // Reset timing trap
-            } else {
-                throw new Error(result.message || 'Failed to send');
-            }
+            setSubmitStatus('success');
+            recordSubmission();
+            onSend?.({ message, email, subject });
+            setMessage('');
+            setSubject('');
+            formLoadedAt.current = Date.now();
         } catch (error) {
-            // console.error('❌ Send failed:', error);
             setSubmitStatus('error');
         } finally {
             setIsSubmitting(false);
         }
-    }, [message, email, subject, onSend, validateForm]);
+    }, [message, email, subject, onSend, botcheck, hasUser, profile, saveBasic]);
 
     // Input handlers
     const handleMessageInput = useCallback((e) => {
@@ -511,8 +470,16 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
 
     // Format message (word wrap)
     const formattedMessage = useMemo(() => {
-        const maxCharsPerLine = 28;
         const maxLines = 10;
+        const hasCjk = /[\u4e00-\u9fff]/.test(message);
+        const maxCharsPerLine = hasCjk ? 16 : 28;
+        if (hasCjk) {
+            const lines = [];
+            for (let i = 0; i < message.length && lines.length < maxLines; i += maxCharsPerLine) {
+                lines.push(message.slice(i, i + maxCharsPerLine));
+            }
+            return lines.join('\n');
+        }
         const lines = [];
         const words = message.split(' ');
         let currentLine = '';
@@ -594,7 +561,7 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
                 <InteractiveTextField
                     isActive={activeField === 'email'}
                     value={email}
-                    placeholder="email..."
+                    placeholder="你的邮箱…"
                     cursor={cursorVisible ? '|' : ' '}
                     onClick={() => { setActiveField('email'); setTimeout(() => emailInputRef.current?.focus(), 10); }}
                     // Layout
@@ -612,7 +579,7 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
                 <InteractiveTextField
                     isActive={activeField === 'subject'}
                     value={subject}
-                    placeholder="subject..."
+                    placeholder="主题…"
                     cursor={cursorVisible ? '|' : ' '}
                     onClick={() => { setActiveField('subject'); setTimeout(() => subjectInputRef.current?.focus(), 10); }}
                     // Layout
@@ -630,7 +597,7 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
                 <InteractiveTextField
                     isActive={activeField === 'message'}
                     value={formattedMessage}
-                    placeholder="message..."
+                    placeholder="留言内容…"
                     cursor={cursorVisible ? '|' : ' '}
                     onClick={() => { setActiveField('message'); setTimeout(() => hiddenInputRef.current?.focus(), 10); }}
                     // Layout
@@ -653,7 +620,7 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
                     onClick={handleButtonClick}
                     position={[0, 0.005, 0.68]}
                     size={[0.5, 0.13]}
-                    text={isSubmitting ? 'SENDING...' : 'SEND'}
+                    text={isSubmitting ? '发送中…' : '发送'}
                     fontPath={FONT_PATH}
                 />
 
@@ -668,7 +635,7 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
                         anchorX="center"
                         anchorY="middle"
                     >
-                        {errors.email || errors.subject || errors.message || 'Please fill all fields'}
+                        {errors.email || errors.subject || errors.message || '请填写完整'}
                     </Text>
                 )}
 
@@ -683,7 +650,7 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
                         anchorX="center"
                         anchorY="middle"
                     >
-                        Message sent! ✓
+                        已打开邮箱草稿 ✓
                     </Text>
                 )}
 
@@ -698,7 +665,7 @@ const MessagePaper = ({ position = [0, 0.05, 2], onSend }) => {
                         anchorX="center"
                         anchorY="middle"
                     >
-                        Failed to send. Try again.
+                        发送失败，请重试
                     </Text>
                 )}
             </>

@@ -9,7 +9,8 @@ export const ACHIEVEMENTS = {
     about_fly: { id: 'about_fly', label: '滚动浏览你的就业故事', title: '云端行者' },
     studio_interact: { id: 'studio_interact', label: '拖拽旋转浏览内容', title: '导演' },
     gallery_inspect: { id: 'gallery_inspect', label: '点击卡片查看详情', title: '鉴赏家' },
-    contact_choose: { id: 'contact_choose', label: '选择联系方式', title: '社交达人' }
+    contact_choose: { id: 'contact_choose', label: '选择联系方式', title: '社交达人' },
+    contact_submit: { id: 'contact_submit', label: '写下并发送留言', title: '漂流瓶' },
 };
 
 export const AchievementsProvider = ({ children }) => {

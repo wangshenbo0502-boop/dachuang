@@ -28,8 +28,8 @@ const ROOM_META = {
     },
     contact: {
         path: '/contact',
-        title: '联系反馈 — AI就业竞争力分析助手',
-        description: '提交反馈与建议，获取平台使用帮助。',
+        title: '联系我们 — AI就业竞争力分析助手',
+        description: '查看 asffga 团队联系方式，或留下你的建议。',
     },
 };
 

@@ -23,7 +23,7 @@ const SUBTITLES = {
     'THE GALLERY': '探索岗位库与匹配结果',
     'THE STUDIO': '浏览 AI 分析与优化记录',
     'DEV DIARY': '记录你的开发成长历程',
-    "LET'S CONNECT": '提交反馈与建议'
+    "LET'S CONNECT": '联系我们'
 };
 
 // Naturalny kafelek listwy: 1582x94px przy wysokości 0.15 → ~2.524 units szerokości
