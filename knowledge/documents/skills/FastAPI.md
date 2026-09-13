@@ -123,3 +123,8 @@ last_update: 2026-07-28
 - **AI 服务化**：2026 年 FastAPI 最热门的方向是 LLM 推理 API，重点掌握流式输出与模型并发
 - **生态融合**：结合 SQLAlchemy、Redis、Kafka、Docker 等技术栈，构建完整的后端技术体系
 - **性能意识**：学会使用压测工具定位瓶颈，从数据库、缓存、并发模型多维度优化性能
+# Reference
+
+1. FastAPI. FastAPI 官方文档（中文版）. fastapi.tiangolo.com/zh. 访问时间: 2026-09-13. https://fastapi.tiangolo.com/zh/
+2. Pydantic. Pydantic V2 官方文档. docs.pydantic.dev. 访问时间: 2026-09-13.
+3. OpenAPI Initiative. OpenAPI Specification 3.1. spec.openapis.org. 访问时间: 2026-09-13.

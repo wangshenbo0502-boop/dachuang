@@ -139,3 +139,7 @@ last_update: 2026-07-28
 - 极客时间：《Redis核心技术与实战》
 
 > Reference: 访问时间 2026-07-28
+# Reference
+
+1. Redis Ltd. Redis 官方文档. redis.io/docs. 访问时间: 2026-09-13.
+2. Broder et al. Network Applications of Bloom Filters (2004，布隆过滤器经典论文). 访问时间: 2026-09-13.

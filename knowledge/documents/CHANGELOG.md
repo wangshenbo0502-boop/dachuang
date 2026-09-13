@@ -7,6 +7,46 @@
 
 ---
 
+## [v1.1.0] — 2026-09-13
+
+### Round 08-09：核心档案重建 + 全库质量清零
+
+**重建（12 篇核心档案，stub → 完整档案）**
+
+- **companies/（8 篇）**：腾讯、阿里巴巴、字节跳动、美团、华为、小红书、哔哩哔哩、中小型互联网公司（100-2000人）。原 JSON 迁移 stub（492-709 字）重建为 5000-8000 字级完整企业档案，含公司概况/主营业务/财务经营/技术实力/招聘岗位/校招社招/技术栈/面试特点/薪资福利/办公地点/最新动态/应聘建议/Reference 共 13 章节。数据经 2026-09 联网搜索交叉验证（腾讯青云计划、阿里 7000+ Offer 与千问事业部、字节 Seed 与豆包股、美团 6000 人校招与 AI 胜任力考察、华为超万人校招与天才少年、2026 届 Java/前端市场 AI 影响分析等）。
+- **jobs/（2 篇）**：Java后端开发工程师（272→8600+ 字）、前端开发工程师（263→9000+ 字），含岗位职责/要求/技术栈/常见项目/薪资区间/热门城市/就业趋势与 AI 影响/发展路径/学习建议/适合人群全维度，就业数据（2025 Java 岗位总量 -20%~-23%、AI 前端岗 30-60K×20薪 等）均注明公开来源。
+
+**Reference 补齐（72 篇）**
+
+- skills/ 46 篇全部补齐规范 Reference 章节（官方文档/规范/权威教材，每篇 3-6 个来源）
+- interview/ 3 篇、roadmap/ 2 篇、resume/ 1 篇、policies/ 2 篇、competition/ 1 篇补齐
+- projects/ 18 篇补齐（RAG/Agent/大模型微调/秒杀等项目对齐 LangChain、LoRA 论文、Milvus、vLLM 等官方与学术来源）
+
+**内容扩写（45 篇达到 1500 字门槛）**
+
+- skills/ 17 篇：Docker/MongoDB/Node.js/Redis/PyTorch/CSS/HTML/Java/NumPy/React/Spring Boot/SQL/TypeScript/Vue.js/机器学习/深度学习/skill_categories——追加"原理与面试高频/进阶要点"章节（内容为可验证技术事实：overlay2 分层、跳表、事件循环六阶段、Fiber 架构、自动装配原理、窗口函数、RoPE 等）
+- projects/ 12 篇：全部 stub（442-687 字）扩写至 1500+ 字，追加"技术难点与面试展开点/项目演进路线/简历定位"章节
+- competition/README、policies/README：从索引骨架扩写为含文档索引表、使用指引、贡献与维护规范的完整目录页
+
+**工具链**
+
+- 新增 `_add_refs.py`（Reference 批量维护工具，含来源映射表）
+- 新增/迭代 `_expand_projects.py`（项目文档扩写工具）
+- 修正 `_check.py` 的 Reference 匹配正则（兼容"## 六、Reference"编号标题格式）
+
+### 验证结果（_check.py）
+
+全部 10 个目录 250 篇 Markdown：noFrontMatter=0、noReference=0、under1500=0。
+
+### 下一轮计划（Round 10 建议）
+
+- companies/ 二线梯队 31 家（小米/百度/京东/快手/滴滴/网易/拼多多/携程/蔚来/理想/小鹏/各银行软开等）按 v1.1.0 标准重建（现仍为早期短档案）
+- interview/ 题量扩充（当前 ~570 题，目标 3000+，优先 AI/大模型应用与 Go 方向）
+- skills/ 三阶段路线的 Reference 逐篇人工校验链接有效性
+- market/ 补充 2026 下半年新报告（就业率/Q3 薪资数据）
+
+---
+
 ## [v1.0.0] — 2026-07-28
 
 ### Phase 5：Skills 目录扩充与体系完善

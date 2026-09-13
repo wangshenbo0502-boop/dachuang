@@ -82,3 +82,8 @@ date: 2026-07-28
 - 为之前的 Todo List 写单元测试
 
 **评估方式：** 代码审查 — 代码模块化清晰，有测试覆盖，虚拟滚动列表流畅支持万级数据
+# Reference
+
+1. MDN Web Docs. JavaScript 参考文档. developer.mozilla.org/zh-CN/docs/Web/JavaScript. 访问时间: 2026-09-13.
+2. ECMA International. ECMAScript® 2024 Language Specification. ecma-international.org. 访问时间: 2026-09-13.
+3. 现代JavaScript教程. javascript.info（高质量开源教程，中文版）. zh.javascript.info. 访问时间: 2026-09-13.

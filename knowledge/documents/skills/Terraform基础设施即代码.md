@@ -81,3 +81,8 @@ date: 2026-07-28
 ---
 
 **来源：** HashiCorp 官方文档、CSDN 云原生专栏、猎聘云架构师 JD、阿里云最佳实践（访问时间：2026-07-28）
+# Reference
+
+1. HashiCorp. Terraform 官方文档. developer.hashicorp.com/terraform/docs. 访问时间: 2026-09-13.
+2. HashiCorp. Terraform Registry（Provider 市场）. registry.terraform.io. 访问时间: 2026-09-13.
+3. OpenTofu. OpenTofu 官方文档（开源分支）. opentofu.org/docs. 访问时间: 2026-09-13.

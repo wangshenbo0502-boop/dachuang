@@ -120,3 +120,8 @@ last_update: 2026-07-28
 - **理解模型差异**：不同模型的特性差异显著，需针对性调整提示策略
 - **关注安全**：Prompt Injection 等安全问题是企业落地的重要挑战，需持续研究
 - **自动化思维**：逐步从手动写提示词转向利用工具实现自动化优化与评估
+# Reference
+
+1. Anthropic. Prompt Engineering 官方指南. docs.anthropic.com/en/docs/build-with-claude/prompt-engineering. 访问时间: 2026-09-13.
+2. OpenAI. Prompt Engineering Guide（官方最佳实践）. platform.openai.com/docs/guides/prompt-engineering. 访问时间: 2026-09-13.
+3. DeepSeek. DeepSeek API 官方文档（Prompt 工程）. api-docs.deepseek.com. 访问时间: 2026-09-13.

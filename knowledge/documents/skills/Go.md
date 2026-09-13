@@ -122,3 +122,8 @@ last_update: 2026-07-28
 - **工程实践**：积极参与开源项目，学习大型 Go 项目的工程化最佳实践
 - **云原生方向**：结合 Docker、Kubernetes、etcd 深入云原生生态，是 Go 开发者的核心赛道
 - **性能意识**：养成使用 pprof、race detector、benchmark 等工具进行性能分析与调优
+# Reference
+
+1. The Go Authors. Go 官方文档与 A Tour of Go. go.dev/doc. 访问时间: 2026-09-13. https://go.dev/doc/
+2. The Go Authors. Effective Go（官方工程实践指南）. go.dev/doc/effective_go. 访问时间: 2026-09-13.
+3. Go by Example. go by example（标准库用法示例）. gobyexample.com. 访问时间: 2026-09-13.

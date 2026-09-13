@@ -119,3 +119,8 @@ last_update: 2026-07-28
 - **横向拓展**：结合 RAG、Agent、向量数据库等技能，构建端到端 AI 应用能力
 - **纵向深入**：研究 LangGraph 与 LangSmith 的高级用法，向 AI 架构师方向发展
 - **生态视野**：关注 LlamaIndex、Haystack 等同类框架，保持技术选型的开阔视野
+# Reference
+
+1. LangChain. LangChain Python 官方文档. python.langchain.com. 访问时间: 2026-09-13.
+2. LangChain. LangGraph 官方文档（Agent 工作流）. langchain-ai.github.io/langgraph. 访问时间: 2026-09-13.
+3. OpenAI. OpenAI API 官方参考. platform.openai.com/docs/api-reference. 访问时间: 2026-09-13.

@@ -75,3 +75,17 @@ date: 2026-07-28
 - 用 Tailwind CSS 重写之前的页面，并添加 GSAP 动画
 
 **评估方式：** 工具检测 — Lighthouse Performance 评分 > 90，动画使用 GPU 加速
+
+# 进阶要点与面试高频
+
+超越基础语法后，CSS 的三个进阶主线值得系统掌握。**布局体系**：Flex 一维布局（主轴/交叉轴、flex:1 的完整含义 flex-grow/shrink/basis）、Grid 二维布局（模板区域、minmax/fr 单位）、以及现代响应式单位（rem/em/vw/vh、clamp() 流体排版）；**容器查询（Container Queries）**已获主流浏览器支持，组件可依据父容器而非视口自适应，是组件化时代的重要演进。
+
+**层叠与继承机制**是面试深水区：选择器优先级（inline > id > class > tag）、层叠上下文（stacking context）如何决定元素绘制顺序、z-index 为何"失效"（未创建层叠上下文或父级受限）。**渲染性能**：重排（layout）与重绘（paint）的触发条件与代价排序（重排 > 重绘 > 合成），transform/opacity 走合成层不触发重排——动画优化（用 transform 替代 top/left、will-change 提示）是高频考题。
+
+现代工程实践：CSS 变量（custom properties）实现主题切换、@media 与 dark mode 适配、BEM 命名或 CSS Modules/CSS-in-JS 的工程选型。面试高频：水平垂直居中的 N 种写法、BFC 的触发条件与应用（清除浮动/防止 margin 合并）、flex:1 细节、sticky 定位原理、重排重绘优化、移动端 1px 问题。
+
+# Reference
+
+1. MDN Web Docs. CSS 参考文档. developer.mozilla.org/zh-CN/docs/Web/CSS. 访问时间: 2026-09-13.
+2. Google Chrome Team. web.dev Learn CSS（官方交互教程）. web.dev/learn/css. 访问时间: 2026-09-13.
+3. Can I use. 浏览器兼容性数据查询. caniuse.com. 访问时间: 2026-09-13.

@@ -122,3 +122,8 @@ last_update: 2026-07-28
 - **关注标准化**：Wasm 生态快速演进，持续跟踪官方提案与 W3C Wasm 工作组动态
 - **性能思维**：始终以性能基准为导向，避免过早优化，用数据驱动优化决策
 - **生态融合**：结合 AI 推理、区块链、游戏等垂直领域，发掘 Wasm 的独特价值场景
+# Reference
+
+1. WebAssembly Community Group. WebAssembly 官方规范. webassembly.org/specs. 访问时间: 2026-09-13.
+2. MDN Web Docs. WebAssembly 中文文档. developer.mozilla.org/zh-CN/docs/WebAssembly. 访问时间: 2026-09-13.
+3. Bytecode Alliance. Wasmtime 官方文档（运行时）. wasmtime.dev. 访问时间: 2026-09-13.

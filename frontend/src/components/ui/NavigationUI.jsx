@@ -241,7 +241,7 @@ const NavigationUI = () => {
                     <button
                         className={`nav-btn hamburger-btn ${isMenuOpen ? 'open' : ''}`}
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Toggle menu"
+                        aria-label="打开菜单"
                         aria-expanded={isMenuOpen}
                     >
                         <div className="hamburger-icon">
@@ -254,7 +254,7 @@ const NavigationUI = () => {
                     <button
                         className={`nav-btn audio-btn ${isAudioMenuOpen ? 'open' : ''}`}
                         onClick={() => setIsAudioMenuOpen(!isAudioMenuOpen)}
-                        aria-label="Audio Settings"
+                        aria-label="音频设置"
                         aria-expanded={isAudioMenuOpen}
                     >
                         {isMuted ? (
@@ -284,7 +284,7 @@ const NavigationUI = () => {
                     <button
                         className={`nav-btn achievements-btn ${isAchievementsOpen ? 'open' : ''}`}
                         onClick={() => setIsAchievementsOpen(!isAchievementsOpen)}
-                        aria-label="Achievements"
+                        aria-label="成就"
                         aria-expanded={isAchievementsOpen}
                     >
                         <svg viewBox="0 0 24 24" className="icon-trophy">
@@ -298,7 +298,7 @@ const NavigationUI = () => {
 
             {/* Map Panel - Drops from top when open */}
             {hasEntered && (
-                <div className={`map-panel ${isMenuOpen ? 'open' : ''}`} inert={!isMenuOpen ? true : undefined} ref={mapPanelRef} onKeyDown={handleMapKeyDown} role="dialog" aria-label="Map">
+                <div className={`map-panel ${isMenuOpen ? 'open' : ''}`} inert={!isMenuOpen ? true : undefined} ref={mapPanelRef} onKeyDown={handleMapKeyDown} role="dialog" aria-label="功能地图">
                     {/* SVG Border Overlay */}
                     <svg
                         className="map-border-overlay"
@@ -332,7 +332,7 @@ const NavigationUI = () => {
                                 ref={mapCloseRef}
                                 className="close-btn"
                                 onClick={() => setIsMenuOpen(false)}
-                                aria-label="Close map"
+                                aria-label="关闭地图"
                             >
                                 <svg viewBox="0 0 24 24">
                                     <path d="M18 6L6 18M6 6l12 12" />
@@ -341,7 +341,7 @@ const NavigationUI = () => {
                         </div>
                         <div className="map-container">
                             {/* Map background image */}
-                            <img src="/images/map.webp" alt="Portfolio Map" className="map-image" />
+                            <img src="/images/map.webp" alt="功能地图" className="map-image" />
 
                             {/* Painted Map Overlays */}
                             <img ref={paintedMapsRefs.about} src="/images/map_about_painted.webp" alt="" className="painted-map-layer" style={{ clipPath: 'polygon(10% 20%, 10% 20%, 10% 55%, 10% 55%)' }} />
@@ -358,7 +358,7 @@ const NavigationUI = () => {
                                 onFocus={() => setHoveredRoom('about')}
                                 onBlur={() => setHoveredRoom(null)}
                                 onClick={() => handleRoomClick('about')}
-                                aria-label="Teleport to About room"
+                                aria-label="传送到就业画像"
                             />
                             <button
                                 type="button"
@@ -368,7 +368,7 @@ const NavigationUI = () => {
                                 onFocus={() => setHoveredRoom('gallery')}
                                 onBlur={() => setHoveredRoom(null)}
                                 onClick={() => handleRoomClick('gallery')}
-                                aria-label="Teleport to Gallery room"
+                                aria-label="传送到岗位匹配"
                             />
                             <button
                                 type="button"
@@ -388,14 +388,14 @@ const NavigationUI = () => {
                                 onFocus={() => setHoveredRoom('studio')}
                                 onBlur={() => setHoveredRoom(null)}
                                 onClick={() => handleRoomClick('studio')}
-                                aria-label="Teleport to Studio room"
+                                aria-label="传送到 AI 工作台"
                             />
 
                             {/* Permanent Map Text Labels */}
-                            <div className="map-room-label about">ABOUT</div>
-                            <div className="map-room-label gallery">THE<br />GALLERY</div>
-                            <div className="map-room-label contact">联系我们</div>
-                            <div className="map-room-label studio">THE<br />STUDIO</div>
+                            <div className="map-room-label about">就业<br />画像</div>
+                            <div className="map-room-label gallery">岗位<br />匹配</div>
+                            <div className="map-room-label contact">联系<br />我们</div>
+                            <div className="map-room-label studio">AI<br />工作台</div>
 
                             {/* Pin slot markers - 4 locations */}
                             {ROOMS.map((room) => (
@@ -446,7 +446,7 @@ const NavigationUI = () => {
                             <button
                                 className="close-btn"
                                 onClick={() => setIsAudioMenuOpen(false)}
-                                aria-label="Close audio settings"
+                                aria-label="关闭音频设置"
                             >
                                 <svg viewBox="0 0 24 24">
                                     <path d="M18 6L6 18M6 6l12 12" />

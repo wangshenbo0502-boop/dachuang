@@ -76,3 +76,8 @@ date: 2026-07-28
 - 部署模型到移动端并优化推理速度
 
 **评估方式：** 部署验证 — 模型成功部署到移动端，推理速度提升3倍以上，精度损失控制在可接受范围内
+# Reference
+
+1. Google. TensorFlow 官方文档与教程. tensorflow.org. 访问时间: 2026-09-13. https://www.tensorflow.org/?hl=zh-cn
+2. Google. Keras 官方文档（TF 高层 API）. keras.io. 访问时间: 2026-09-13.
+3. Google. TensorFlow Model Optimization 官方指南（端侧部署）. tensorflow.org/model_optimization. 访问时间: 2026-09-13.

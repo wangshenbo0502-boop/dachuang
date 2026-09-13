@@ -77,3 +77,8 @@ date: 2026-07-28
 - 设计高可用 MySQL 集群方案
 
 **评估方式：** 架构设计 — 提交完整的高可用集群设计方案，包含主从切换、故障转移、备份恢复策略
+# Reference
+
+1. Oracle. MySQL 8.x Reference Manual（官方手册）. dev.mysql.com/doc. 访问时间: 2026-09-13. https://dev.mysql.com/doc/
+2. Oracle. MySQL InnoDB 存储引擎官方文档. dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html. 访问时间: 2026-09-13.
+3. Percona. Percona Database Performance Blog（高质量数据库实践）. percona.com/blog. 访问时间: 2026-09-13.

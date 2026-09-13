@@ -264,3 +264,9 @@ version: "0.2.0"
 **JDK 6+ synchronized 优化**：偏向锁 → 轻量级锁（自旋）→ 重量级锁，性能与 ReentrantLock 接近。简单场景优先使用 synchronized。
 
 </details>
+# Reference
+
+1. Oracle. Java SE 官方文档. docs.oracle.com/en/java/javase/21. 访问时间: 2026-09-13.
+2. JavaGuide. Java 面试开源知识库. javaguide.cn. 访问时间: 2026-09-13. https://javaguide.cn/
+3. 小林coding. 图解 MySQL/网络/系统（后端八股图解）. xiaolincoding.com. 访问时间: 2026-09-13.
+4. 牛客网. Java 校招面经汇总. nowcoder.com. 访问时间: 2026-09-13.

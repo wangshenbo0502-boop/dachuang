@@ -126,3 +126,9 @@ last_update: 2026-07-28
 - RAGAS 官方文档：https://docs.ragas.io/ （RAG 效果评估框架）
 
 > Reference: 访问时间 2026-07-28
+# Reference
+
+1. Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (NeurIPS 2020). arxiv.org/abs/2005.11401. 访问时间: 2026-09-13.
+2. LangChain. Build a Retrieval Augmented Generation (RAG) App 官方教程. python.langchain.com/docs/tutorials/rag. 访问时间: 2026-09-13.
+3. Zilliz. Milvus 向量数据库官方文档. milvus.io/docs. 访问时间: 2026-09-13.
+4. DeepSeek. DeepSeek API 官方文档. api-docs.deepseek.com. 访问时间: 2026-09-13.

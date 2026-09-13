@@ -78,3 +78,17 @@ date: 2026-07-28
 - 为博客系统加入 Spring Security + Redis + Docker 部署
 
 **评估方式：** 部署验证 — 系统可通过 docker-compose 一键启动，JWT 认证完整
+
+# 版本演进与面试高频
+
+Java 的 LTS 版本节奏是现代 Java 学习的坐标系：**Java 8**（Lambda/Stream/Optional，仍是存量系统主力）、**Java 11**（模块化成熟、HTTP Client 标准化）、**Java 17**（Records 不可变数据类、sealed 密封类、switch 模式匹配预览）、**Java 21**（**虚拟线程（Virtual Threads）正式发布**——轻量级线程由 JVM 调度，百万级并发成为可能，正在重塑高并发 I/O 密集型服务的写法；分代 ZGC 降低停顿）。新项目建议直接基于 Java 17/21 + Spring Boot 3。
+
+JVM 是 Java 岗面试的核心战场，需系统掌握：运行时数据区（堆/栈/方法区/程序计数器）、类加载机制与双亲委派、垃圾回收（分代假说、GC Roots 可达性、CMS→G1→ZGC 的演进逻辑、如何选择收集器）、线上问题排查思路（jstat/jmap/jstack 与 Arthas 的配合使用）。并发编程同样高频：Java 内存模型（happens-before）、synchronized 锁升级、AQS 框架、线程池七参数与执行流程、ThreadLocal 内存泄漏场景。
+
+集合框架的源码级理解是区分度所在：HashMap 的扰动函数/扩容/树化（8 链表转红黑树）、ConcurrentHashMap 的 CAS+synchronized 细粒度锁演进、ArrayList 扩容 1.5 倍的取舍。面试建议：八股按"原理→场景→线上事故排查"三层准备，配合 LeetCode Medium 手写题，是 Java 校招的标准打法。
+
+# Reference
+
+1. Oracle. Java SE 官方文档. docs.oracle.com/en/java/javase/21. 访问时间: 2026-09-13.
+2. Oracle. The Java® Language Specification (Java SE 21 Edition). docs.oracle.com. 访问时间: 2026-09-13.
+3. OpenJDK. JDK 21 Release Notes（虚拟线程正式特性）. openjdk.org. 访问时间: 2026-09-13.

@@ -102,3 +102,9 @@ version: "0.2.0"
 3. **用白板/纸练习手写代码** — 面试时要在无提示的环境下写
 4. **重视时间/空间复杂度分析** — 每次写完都要分析
 5. **牛客网的 ACM 模式输入输出要提前练习** — 不同于 LeetCode 的函数模式
+# Reference
+
+1. LeetCode. 力扣（LeetCode）官方题库与 Hot 100 专题. leetcode.cn/studyplan/top-100-liked. 访问时间: 2026-09-13.
+2. 牛客网. 面经与企业题库（校招真题）. nowcoder.com. 访问时间: 2026-09-13.
+3. Codeforces. Codeforces 在线竞赛与题库. codeforces.com. 访问时间: 2026-09-13.
+4. AcWing. 算法基础课与题库（公开目录）. acwing.com. 访问时间: 2026-09-13.

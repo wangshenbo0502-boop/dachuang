@@ -1,0 +1,159 @@
+/* 岗位匹配 — 轻量入口（不遮挡场景） */
+.job-match-entry {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 6rem;
+  z-index: 1400;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+  pointer-events: none;
+  font-family: 'Cabin Sketch', cursive, sans-serif;
+}
+
+.job-match-fab {
+  pointer-events: auto;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.85rem;
+  background: #fff;
+  border: 2px solid #1a1a1a;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 2px 255px 3px 255px / 255px 5px 225px 3px;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  transition: transform 0.15s ease;
+}
+
+.job-match-fab:hover {
+  transform: rotate(0deg) translateY(-2px);
+}
+
+.job-match-toast {
+  pointer-events: none;
+  margin: 0;
+  max-width: 220px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #5a3a3a;
+  background: rgba(255, 232, 232, 0.92);
+  border: 1.5px solid #1a1a1a;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.08);
+  text-align: right;
+}
+
+/* GlobalOverlay 内表单 */
+.job-match-form {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  font-family: 'Cabin Sketch', cursive, sans-serif;
+  color: #1a1a1a;
+}
+
+.job-match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.job-match-mode {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.job-match-link {
+  font-family: inherit;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #333;
+  font-size: 0.85rem;
+}
+
+.job-match-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.job-match-filters input,
+.job-match-filters select {
+  font-family: inherit;
+  border: 2px solid #1a1a1a;
+  padding: 0.4rem 0.55rem;
+  background: #fff;
+  flex: 1 1 160px;
+  min-width: 0;
+  font-size: 0.95rem;
+}
+
+.job-match-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.job-match-btn {
+  font-family: inherit;
+  border: 2px solid #1a1a1a;
+  background: #f3f3f3;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.job-match-btn.primary {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.job-match-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.job-match-count {
+  font-size: 0.88rem;
+  color: #555;
+}
+
+.job-match-banner {
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.7rem;
+  border: 2px solid #1a1a1a;
+  font-size: 0.9rem;
+}
+
+.job-match-banner.err {
+  background: #ffe8e8;
+}
+
+.job-match-banner.warn {
+  background: #fff8e1;
+}
+
+.job-match-hint {
+  margin: 0.5rem 0 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 767px) {
+  .job-match-entry {
+    right: 0.85rem;
+    bottom: 5.5rem;
+  }
+
+  .job-match-toast {
+    max-width: 160px;
+    font-size: 0.72rem;
+  }
+}

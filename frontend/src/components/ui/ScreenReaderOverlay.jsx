@@ -1,5 +1,6 @@
 import { useScene } from '../../context/SceneContext';
-import { useGalleryProjects, useStudioContent, useAwards } from '../../hooks/useSanityData';
+import { useStudioContent, useAwards } from '../../hooks/useSanityData';
+import { useJobMatch } from '../../context/JobMatchContext';
 import '../../styles/ScreenReaderOverlay.scss';
 
 /**
@@ -9,7 +10,7 @@ import '../../styles/ScreenReaderOverlay.scss';
 const ScreenReaderOverlay = () => {
     const { hasEntered, isInRoom, currentRoom, teleportTo, requestExit } = useScene();
 
-    const projects = useGalleryProjects();
+    const { displayItems, mode, listLoading, listError } = useJobMatch();
     const studio = useStudioContent();
     const awards = useAwards();
 
@@ -94,13 +95,16 @@ const ScreenReaderOverlay = () => {
                         {currentRoom === 'gallery' && (
                             <div aria-label="岗位匹配内容">
                                 <h3>岗位匹配</h3>
-                                <p>浏览岗位卡片，点击查看详情与匹配结果。</p>
-                                {projects?.length > 0 && (
+                                <p>{mode === 'match' ? '当前显示技能匹配结果。' : '浏览岗位卡片，点击查看详情。'}</p>
+                                {listLoading && <p>正在加载岗位列表…</p>}
+                                {listError && <p>{listError}</p>}
+                                {displayItems?.length > 0 && (
                                     <ul>
-                                        {projects.map((p, i) => (
-                                            <li key={i}>
+                                        {displayItems.map((p) => (
+                                            <li key={p.job_id}>
                                                 <h4>{p.title}</h4>
-                                                <p>{p.description}</p>
+                                                <p>{p.category} · {p.snippet}</p>
+                                                {p.match_score != null && <p>匹配度 {Math.round(p.match_score)}%</p>}
                                             </li>
                                         ))}
                                     </ul>

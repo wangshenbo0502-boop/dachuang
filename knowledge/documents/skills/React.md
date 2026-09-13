@@ -74,3 +74,17 @@ date: 2026-07-28
 - 用 Next.js 重构商城项目，实现 SSR + ISR
 
 **评估方式：** 性能测试 — Lighthouse 评分 > 85，首屏加载 < 2s
+
+# 原理与面试高频
+
+React 的现代核心是 **Fiber 架构**：把渲染工作拆分为可中断的小单元（Fiber 节点），通过调度器（Scheduler，基于优先级与 MessageChannel 时间切片）协调渲染与用户交互，实现"并发渲染"。两棵 Fiber 树（current 与 workInProgress）配合双缓冲实现增量更新与中断恢复。
+
+**Hooks 原理**是面试必考：Hooks 依托 Fiber 节点上的链表按调用顺序索引（因此有"不能放在条件语句里"的规则）；useState 的更新触发重渲染，useEffect 的依赖数组与 cleanup 机制对应副作用的挂载/更新/卸载时机；useMemo/useCallback 的记忆化本质是依赖数组的浅比较。React 18 的并发特性（useTransition/useDeferredValue 区分紧急与非紧急更新）与 React 19 的 Server Components/Actions 是新的加分考点。
+
+工程层面：状态管理从 Redux（单一 store、action 不可变流）演进到轻量方案（Zustand/Jotai 原子化状态）与服务端状态专用库（TanStack Query 解决缓存/重试/失效）；Next.js 提供 SSR/SSG/RSC 全栈能力，是 React 生态事实上的全栈标准。diff 算法三假设（同类型元素复用、key 标识跨层级移动、同级多节点 O(n) 比较）决定了"为什么列表要稳定唯一的 key"这类高频题的标准答案。
+
+# Reference
+
+1. Meta Open Source. React 官方文档（react.dev）. react.dev. 访问时间: 2026-09-13. https://react.dev/
+2. Meta Open Source. React 19 Release Notes（Server Components / Actions）. react.dev/blog. 访问时间: 2026-09-13.
+3. Vercel. Next.js 官方文档（React 全栈框架）. nextjs.org/docs. 访问时间: 2026-09-13.

@@ -79,3 +79,8 @@ date: 2026-07-28
 - 为关键接口写 pytest 测试
 
 **评估方式：** 测试覆盖率 — 核心业务代码测试覆盖率 > 80%，接口文档完整可交互
+# Reference
+
+1. Python Software Foundation. Python 3 官方文档. docs.python.org/zh-cn/3. 访问时间: 2026-09-13. https://docs.python.org/zh-cn/3/
+2. Python Software Foundation. PEP 索引（Python 增强提案）. peps.python.org. 访问时间: 2026-09-13.
+3. PyPA. pip 与 Python 打包官方文档. pip.pypa.io. 访问时间: 2026-09-13.

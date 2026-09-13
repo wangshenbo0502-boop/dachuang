@@ -163,3 +163,8 @@ Burp Suite 渗透测试工具
 - **深入阶段（5-10周）**：学习插件开发，尝试编写自定义扫描规则与自动化脚本，参与 Bug Bounty 平台实战，搭建个人自动化扫描流水线，形成自己的渗透测试方法论。
 - **职业发展**：Burp Suite 是渗透测试工程师的核心工具，建议配合网络安全、Web 安全、内网渗透等技能一起学习，考取 CISP-PTE、OSCP 等认证提升职业竞争力。
 - **持续精进**：关注 PortSwigger 官方博客与社区插件更新，定期参加 CTF 和 Bug Bounty 活动，不断积累实战经验和工具链，从工具使用者向工具开发者和安全专家演进。
+# Reference
+
+1. PortSwigger. Burp Suite 官方文档. portswigger.net/burp/documentation. 访问时间: 2026-09-13.
+2. OWASP Foundation. OWASP Top 10 Web Application Security Risks (2021). owasp.org. 访问时间: 2026-09-13. https://owasp.org/www-project-top-ten/
+3. CTF Wiki. Web 安全知识库（开源社区维护）. ctf-wiki.org. 访问时间: 2026-09-13.

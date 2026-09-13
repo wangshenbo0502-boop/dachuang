@@ -118,3 +118,8 @@ last_update: 2026-07-28
 - **关注前沿**：跟踪 Graph RAG、Agentic RAG、Self-RAG 等新兴技术方向
 - **全栈能力**：结合向量数据库、Embedding 模型、推理引擎，构建端到端优化能力
 - **业务理解**：深入理解业务场景与知识结构，设计与业务匹配的 RAG 架构方案
+# Reference
+
+1. Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (NeurIPS 2020). arxiv.org/abs/2005.11401. 访问时间: 2026-09-13.
+2. LangChain. RAG 官方教程（Build a RAG App）. python.langchain.com/docs/tutorials/rag. 访问时间: 2026-09-13.
+3. LlamaIndex. LlamaIndex 官方文档（数据框架与索引）. docs.llamaindex.ai. 访问时间: 2026-09-13.

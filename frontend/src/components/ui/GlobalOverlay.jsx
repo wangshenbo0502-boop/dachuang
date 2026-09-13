@@ -3,6 +3,8 @@ import { useScene } from '../../context/SceneContext';
 import { useUser } from '../../context/UserContext';
 import { toAnalysisOverlay } from '../../adapters/profile';
 import ProfileOverlay, { AnalysisReport } from './ProfileOverlay';
+import { JobDetailBody } from './JobMatchOverlay';
+import { JobMatchPanelBody } from './JobMatchPanel';
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin';
 import '../../styles/GlobalOverlay.scss';
@@ -74,7 +76,7 @@ const GlobalOverlay = () => {
 const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
     if (!content) return null;
 
-    const label = content.platformConfig?.label || 'Content';
+    const label = content.platformConfig?.label || '内容';
 
     // GSAP TextPlugin typing effect for description
     const descriptionRef = useRef(null);
@@ -315,7 +317,7 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                         pointerEvents: 'auto', // Re-enable clicks for the card
                         ...cardStyle,
                         // Override styles for grid layout to be centered and wider
-                        ...(['certificate_grid', 'profile_form', 'analysis_report', 'experience_list'].includes(content.layout) ? {
+                        ...(['certificate_grid', 'profile_form', 'analysis_report', 'experience_list', 'job_detail', 'job_match_panel'].includes(content.layout) ? {
                             // Make it centered and wide on desktop
                             width: isMobile ? '95vw' : 'clamp(300px, 90vw, 1200px)',
                             height: 'clamp(500px, 85vh, 900px)',
@@ -401,7 +403,7 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                         <button
                             onClick={onClose}
                             className="studio-close-btn"
-                            aria-label="Close"
+                            aria-label="关闭"
                         >
                             <svg viewBox="0 0 24 24">
                                 <path d="M18 6L6 18M6 6l12 12" />
@@ -421,6 +423,17 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                         </div>
                     ) : content.layout === 'experience_list' ? (
                         <ExperienceListBody content={content} isOpen={isOpen} getStaggerStyle={getStaggerStyle} scrollContainerRef={scrollContainerRef} />
+                    ) : content.layout === 'job_detail' ? (
+                        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, ...getStaggerStyle(150) }}>
+                            <JobDetailBody
+                                job={content.job}
+                                match={content.match}
+                                blocks={content.blocks}
+                                loadError={content.loadError}
+                            />
+                        </div>
+                    ) : content.layout === 'job_match_panel' ? (
+                        <JobMatchPanelBody getStaggerStyle={getStaggerStyle} />
                     ) : content.layout === 'certificate_grid' ? (
                         <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
                             <div

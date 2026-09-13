@@ -136,25 +136,9 @@ export const GALLERY_TEXTURES_BASE = [
 ];
 
 export const GALLERY_TEXTURES_VERSIONED = [
-    // Project cards
-    'monetuneprzod',
-    'timberkittyprzod',
-    'youngmultiprzod',
-    'bioprzod',
-    // Card back
+    // 岗位卡片中性纸张与按钮
     'tylkartki',
     'przyciskdotylukartki',
-    // Tech stack logos
-    'csslogo',
-    'elementorlogo',
-    'firebaselogo',
-    'htmllogo',
-    'jslogo',
-    'netlifylogo',
-    'phplogo',
-    'reactlogo',
-    'tailwindlogo',
-    'wordpresslogo',
 ];
 
 export const GALLERY_TEXTURES = [

@@ -79,3 +79,17 @@ date: 2026-07-28
 - 用 Nuxt.js 重写个人博客实现 SSR
 
 **评估方式：** 代码审查+性能测试 — 组件的 props 类型完整，有使用文档，Lighthouse 评分 > 80
+
+# 进阶要点与面试高频
+
+Vue 3 的响应式系统建立在 **Proxy** 之上（对比 Vue 2 的 Object.defineProperty：可监听新增/删除属性与数组索引、无需递归初始化）：track 在 getter 中收集依赖（副作用函数），trigger 在 setter 中派发更新；ref 对基本类型包装为带 value 的响应式对象，reactive 用于对象。**编译优化**是 Vue 3 的杀手锏：模板编译期进行静态提升（hoistStatic）、Patch Flag（标记动态节点类型，diff 时只比较标记部分）、块树（Block Tree）收集动态后代——这使得 Vue 的更新性能接近手写优化代码。
+
+**Composition API** 的设计动机是逻辑组织与复用：setup 中按逻辑单元组织代码（对比 Options API 按选项分散）、自定义组合式函数（composables，如 useFetch/useMouse）替代 mixin 的复用方案。Vue 3.5 的响应式 props 解构与 useTemplateRef 等改进持续降低样板代码。
+
+生态坐标：Vite（作者同为尤雨溪，基于原生 ESM 的秒级冷启动）、Pinia（官方状态管理，TypeScript 友好）、Vue Router 4。与 React 的选型对比要客观：Vue 的模板 DSL 与编译优化在中小团队上手更快，React 的 JSX 灵活性与生态纵深在超大规模团队更主流；面试中能说出双方 Trade-off 而非站队，是加分的表达方式。面试高频：Proxy 与 defineProperty 区别、ref 与 reactive 选用、computed 与 watch 场景、v-if 与 v-show、key 的作用与 diff 策略、nextTick 原理。
+
+# Reference
+
+1. Vue.js. Vue 3 官方文档（中文）. cn.vuejs.org/guide. 访问时间: 2026-09-13. https://cn.vuejs.org/guide/introduction.html
+2. Vue.js. Vue 3 深入响应式系统（官方原理篇）. cn.vuejs.org/guide/extras/reactivity-in-depth. 访问时间: 2026-09-13.
+3. Vue.js. Pinia 官方文档（官方状态管理）. pinia.vuejs.org/zh. 访问时间: 2026-09-13.

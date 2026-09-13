@@ -82,3 +82,8 @@ date: 2026-07-28
 ---
 
 **来源：** CNCF 2025 云原生报告、Kubernetes 官方文档、掘金云原生专栏、猎聘运维岗位 JD（访问时间：2026-07-28）
+# Reference
+
+1. Kubernetes. Kubernetes 官方文档（中文）. kubernetes.io/zh-cn/docs. 访问时间: 2026-09-13. https://kubernetes.io/zh-cn/docs/home/
+2. CNCF. Cloud Native Computing Foundation 项目全景图. landscape.cncf.io. 访问时间: 2026-09-13.
+3. Kubernetes. Kubernetes API 概念与 Pod 生命周期规范. kubernetes.io/docs/concepts. 访问时间: 2026-09-13.

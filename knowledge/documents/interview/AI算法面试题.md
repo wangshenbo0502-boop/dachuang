@@ -230,3 +230,10 @@ Attention(Q, K, V) = softmax(QK^T / √d_k) V
 **加分项**：能说出论文名称、GitHub 上有实现、提到部署相关经验。
 
 </details>
+# Reference
+
+1. LeetCode. 力扣题库与官方题解. leetcode.cn. 访问时间: 2026-09-13. https://leetcode.cn/
+2. Andrew Ng. CS229 Machine Learning 讲义. cs229.stanford.edu. 访问时间: 2026-09-13.
+3. 李沐等. 动手学深度学习（中文开源教材）. zh.d2l.ai. 访问时间: 2026-09-13.
+4. HuggingFace. Transformers 官方文档. huggingface.co/docs/transformers. 访问时间: 2026-09-13.
+5. 牛客网. AI 算法岗面经汇总. nowcoder.com. 访问时间: 2026-09-13.

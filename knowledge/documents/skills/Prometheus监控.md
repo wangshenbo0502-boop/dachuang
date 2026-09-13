@@ -81,3 +81,8 @@ date: 2026-07-28
 ---
 
 **来源：** Prometheus 官方文档、CNCF 可观测性报告、腾讯云监控、阿里云 Prometheus（访问时间：2026-07-28）
+# Reference
+
+1. Prometheus. Prometheus 官方文档. prometheus.io/docs. 访问时间: 2026-09-13. https://prometheus.io/docs/introduction/overview/
+2. CNCF. Prometheus（CNCF 毕业项目）. cncf.io/projects/prometheus. 访问时间: 2026-09-13.
+3. Grafana Labs. Grafana 官方文档（可视化与告警）. grafana.com/docs. 访问时间: 2026-09-13.

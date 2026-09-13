@@ -77,3 +77,8 @@ date: 2026-07-28
 - 处理百万级数据文件并优化内存占用
 
 **评估方式：** 性能验证 — 百万级数据处理内存占用降低50%以上，处理时间在可接受范围内，有优化前后对比报告
+# Reference
+
+1. Pandas. pandas 官方文档与 10 minutes to pandas. pandas.pydata.org/docs. 访问时间: 2026-09-13. https://pandas.pydata.org/docs/
+2. Pandas. pandas 用户指南（User Guide）. pandas.pydata.org/docs/user_guide. 访问时间: 2026-09-13.
+3. Kaggle. Pandas 课程（数据科学实战）. kaggle.com/learn/pandas. 访问时间: 2026-09-13.

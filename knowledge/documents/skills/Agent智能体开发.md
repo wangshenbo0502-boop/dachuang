@@ -118,3 +118,9 @@ last_update: 2026-07-28
 - **紧跟前沿**：AI Agent 技术迭代极快，定期关注顶会论文与大厂技术博客
 - **实战驱动**：选择真实业务场景进行 Agent 开发，在实践中积累经验与踩坑
 - **跨领域融合**：结合 RAG、多模态、行业知识，打造领域专用的 Agent 解决方案
+# Reference
+
+1. Anthropic. Model Context Protocol (MCP) 官方文档. modelcontextprotocol.io. 访问时间: 2026-09-13. https://modelcontextprotocol.io/
+2. LangChain. LangGraph 官方文档（多智能体编排框架）. langchain-ai.github.io/langgraph. 访问时间: 2026-09-13.
+3. OpenAI. Function Calling / Structured Outputs 官方指南. platform.openai.com/docs. 访问时间: 2026-09-13.
+4. OpenBMB. MetaGPT 开源项目（多智能体协作框架）. github.com/geekan/MetaGPT. 访问时间: 2026-09-13.

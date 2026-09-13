@@ -11,7 +11,9 @@ import { PerformanceProvider, usePerformance } from './context/PerformanceContex
 import { SceneProvider, useScene } from './context/SceneContext';
 import NavigationUI from './components/ui/NavigationUI';
 import GlobalOverlay from './components/ui/GlobalOverlay';
+import JobMatchPanel from './components/ui/JobMatchPanel';
 import ScreenReaderOverlay from './components/ui/ScreenReaderOverlay';
+import { JobMatchProvider } from './context/JobMatchContext';
 import { useDocumentMeta } from './hooks/useDocumentMeta';
 import { loadSanityData } from './hooks/useSanityData';
 
@@ -199,6 +201,7 @@ function AppContent() {
           {isLoaded && (
             <>
               <NavigationUI />
+              <JobMatchPanel />
               <GlobalOverlay />
               <PaperTransition />
               <ScreenReaderOverlay />
@@ -234,7 +237,9 @@ export default function App() {
     <PerformanceProvider>
       <AchievementsProvider>
         <UserProvider>
-          <AppContent />
+          <JobMatchProvider>
+            <AppContent />
+          </JobMatchProvider>
         </UserProvider>
       </AchievementsProvider>
     </PerformanceProvider>

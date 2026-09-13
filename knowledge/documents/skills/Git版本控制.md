@@ -175,3 +175,8 @@ Git 版本控制
 - **深入阶段（4-8周）**：学习 Git 内部原理、Hooks 钩子、子模块、大型仓库优化、CI/CD 集成、代码审查流程，能在团队中推动 Git 规范化建设，处理复杂的版本管理问题。
 - **职业发展**：Git 是所有开发岗位的基础技能，建议配合编程语言、框架、DevOps 等技能一起学习。向 DevOps 方向发展可以深入学习 CI/CD、Kubernetes、Terraform 等云原生技术。
 - **持续精进**：关注 GitHub Blog、Git 官方邮件列表、掘金 Git 专栏，学习 monorepo 管理、GitOps、代码安全审计等高级主题，不断提升版本管理和团队协作效率。
+# Reference
+
+1. Git. Pro Git（官方书籍，中文版免费在线）. git-scm.com/book/zh/v2. 访问时间: 2026-09-13.
+2. Git. Git 官方文档与参考手册. git-scm.com/docs. 访问时间: 2026-09-13.
+3. GitHub. GitHub Docs（工作流与协作规范）. docs.github.com. 访问时间: 2026-09-13.

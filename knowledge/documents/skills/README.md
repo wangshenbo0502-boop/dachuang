@@ -142,3 +142,6 @@ last_update: 2026-07-28
 - **技能数量**：44 篇（含 1 篇分类索引 + 1 篇README）
 - **覆盖领域**：编程语言、前端、后端、数据库、AI、DevOps、安全、软技能
 - **下次更新计划**：补充设计模式、算法与数据结构、消息队列、微服务架构等方向
+# Reference
+
+1. keep a Changelog. keepachangelog.com（本知识库变更规范参照）. 访问时间: 2026-09-13. https://keepachangelog.com/zh-CN/1.1.0/

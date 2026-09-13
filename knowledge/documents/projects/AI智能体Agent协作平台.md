@@ -125,3 +125,9 @@ last_update: 2026-07-28
 - awesome-llm-apps（GitHub: 89k+ stars）：LLM 应用和 Agent 开源项目精选
 
 > Reference: 访问时间 2026-07-28
+# Reference
+
+1. LangChain. LangGraph 官方文档（多智能体编排）. langchain-ai.github.io/langgraph. 访问时间: 2026-09-13.
+2. Microsoft. AutoGen 开源多智能体框架. github.com/microsoft/autogen. 访问时间: 2026-09-13.
+3. OpenBMB. MetaGPT 多智能体协作开源项目. github.com/geekan/MetaGPT. 访问时间: 2026-09-13.
+4. Anthropic. Building effective agents 官方工程指南. anthropic.com/research. 访问时间: 2026-09-13.

@@ -13,7 +13,7 @@ const AchievementsPanel = ({ isOpen, onClose }) => {
                     <button
                         className="close-btn"
                         onClick={onClose}
-                        aria-label="Close achievements"
+                        aria-label="关闭成就"
                     >
                         <svg viewBox="0 0 24 24">
                             <path d="M18 6L6 18M6 6l12 12" />

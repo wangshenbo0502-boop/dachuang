@@ -237,3 +237,8 @@ version: "0.2.0"
 - 系统设计能力
 
 **推荐技术栈**：`React/Vue3 + TypeScript + Node.js/Python + MySQL + Docker`
+# Reference
+
+1. 超级简历WonderCV. 简历写作规范与HR筛选研究. wondercv.com. 访问时间: 2026-09-13.
+2. BOSS直聘. 简历投递与HR搜索机制官方说明. zhipin.com. 访问时间: 2026-09-13.
+3. 牛客网. 简历修改与校招投递经验汇总. nowcoder.com. 访问时间: 2026-09-13.

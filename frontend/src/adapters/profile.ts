@@ -30,7 +30,7 @@ export interface OverlayItem {
 
 export interface OverlayPayload {
   id: string;
-  layout: "experience_list" | "profile_form" | "analysis_report";
+  layout: "experience_list" | "profile_form" | "analysis_report" | "job_detail" | "job_match_panel";
   title: string;
   items?: OverlayItem[];
   emptyText?: string;

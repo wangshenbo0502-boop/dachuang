@@ -128,3 +128,8 @@ last_update: 2026-07-28
 - **拥抱生态**：crates.io有丰富的第三方库，优先使用成熟crate，避免重复造轮子
 - **社区参与**：关注Rust官方博客、Inside Rust论坛，参与RFC讨论，紧跟语言演进
 - **方向深耕**：Rust应用领域广泛（系统编程/区块链/WebAssembly/云原生/嵌入式），建议选定一个方向深入发展
+# Reference
+
+1. The Rust Project. The Rust Programming Language（官方书，中文版）. doc.rust-lang.org/book. 访问时间: 2026-09-13. https://kaisery.github.io/trpl-zh-cn/
+2. The Rust Project. Rust 标准库文档. doc.rust-lang.org/std. 访问时间: 2026-09-13.
+3. Rust Community. Rust by Example. doc.rust-lang.org/rust-by-example. 访问时间: 2026-09-13.
