@@ -2,14 +2,20 @@ import { useRef, useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useFrame, useThree, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { CONTENT_DATA, PLATFORM_CONFIG, getLatestContent } from './contentData';
+import { PLATFORM_CONFIG } from './contentData';
 import { useScene } from '../../../../context/SceneContext';
+import { useUser } from '../../../../context/UserContext';
 import { useAchievements } from '../../../../context/AchievementsContext';
+import {
+    buildStudioMonitors,
+    toGrowthOverlay,
+    toResumeOverlay,
+    toStudioOverlayFromMonitor,
+} from '../../../../adapters/studio';
 import { TextureLoader } from 'three';
 import FloatingCodeParticles from './FloatingCodeParticles';
 import { PositionalAudio } from '@react-three/drei';
 import { useAudio } from '../../../../context/AudioManager';
-import { useStudioContent } from '../../../../hooks/useSanityData';
 import '../../shaders/RevealMaterial';
 import { isTouchDevice } from '../../../../utils/deviceDetect';
 import { usePaintMaterial } from '../Gallery/usePaintMaterial';
@@ -107,9 +113,17 @@ const StudioRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
     const { globalVolume, isMuted } = useAudio();
     const effectiveVolume = isMuted ? 0 : AUDIO_SETTINGS.volume * globalVolume;
 
-    // Pobieranie danych z Sanity.io (fallback do starych danych)
-    const sanityContent = useStudioContent();
-    const activeContent = sanityContent || CONTENT_DATA;
+    const {
+        resumeHistory,
+        growthHistory,
+        loadResumeItem,
+        loadGrowthItem,
+    } = useUser();
+
+    const activeContent = useMemo(
+        () => buildStudioMonitors(resumeHistory, growthHistory),
+        [resumeHistory, growthHistory]
+    );
 
     const audioRef = useRef();
     useEffect(() => {
@@ -455,13 +469,41 @@ const StudioRoom = ({ showRoom, onReady, isExiting, isWarmup }) => {
                     ease: 'power2.inOut',
                     onComplete: () => {
                         setIsAnimating(false);
-                        openOverlay(item); // Open global overlay in HUD
+                        (async () => {
+                            const base = toStudioOverlayFromMonitor(item, {
+                                loadingDetail: item.kind === 'resume' || item.kind === 'growth',
+                            });
+                            openOverlay(base);
+                            if (item.kind === 'resume' && item.recordId) {
+                                try {
+                                    const detail = await loadResumeItem(item.recordId);
+                                    openOverlay(toResumeOverlay(detail));
+                                } catch (err) {
+                                    openOverlay({
+                                        ...base,
+                                        loadingDetail: false,
+                                        loadError: err?.message || '加载简历优化详情失败',
+                                    });
+                                }
+                            } else if (item.kind === 'growth' && item.recordId) {
+                                try {
+                                    const detail = await loadGrowthItem(item.recordId);
+                                    openOverlay(toGrowthOverlay(detail));
+                                } catch (err) {
+                                    openOverlay({
+                                        ...base,
+                                        loadingDetail: false,
+                                        loadError: err?.message || '加载成长规划详情失败',
+                                    });
+                                }
+                            }
+                        })();
                     }
                 });
             }
         });
 
-    }, [isAnimating, camera, responsiveParams, openOverlay]);
+    }, [isAnimating, camera, responsiveParams, openOverlay, loadResumeItem, loadGrowthItem]);
 
     // Trigger camera return ONLY when overlay is explicitly closed
     // We use a ref to track if overlay was previously open to avoid initial race conditions

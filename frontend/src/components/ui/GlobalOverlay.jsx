@@ -5,11 +5,30 @@ import { toAnalysisOverlay } from '../../adapters/profile';
 import ProfileOverlay, { AnalysisReport } from './ProfileOverlay';
 import { JobDetailBody } from './JobMatchOverlay';
 import { JobMatchPanelBody } from './JobMatchPanel';
+import {
+    GrowthFormBody,
+    GrowthReport,
+    ResumeFormBody,
+    ResumeReport,
+} from './StudioWorkbenchOverlay';
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin';
 import '../../styles/GlobalOverlay.scss';
 
 gsap.registerPlugin(TextPlugin);
+
+const SKIP_TYPEWRITER = new Set([
+    'certificate_grid',
+    'profile_form',
+    'analysis_report',
+    'experience_list',
+    'job_detail',
+    'job_match_panel',
+    'resume_form',
+    'growth_form',
+    'resume_report',
+    'growth_report',
+]);
 
 const GlobalOverlay = () => {
     const { overlayContent, closeOverlay } = useScene();
@@ -81,7 +100,7 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
     // GSAP TextPlugin typing effect for description
     const descriptionRef = useRef(null);
     useEffect(() => {
-        if (isOpen && content.description && descriptionRef.current && content.layout !== 'certificate_grid') {
+        if (isOpen && content.description && descriptionRef.current && !SKIP_TYPEWRITER.has(content.layout)) {
             gsap.killTweensOf(descriptionRef.current);
             gsap.fromTo(descriptionRef.current,
                 { text: "" },
@@ -434,6 +453,26 @@ const ContentCard = ({ content, isOpen, onClose, isMobile }) => {
                         </div>
                     ) : content.layout === 'job_match_panel' ? (
                         <JobMatchPanelBody getStaggerStyle={getStaggerStyle} />
+                    ) : content.layout === 'resume_form' ? (
+                        <ResumeFormBody getStaggerStyle={getStaggerStyle} />
+                    ) : content.layout === 'growth_form' ? (
+                        <GrowthFormBody getStaggerStyle={getStaggerStyle} />
+                    ) : content.layout === 'resume_report' ? (
+                        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, ...getStaggerStyle(150) }}>
+                            <ResumeReport
+                                resume={content.resume}
+                                loadError={content.loadError}
+                                loadingDetail={content.loadingDetail}
+                            />
+                        </div>
+                    ) : content.layout === 'growth_report' ? (
+                        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, ...getStaggerStyle(150) }}>
+                            <GrowthReport
+                                growth={content.growth}
+                                loadError={content.loadError}
+                                loadingDetail={content.loadingDetail}
+                            />
+                        </div>
                     ) : content.layout === 'certificate_grid' ? (
                         <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
                             <div

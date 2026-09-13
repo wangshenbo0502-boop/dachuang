@@ -1,6 +1,7 @@
 import { useScene } from '../../context/SceneContext';
-import { useStudioContent, useAwards } from '../../hooks/useSanityData';
+import { useAwards } from '../../hooks/useSanityData';
 import { useJobMatch } from '../../context/JobMatchContext';
+import { useUser } from '../../context/UserContext';
 import '../../styles/ScreenReaderOverlay.scss';
 
 /**
@@ -11,7 +12,7 @@ const ScreenReaderOverlay = () => {
     const { hasEntered, isInRoom, currentRoom, teleportTo, requestExit } = useScene();
 
     const { displayItems, mode, listLoading, listError } = useJobMatch();
-    const studio = useStudioContent();
+    const { resumeHistory, growthHistory, studioLoading, studioError, hasUser } = useUser();
     const awards = useAwards();
 
     const roomNames = {
@@ -120,16 +121,33 @@ const ScreenReaderOverlay = () => {
                         {currentRoom === 'studio' && (
                             <div aria-label="AI 工作台内容">
                                 <h3>AI 工作台</h3>
-                                <p>浏览 AI 简历优化与成长规划的历史记录。</p>
-                                {studio?.length > 0 && (
-                                    <ul>
-                                        {studio.map((s, i) => (
-                                            <li key={i}>
-                                                <h4>{s.title}（{s.platform}）</h4>
-                                                <p>{s.description}</p>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                <p>浏览 AI 简历优化与成长规划的历史记录，或生成新的结果。</p>
+                                {!hasUser && <p>请先到就业画像房间创建档案。</p>}
+                                {studioLoading && <p>正在加载历史记录…</p>}
+                                {studioError && <p>{studioError}</p>}
+                                {resumeHistory?.length > 0 && (
+                                    <section>
+                                        <h4>简历优化历史</h4>
+                                        <ul>
+                                            {resumeHistory.map((s) => (
+                                                <li key={`resume-${s.id}`}>
+                                                    {s.target_job} · 评分 {s.resume_score} · {s.created_at}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </section>
+                                )}
+                                {growthHistory?.length > 0 && (
+                                    <section>
+                                        <h4>成长规划历史</h4>
+                                        <ul>
+                                            {growthHistory.map((s) => (
+                                                <li key={`growth-${s.id}`}>
+                                                    {s.target_job} · {s.expected_timeline} · {s.created_at}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </section>
                                 )}
                             </div>
                         )}

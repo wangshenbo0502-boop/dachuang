@@ -57,6 +57,20 @@ export const PLATFORM_CONFIG = {
         label: 'Codrops',
         shape: 'monitor',
     },
+    resume: {
+        color: '#4A90D9',
+        accentColor: '#2d6cb5',
+        icon: '📄',
+        label: '简历优化',
+        shape: 'monitor',
+    },
+    growth: {
+        color: '#2ECC71',
+        accentColor: '#1e8449',
+        icon: '🌱',
+        label: '成长规划',
+        shape: 'tv',
+    },
 };
 
 // Sample content data - replace with real content later
