@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from app.ai.deepseek_client import DeepSeekClient
 from app.ai.prompts import SystemPrompts, JobMatchPrompts
 from app.knowledge.knowledge_service import KnowledgeService
+from app.knowledge.rag_integration import augment_prompt
 from app.knowledge.skill_synonyms import normalize_skill, is_skill_match
 from app.models.job import JobMatchRecord
 from app.models.user import User
@@ -215,6 +216,15 @@ class JobMatchService:
                     job_title=job_title,
                     job_description=content[:500],
                     job_requirements="、".join(required_skills),
+                )
+                rag_query = " ".join(
+                    [job_title, *user_skills, *required_skills, "岗位要求 技能匹配"]
+                )
+                user_prompt, _sources = augment_prompt(
+                    rag_query,
+                    user_prompt,
+                    category="jobs",
+                    top_k=5,
                 )
 
                 messages = [

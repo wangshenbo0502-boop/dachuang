@@ -11,7 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import user, job_match, analysis, resume, growth, streaming
+from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat
 from app.config import get_settings
 from app.database.bootstrap import initialize_database_schema
 from app.utils.exceptions import AppException
@@ -106,10 +106,11 @@ def health_check():
         "ai_mode": "mock" if ai_client.is_mock_mode else "live",
         "modules": [
             "用户管理（含竞赛/实习经历）",
-            "岗位匹配（关键词+AI增强+同义词映射）",
+            "岗位匹配（PostgreSQL/pgvector 混合检索 + AI增强）",
             "AI就业画像分析",
             "AI简历优化",
             "AI成长规划",
+            "RAG知识库（Embedding + Hybrid Retrieval + Sources）",
             "AI流式响应（SSE）",
             "Token用量统计",
         ]
@@ -130,3 +131,5 @@ app.include_router(analysis.router)
 app.include_router(resume.router)
 app.include_router(growth.router)
 app.include_router(streaming.router)  # 流式响应路由
+app.include_router(knowledge.router)
+app.include_router(chat.router)

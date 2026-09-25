@@ -30,6 +30,9 @@ class Settings:
             "DATABASE_URL",
             "sqlite:///./ai_job_analysis.db",
         )
+        # Knowledge/RAG uses a dedicated PostgreSQL + pgvector database so that
+        # existing user and AI-result tables do not need a forced migration.
+        self.KNOWLEDGE_DATABASE_URL: str = os.getenv("KNOWLEDGE_DATABASE_URL", "")
         self.DB_POOL_SIZE: int = int(os.getenv("DB_POOL_SIZE", "5" if self.is_dev else "20"))
         self.DB_POOL_RECYCLE: int = int(os.getenv("DB_POOL_RECYCLE", "3600"))
         self.DB_ECHO: bool = os.getenv("DB_ECHO", "false").lower() == "true"
@@ -93,11 +96,13 @@ class Settings:
 
     @property
     def db_dialect(self) -> str:
-        """数据库类型：sqlite / mysql"""
+        """数据库类型：sqlite / mysql / postgresql"""
         if self.DATABASE_URL.startswith("sqlite"):
             return "sqlite"
         if "mysql" in self.DATABASE_URL or "pymysql" in self.DATABASE_URL:
             return "mysql"
+        if self.DATABASE_URL.startswith("postgresql"):
+            return "postgresql"
         return "unknown"
 
 

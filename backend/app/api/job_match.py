@@ -18,6 +18,7 @@ from sqlalchemy.orm import Session
 
 from app.database.session import get_db
 from app.models.job import JobMatchRecord
+from app.models.user import User
 from app.schemas.job import (
     JobDetail,
     JobListResponse,
@@ -80,6 +81,8 @@ def match_jobs(
         "user_id": 1
     }
     """
+    if request.user_id is not None and database_session.get(User, request.user_id) is None:
+        raise ResourceNotFoundError(f"用户 {request.user_id} 不存在")
     service = JobMatchService.instance()
     result: JobMatchResponse = service.match_jobs(request)
     # 持久化匹配历史（仅当有匹配结果时）

@@ -22,12 +22,21 @@ from app.ai.prompts import (
 )
 from app.database.session import get_db
 from app.models.user import User
+from app.knowledge.rag_integration import augment_prompt
 from app.schemas.analysis import ProfileAnalysisRequest
 from app.schemas.resume import ResumeOptimizationRequest
 from app.schemas.growth import GrowthPlanRequest
 from app.utils.exceptions import ResourceNotFoundError
 
 router = APIRouter(prefix="/api/stream", tags=["AI流式响应"])
+
+
+def _as_dict(value: Any) -> dict:
+    if isinstance(value, dict):
+        return value
+    if hasattr(value, "model_dump"):
+        return value.model_dump()
+    return {"value": str(value)}
 
 
 def _sse_event(data: str, event: str = "message") -> str:
@@ -135,8 +144,8 @@ async def stream_analysis(
             "major": body.major or "未填写",
             "grade": body.grade or "未填写",
             "bio": body.bio or "",
-            "skills": [s.model_dump() for s in (body.skills or [])],
-            "projects": [p.model_dump() for p in (body.projects or [])],
+            "skills": [_as_dict(s) for s in (body.skills or [])],
+            "projects": [_as_dict(p) for p in (body.projects or [])],
             "competitions": [],
             "internships": [],
         }
@@ -151,6 +160,11 @@ async def stream_analysis(
         skills=user_info["skills"],
         projects=user_info["projects"],
         target_job=body.target_job or "",
+    )
+    user_prompt, _sources = augment_prompt(
+        " ".join([body.target_job or "就业能力评价", user_info["major"], "岗位能力要求 技能评价"]),
+        user_prompt,
+        top_k=5,
     )
 
     messages = [
@@ -197,6 +211,11 @@ async def stream_resume(
         skills=user_info["skills"],
         projects=user_info["projects"],
         original_resume=body.original_resume or "",
+    )
+    user_prompt, _sources = augment_prompt(
+        f"{body.target_job} 简历 项目经历 技能关键词 STAR",
+        user_prompt,
+        top_k=5,
     )
 
     messages = [
@@ -245,6 +264,11 @@ async def stream_growth(
         target_job=body.target_job,
         skills=user_info["skills"],
         projects=user_info["projects"],
+    )
+    user_prompt, _sources = augment_prompt(
+        f"{body.target_job} {user_info['major']} 学习路线 技能提升 职业成长",
+        user_prompt,
+        top_k=5,
     )
 
     messages = [

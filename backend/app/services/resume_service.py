@@ -13,6 +13,7 @@ from app.ai.deepseek_client import DeepSeekClient
 from app.ai.prompts import SystemPrompts, ResumeOptimizationPrompts
 from app.models.resume import ResumeOptimization
 from app.models.user import User
+from app.knowledge.rag_integration import augment_prompt
 from app.schemas.resume import (
     ResumeOptimizationRequest,
     ResumeOptimizationResponse,
@@ -52,6 +53,17 @@ class ResumeService:
             projects=user_info["projects"],
             original_resume=request.original_resume or "",
         )
+        skill_names = [str(item.get("name", "")) for item in user_info["skills"] if isinstance(item, dict)]
+        project_names = [str(item.get("name", "")) for item in user_info["projects"] if isinstance(item, dict)]
+        rag_query = " ".join(
+            value for value in [
+                request.target_job,
+                *skill_names,
+                *project_names,
+                "简历 项目经历 技能关键词 STAR",
+            ] if value
+        )
+        user_prompt, sources = augment_prompt(rag_query, user_prompt, top_k=5)
 
         messages = [
             {"role": "system", "content": system_prompt},
@@ -71,7 +83,7 @@ class ResumeService:
             target_job=request.target_job,
             original_resume=request.original_resume or "",
             result=result,
-            raw_result=ai_result,
+            raw_result={"answer": ai_result, "sources": sources},
         )
 
         return ResumeOptimizationResponse(

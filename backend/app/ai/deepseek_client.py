@@ -359,6 +359,9 @@ class DeepSeekClient:
                 last_user_msg = msg["content"]
                 break
 
+        if any("自由对话" in msg.get("content", "") for msg in messages if msg.get("role") == "system"):
+            return f"我可以和你一起梳理这个问题。关于“{last_user_msg[:120]}”，建议先结合你的目标和真实经历拆成可执行的小步骤；如果你愿意，也可以告诉我你目前最想解决的具体困难。"
+
         # 提取用户消息中的技能名
         skill_pattern = re.findall(r'"name":\s*"([^"]+)"|技能[：:]\s*(.+)|- (\w+)', last_user_msg)
         for match in skill_pattern:
@@ -366,7 +369,21 @@ class DeepSeekClient:
                 if g and len(g) > 1:
                     skills_in_msg.append(g)
 
-        if "就业画像" in last_user_msg or "profile" in last_user_msg.lower():
+        if any("最多10个问题" in msg.get("content", "") for msg in messages if msg.get("role") == "system"):
+            assistant_turns = len(re.findall(r"(?:^|\n)assistant:", last_user_msg))
+            finished = assistant_turns >= 9
+            reply = (
+                "目前收集到的信息已经可以先生成一版简历。你也可以继续补充项目成果、实习经历或技能细节。"
+                if finished
+                else "我记下了。为了把经历写得更具体一些，请再补充一个可验证的细节：你负责的部分带来了什么结果，或者解决了什么问题？"
+            )
+            return json.dumps({
+                "reply": reply,
+                "finished": finished,
+                "extracted": {"skills": [], "projects": [], "competitions": [], "internships": []},
+                "missing": ["项目成果或量化数据", "实习经历"] if not finished else [],
+            }, ensure_ascii=False)
+        elif "就业画像" in last_user_msg or "profile" in last_user_msg.lower():
             return json.dumps(self._mock_profile_result(skills_in_msg), ensure_ascii=False)
         elif "简历" in last_user_msg or "resume" in last_user_msg.lower():
             return json.dumps(self._mock_resume_result(skills_in_msg), ensure_ascii=False)

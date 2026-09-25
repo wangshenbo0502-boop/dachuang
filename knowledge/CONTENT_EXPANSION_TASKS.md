@@ -1,0 +1,257 @@
+# Knowledge Content Expansion Tasks
+
+由 `scripts/audit_knowledge_content.py` 自动生成。扩写时必须遵循 `documents/扩写要求.txt`，保留原文事实，不虚构数据与来源。
+
+## 执行规则
+
+1. 每次只处理一篇，先查重，再使用至少 3 个公开可靠来源交叉验证。
+2. 补齐 Front Matter、独立语义章节、5 个以上真实链接和 Related Knowledge。
+3. 不覆盖无法核验的数据；不确定内容标注待人工复核。
+4. 完成后运行内容审计、索引入库和 RAG 评测。
+
+## 待处理文件
+
+- [medium] `companies/Apple中国.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `companies/Google中国.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [high] `companies/MiniMax（稀宇科技）.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5；章节过长，不利于 Chunk: 10668 字符
+- [medium] `companies/Shopee中国.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5676 字符
+- [high] `companies/东方财富.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 4763 字符
+- [medium] `companies/中国工商银行软开中心.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `companies/中国建设银行数据中心.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [high] `companies/中国电科（CETC）.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 5189 字符
+- [high] `companies/中国移动.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 5213 字符
+- [high] `companies/中小型互联网公司（100-2000人）.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 3858 字符
+- [high] `companies/中软国际.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 4908 字符
+- [medium] `companies/亚马逊中国.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `companies/京东.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [high] `companies/华为.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5；章节过长，不利于 Chunk: 5520 字符
+- [high] `companies/同花顺.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 4689 字符
+- [high] `companies/哔哩哔哩.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5；章节过长，不利于 Chunk: 4604 字符
+- [high] `companies/国家电网.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 4918 字符
+- [medium] `companies/字节跳动.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 6041 字符
+- [medium] `companies/小米.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [high] `companies/小红书.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5；章节过长，不利于 Chunk: 4270 字符
+- [medium] `companies/小鹏汽车.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5688 字符
+- [medium] `companies/微软中国.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `companies/快手.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [high] `companies/招商银行科技岗.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 5604 字符
+- [medium] `companies/智谱AI.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 10659 字符
+- [high] `companies/月之暗面（Kimi）.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5；章节过长，不利于 Chunk: 7545 字符
+- [medium] `companies/比亚迪（BYD）.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5587 字符
+- [medium] `companies/理想汽车.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5587 字符
+- [medium] `companies/百度.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `companies/网易.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `companies/美团.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5405 字符
+- [medium] `companies/腾讯.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 6013 字符
+- [medium] `companies/英伟达中国（NVIDIA）.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5571 字符
+- [medium] `companies/蔚来汽车.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [high] `companies/蚂蚁集团.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5；章节过长，不利于 Chunk: 5398 字符
+- [medium] `companies/阶跃星辰（StepFun）.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 10674 字符
+- [medium] `companies/阿里巴巴.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5461 字符
+- [medium] `companies/零一万物（01.AI）.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 11523 字符
+- [medium] `companies/高盛中国（Goldman Sachs）.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 5629 字符
+- [medium] `competition/ACM-ICPC国际大学生程序设计竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `competition/CCF CSP计算机软件能力认证.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `competition/CCPC中国大学生程序设计竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `competition/CTF网络安全竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `competition/Kaggle数据科学竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5
+- [medium] `competition/中国国际大学生创新大赛（互联网+）.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `competition/全国大学生信息安全竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `competition/全国大学生数学建模竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `competition/大学生创新创业训练计划（大创）.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `competition/天池大数据竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `competition/挑战杯全国大学生课外学术科技作品竞赛.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `competition/蓝桥杯全国软件和信息技术大赛.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `competition/计算机专业竞赛全攻略.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/AI大模型应用开发面试题.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/AI大模型应用面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/AI算法面试题.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 1/5
+- [medium] `interview/Go后端开发面试题.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/Go语言面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `interview/HR行为面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/HR面试与行为面试完全指南.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/interview_guide.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/JavaScript基础面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/Java基础面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `interview/Java并发编程面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `interview/Java集合框架面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `interview/Java面试题.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 1/5
+- [medium] `interview/JVM面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/MySQL数据库面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `interview/Python后端开发面试题.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/Python面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `interview/Redis面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `interview/Spring_Spring Boot面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/Vue-React框架面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/前端工程化与性能优化面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/前端开发面试题（2026版）.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/动态规划与贪心面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/技术面试项目介绍指南.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/操作系统面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `interview/数据分析面试题.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/数据库与中间件面试题.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/数组与字符串面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/树与图面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/算法面试题指南（校招版）.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/系统设计面试题.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `interview/系统设计面试题（校招版）.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `interview/计算机网络面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `interview/链表面试题.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/AI产品经理.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/AI产品运营.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/AI伦理与合规专员.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/AI内容创作师_AIGC内容运营.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/AI算法工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/AI解决方案架构师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/BI工程师_商业智能工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 9719 字符
+- [medium] `jobs/C++开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/Go后端开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [high] `jobs/Java后端开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5；章节过长，不利于 Chunk: 6506 字符
+- [medium] `jobs/NLP算法工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/Prompt工程师_提示词工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/RAG知识库工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/Rust开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/UI_UX设计师.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 10597 字符
+- [medium] `jobs/云原生开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [high] `jobs/互联网产品经理.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 8113 字符
+- [high] `jobs/人力资源HR.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 8260 字符
+- [medium] `jobs/人工智能训练师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/全栈开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/具身智能算法工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [high] `jobs/内容运营.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 8151 字符
+- [medium] `jobs/前端开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 7328 字符
+- [medium] `jobs/区块链开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/多模态算法工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/大模型应用工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/大模型算法工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/嵌入式开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 10880 字符
+- [high] `jobs/市场营销品牌营销.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 8868 字符
+- [medium] `jobs/技术产品经理.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [high] `jobs/技术支持客户成功.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 9105 字符
+- [medium] `jobs/搜索算法工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/数字孪生工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/数据产品经理.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/数据仓库工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 10565 字符
+- [medium] `jobs/数据分析师.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 9109 字符
+- [medium] `jobs/数据工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [high] `jobs/新媒体运营.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 7903 字符
+- [medium] `jobs/智能体Agent开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/机器人产品经理.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/测试开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 10616 字符
+- [medium] `jobs/渗透测试工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/游戏客户端开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/游戏服务端开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [high] `jobs/用户运营.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 7878 字符
+- [high] `jobs/电商运营.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5；章节过长，不利于 Chunk: 8190 字符
+- [medium] `jobs/移动端开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `jobs/算法工程师-推荐算法.md`: 缺少字段: id, keywords, status, summary, updated_at；章节过长，不利于 Chunk: 9673 字符
+- [medium] `jobs/网络安全工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/计算机视觉算法工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/车载开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `jobs/软件测试工程师.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [high] `jobs/运维工程师_SRE.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5；章节过长，不利于 Chunk: 10536 字符
+- [medium] `jobs/量化开发工程师.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `market/2026年AI人工智能行业就业报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年中国大学生就业市场总报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年互联网行业就业趋势报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年新能源汽车行业就业报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年新质生产力行业就业报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年游戏行业就业报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年生物医药行业就业报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年电商行业就业报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年程序员薪资与职业发展报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年重点城市就业市场分析.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `market/2026年金融科技行业就业报告.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `policies/2026年国家高校毕业生就业政策汇总.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `policies/一线城市落户政策对比（北上广深）.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `policies/加班费、调岗与辞退赔偿详解.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5
+- [medium] `policies/劳动合同签订与试用期权益指南.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5
+- [medium] `policies/应届生租房与生活补贴申请全攻略.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `policies/应届生身份与择业期政策详解.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `policies/新一线城市人才补贴政策汇总.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `policies/校招与社招区别全面对比.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `policies/职场维权渠道与证据收集指南.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5
+- [high] `projects/AI 图像分类应用.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1529 字符；公开参考来源不足: 0/5
+- [medium] `projects/AI智能体Agent协作平台.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 3/5
+- [high] `projects/API 网关与限流系统.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1528 字符；公开参考来源不足: 0/5
+- [high] `projects/Docker 化 CI CD 流水线.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1634 字符；公开参考来源不足: 0/5
+- [high] `projects/GitHub 风格个人主页.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1531 字符；公开参考来源不足: 0/5
+- [high] `projects/NLP 文本情感分析.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1627 字符；公开参考来源不足: 0/5
+- [medium] `projects/RAG企业知识库问答系统.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 2/5
+- [medium] `projects/SaaS短链接系统.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 1/5
+- [high] `projects/个人博客系统.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1631 字符；公开参考来源不足: 0/5
+- [medium] `projects/云原生微服务部署平台.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 1/5
+- [high] `projects/企业级权限管理系统.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1637 字符；公开参考来源不足: 0/5
+- [medium] `projects/全栈项目实战：从0到1上线.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 1/5
+- [high] `projects/在线商城.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1549 字符；公开参考来源不足: 0/5
+- [medium] `projects/大模型微调与私有化部署.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 4/5
+- [high] `projects/实时聊天应用.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1532 字符；公开参考来源不足: 0/5
+- [medium] `projects/开源项目贡献完全指南.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 2/5
+- [high] `projects/技术面试题库.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1528 字符；公开参考来源不足: 0/5
+- [high] `projects/数据分析看板.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1632 字符；公开参考来源不足: 0/5
+- [high] `projects/文件云盘系统.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；正文偏短: 1586 字符；公开参考来源不足: 0/5
+- [medium] `projects/项目包装与简历书写指南.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `projects/高并发秒杀系统.md`: 缺少字段: id, keywords, status, summary, tags, updated_at；公开参考来源不足: 1/5
+- [medium] `resume/AI大模型应用工程师简历模板与范例.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `resume/resume_guide.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `resume/前端开发工程师简历模板与范例.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `resume/后端开发工程师简历模板与范例.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `resume/简历写作避坑完全指南.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `resume/简历投递与面试邀约全攻略.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `resume/自我介绍与面试话术完全手册.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `roadmap/AI产品经理学习路线.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `roadmap/AI大模型应用工程师学习路线.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5
+- [medium] `roadmap/career_paths.md`: 缺少字段: category, id, keywords, source, status, summary, tags, updated_at；公开参考来源不足: 0/5
+- [medium] `roadmap/learning_paths.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `roadmap/云原生DevOps工程师学习路线.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `roadmap/大模型算法工程师学习路线.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 1/5
+- [medium] `roadmap/测试开发工程师学习路线.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `roadmap/网络安全工程师学习路线.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 2/5
+- [medium] `roadmap/计算机专业大学四年完整规划.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `roadmap/计算机专业考研就业选择指南.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `roadmap/零基础转行程序员完整路线.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 0/5
+- [medium] `skills/Agent智能体开发.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Burp Suite渗透测试工具.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/CSS.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Docker.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/FastAPI.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Git版本控制.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Go.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/HTML.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/Java.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/JavaScript.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Kubernetes.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/LangChain.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Linux运维.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/MongoDB.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/MySQL.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Node.js.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/NumPy.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Pandas.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Prometheus监控.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Prompt Engineering提示工程.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Python.md`: 缺少字段: id, keywords, status, summary, updated_at；正文偏短: 1791 字符
+- [medium] `skills/PyTorch.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/RAG检索增强生成.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/React.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Redis.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/Rust.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [high] `skills/skill_categories.md`: 缺少字段: id, keywords, status, summary, updated_at；正文偏短: 1507 字符；公开参考来源不足: 0/5
+- [medium] `skills/Spring Boot.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/SQL.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/TensorFlow.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Terraform基础设施即代码.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/TypeScript.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/vLLM推理引擎.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/Vue.js.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/WebAssembly.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/产品思维.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/向量数据库.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/大模型微调.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/机器学习.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 3/5
+- [medium] `skills/沟通协作.md`: 缺少字段: id, keywords, status, summary, updated_at；公开参考来源不足: 4/5
+- [medium] `skills/深度学习.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/网络安全基础.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/职场情商.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/自动化测试.md`: 缺少字段: id, keywords, status, summary, updated_at
+- [medium] `skills/项目管理.md`: 缺少字段: id, keywords, status, summary, updated_at

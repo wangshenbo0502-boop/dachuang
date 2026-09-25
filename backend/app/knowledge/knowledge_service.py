@@ -1,57 +1,27 @@
-"""
-文件名称：knowledge_service.py
-文件作用：知识库查询服务，提供统一的 RAG 知识检索能力。
-负责构建知识索引，提供知识搜索、文档查询、技能要求提取等通用能力，
-供岗位匹配、就业画像、简历优化等各业务模块复用。
+"""Backend adapter for the PostgreSQL + pgvector knowledge service."""
+from __future__ import annotations
 
-当前版本：基于 keyword index 关键词检索。
-未来版本：升级 Embedding + Hybrid Retrieval + Reranker。
-"""
-
-import os
 import re
 import sys
-from typing import Optional
+from pathlib import Path
+from typing import Any, Optional
 
-# 引入独立 knowledge 模块（位于项目根目录）
-_knowledge_root = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-    "knowledge",
-)
-if _knowledge_root not in sys.path:
-    sys.path.insert(0, _knowledge_root)
+_KNOWLEDGE_ROOT = Path(__file__).resolve().parents[3] / "knowledge"
+if str(_KNOWLEDGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(_KNOWLEDGE_ROOT))
 
-from app.knowledge.knowledge_loader import KnowledgeLoader  # noqa: E402
 
-from indexes.keyword_index import KeywordIndex  # noqa: E402
-from retrieval.query_rewriter import QueryRewriter  # noqa: E402
-from retrieval.keyword_retriever import KeywordRetriever  # noqa: E402
-from retrieval.search_engine import SearchEngine  # noqa: E402
+class KnowledgeUnavailableError(RuntimeError):
+    pass
 
 
 class KnowledgeService:
-    """知识库查询服务（单例）：加载全部知识文档并构建检索索引。
-
-    职责：
-        - 构建并维护 keyword 索引
-        - 提供跨分类的知识检索入口
-        - 提供单篇文档查询与技能要求提取
-    其他业务服务（如 JobMatchService）依赖本服务获取知识数据。
-    """
+    """Stable backend facade; all formal retrieval is delegated to pgvector."""
 
     _instance: Optional["KnowledgeService"] = None
 
     def __init__(self) -> None:
-        self._loader = KnowledgeLoader()
-        self._index = KeywordIndex()
-        self._engine: Optional[SearchEngine] = None
-        # (category, doc_id) -> doc
-        self._documents: dict[tuple[str, str], dict] = {}
-        # category -> [doc_id]
-        self._by_category: dict[str, list[str]] = {}
-        self._loaded = False
-
-    # ── 单例懒加载 ──
+        self._service = None
 
     @classmethod
     def instance(cls) -> "KnowledgeService":
@@ -59,84 +29,98 @@ class KnowledgeService:
             cls._instance = cls()
         return cls._instance
 
-    def _ensure_loaded(self) -> None:
-        """首次调用时加载全部知识文档并构建索引（延迟加载）。"""
-        if self._loaded:
-            return
-        for category in self._loader.get_categories():
-            docs = self._loader.load_category(category)
-            ids: list[str] = []
-            for doc in docs:
-                key = (category, doc["doc_id"])
-                self._documents[key] = doc
-                ids.append(doc["doc_id"])
-            self._by_category[category] = ids
-        self._index.build(list(self._documents.values()))
-        self._engine = SearchEngine(
-            retriever=KeywordRetriever(self._index),
-            query_rewriter=QueryRewriter(),
-        )
-        self._loaded = True
+    def _core(self):
+        if self._service is None:
+            try:
+                from service.knowledge_service import KnowledgeService as CoreKnowledgeService
+                self._service = CoreKnowledgeService()
+            except Exception as exc:
+                raise KnowledgeUnavailableError(f"knowledge service initialization failed: {exc}") from exc
+        return self._service
 
-    # ── 知识检索 ──
+    def initialize(self) -> None:
+        self._core().initialize()
 
-    def search(self, query: str, category: Optional[str] = None, top_k: int = 10) -> list[dict]:
-        """在知识库中检索与 query 相关的文档。
+    def search(self, query: str, category: str | None = None, top_k: int = 10, filters=None) -> list[dict[str, Any]]:
+        results = self._core().search(query, top_k=top_k, category=category, filters=filters)
+        return [self._legacy_result(item) for item in results]
 
-        Args:
-            query: 检索关键词
-            category: 限定知识分类（如 "jobs"、"skills"），None 表示全库检索
-            top_k: 返回结果数量
+    def retrieve_context(self, query: str, category: str | None = None, top_k: int = 5) -> dict[str, Any]:
+        return self._core().retrieve_context(query, top_k=top_k, category=category)
 
-        Returns:
-            检索结果列表 [{"doc_id", "content", "score", "metadata", "filename"}, ...]
-        """
-        self._ensure_loaded()
-        return self._engine.search(query, top_k=top_k, category=category)
+    def debug_search(self, query: str, category: str | None = None, top_k: int = 5, filters=None) -> dict[str, Any]:
+        return self._core().debug_search(query, top_k=top_k, category=category, filters=filters)
 
-    def get_document(self, category: str, doc_id: str) -> Optional[dict]:
-        """获取指定分类下的单篇知识文档。"""
-        self._ensure_loaded()
-        return self._documents.get((category, doc_id))
+    def health(self) -> dict[str, Any]:
+        return self._core().health()
 
-    def list_documents(self, category: str) -> list[dict]:
-        """获取指定分类下的全部文档列表。"""
-        self._ensure_loaded()
-        return [self._documents[(category, doc_id)] for doc_id in self._by_category.get(category, [])]
+    def list_documents(self, category: str | None = None) -> list[dict[str, Any]]:
+        return [self._legacy_document(item) for item in self._core().list_documents(category=category)]
 
-    def list_categories(self) -> list[dict]:
-        """列出知识库中的分类及文档数量。"""
-        self._ensure_loaded()
-        return [
-            {"category": category, "count": len(doc_ids)}
-            for category, doc_ids in sorted(self._by_category.items())
-        ]
+    def get_document(self, category: str, doc_id: str) -> dict[str, Any] | None:
+        for item in self.list_documents(category):
+            if item["doc_id"] == doc_id:
+                return item
+        return None
 
-    # ── 技能要求提取 ──
+    def get_document_by_id(self, document_id: int) -> dict[str, Any] | None:
+        item = self._core().get_document(document_id)
+        return self._legacy_document(item) if item else None
+
+    def create_document(self, title: str, source: str, category: str, content: str, metadata: dict | None = None) -> int:
+        return self._core().create_document(title, source, category, content, metadata)
+
+    def index_document(self, document_id: int, force: bool = True) -> dict[str, Any]:
+        return self._core().index_existing_document(document_id, force=force)
+
+    def delete_document(self, document_id: int) -> bool:
+        return self._core().delete_document(document_id)
+
+    def stats(self) -> dict[str, Any]:
+        return self._core().stats()
+
+    def list_categories(self) -> list[dict[str, Any]]:
+        stats = self.stats()
+        return [{"category": key, "count": value} for key, value in sorted(stats.get("categories", {}).items())]
 
     def get_skill_requirements(self, job_id: str) -> list[str]:
-        """获取岗位文档中的核心技能要求。
-
-        优先使用 YAML 元数据中的 tags，
-        缺失时从正文「核心技能要求」小节中提取。
-        """
         doc = self.get_document("jobs", job_id)
         if not doc:
             return []
-        tags = doc["metadata"].get("tags", [])
+        tags = doc.get("metadata", {}).get("tags", [])
         if tags:
             return [str(tag).lower() for tag in tags if tag]
-        # 回退：从正文提取技能列表
         content = doc.get("content", "")
         match = re.search(r"核心技能要求.*?\n((?:\s*[-*]\s*.+\n?)+)", content, re.IGNORECASE)
         if not match:
             return []
-        skills = re.findall(r"[-*]\s*(.+)", match.group(1))
-        return [s.strip().lower() for s in skills if s.strip()]
+        return [value.strip().lower() for value in re.findall(r"[-*]\s*(.+)", match.group(1)) if value.strip()]
 
-    # ── 重置（供测试使用） ──
+    @staticmethod
+    def _legacy_document(item: dict[str, Any]) -> dict[str, Any]:
+        result = dict(item)
+        result.setdefault("doc_id", Path(result.get("source", "unknown")).stem)
+        result.setdefault("filename", Path(result.get("source", "unknown")).name)
+        result.setdefault("metadata", {})
+        result["metadata"] = {
+            "title": result.get("title") or result["doc_id"],
+            "category": result.get("category", "general"),
+            **result["metadata"],
+        }
+        return result
+
+    @classmethod
+    def _legacy_result(cls, item: dict[str, Any]) -> dict[str, Any]:
+        result = dict(item)
+        result["doc_id"] = Path(result.get("source", "unknown")).stem
+        result["filename"] = Path(result.get("source", "unknown")).name
+        result["metadata"] = {
+            "title": result.get("title") or result["doc_id"],
+            "category": result.get("category", "general"),
+            **(result.get("metadata") or {}),
+        }
+        return result
 
     @classmethod
     def reset(cls) -> None:
-        """清除单例，供测试或知识库变更后重新初始化。"""
         cls._instance = None

@@ -13,6 +13,7 @@ from app.ai.deepseek_client import DeepSeekClient
 from app.ai.prompts import SystemPrompts, ProfileAnalysisPrompts
 from app.models.analysis import ProfileAnalysis
 from app.models.user import User
+from app.knowledge.rag_integration import augment_prompt
 from app.schemas.analysis import (
     ProfileAnalysisRequest,
     ProfileAnalysisResult,
@@ -55,6 +56,18 @@ class AnalysisService:
             projects=user_info["projects"],
             target_job=request.target_job or "",
         )
+        skill_names = [str(item.get("name", "")) for item in user_info["skills"] if isinstance(item, dict)]
+        project_names = [str(item.get("name", "")) for item in user_info["projects"] if isinstance(item, dict)]
+        rag_query = " ".join(
+            value for value in [
+                request.target_job or "就业能力评价",
+                user_info["major"],
+                *skill_names,
+                *project_names,
+                "岗位能力要求 技能评价",
+            ] if value
+        )
+        user_prompt, sources = augment_prompt(rag_query, user_prompt, top_k=5)
 
         messages = [
             {"role": "system", "content": system_prompt},
@@ -73,7 +86,7 @@ class AnalysisService:
             user_info=user_info,
             target_job=request.target_job or "",
             result=result,
-            raw_result=ai_result,
+            raw_result={"answer": ai_result, "sources": sources},
         )
 
         return ProfileAnalysisResponse(

@@ -1,23 +1,25 @@
 # embedding/ — Embedding 模型接口
 
 ## 目录职责
-提供文本向量化（Embedding）的统一接口。
+提供生产索引和查询共用的文本向量化接口。
 
 ## 当前状态
-【预留】当前关闭。仅保留接口框架。
+已接入 `IndexPipeline` 和 `VectorRetriever`。默认使用
+`BAAI/bge-small-zh-v1.5`，测试使用确定性的 Mock Provider。
 
-## 支持的模型候选（未来）
+## 支持的模型
 | 模型 | 提供方 | 维度 |
 |------|--------|------|
-| BGE-M3 | BAAI | 1024 |
-| Qwen3-Embedding | 阿里 | 2048 |
-| Jina Embedding | Jina AI | 1024 |
-| SentenceTransformer | UKP Lab | 可变 |
+| SentenceTransformers | UKP Lab / Hugging Face | 由配置决定 |
+| Mock Provider | 项目内置 | 由配置决定 |
 
 ## 配置文件
-`config/embedding_config.json`
+项目根目录 `.env`，对应字段为 `EMBEDDING_PROVIDER`、
+`EMBEDDING_MODEL`、`EMBEDDING_DIMENSION`、`EMBEDDING_BATCH_SIZE`。
 
 ## 文件
 | 文件 | 状态 |
 |------|------|
-| `embedding_model.py` | 预留接口 |
+| `base.py` | Embedding 抽象接口 |
+| `factory.py` | Provider 工厂和 Mock Provider |
+| `local.py` | SentenceTransformers 本地实现 |

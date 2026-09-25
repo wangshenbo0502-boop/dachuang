@@ -1,0 +1,1 @@
+import{ref}from"vue";import{defineStore}from"pinia";export const useAppStore=defineStore("app",()=>{const sidebarCollapsed=ref(false),mobileSidebarOpen=ref(false);return{sidebarCollapsed,mobileSidebarOpen,toggleSidebar:()=>sidebarCollapsed.value=!sidebarCollapsed.value,toggleMobile:()=>mobileSidebarOpen.value=!mobileSidebarOpen.value}});

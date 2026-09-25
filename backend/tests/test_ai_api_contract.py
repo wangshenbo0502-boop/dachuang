@@ -104,7 +104,9 @@ class AiApiContractTestCase(unittest.TestCase):
             "/api/growth/user/{user_id}", "/api/stream/analysis", "/api/stream/resume",
             "/api/stream/growth",
         }
-        route_paths = {route.path for route in app.routes if route.path in expected_paths}
+        # FastAPI 0.121+ keeps included routers lazy in app.routes; OpenAPI is
+        # the stable public route inventory across supported FastAPI versions.
+        route_paths = {path for path in app.openapi()["paths"] if path in expected_paths}
         self.assertEqual(route_paths, expected_paths)
 
         root = self.client.get("/", headers={"X-Request-ID": "contract-1"})

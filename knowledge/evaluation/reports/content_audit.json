@@ -1,0 +1,1922 @@
+{
+  "documents": 244,
+  "categories": {
+    "companies": 39,
+    "competition": 13,
+    "interview": 34,
+    "jobs": 54,
+    "market": 11,
+    "policies": 9,
+    "projects": 21,
+    "resume": 7,
+    "roadmap": 11,
+    "skills": 45
+  },
+  "needs_improvement": 244,
+  "issues": [
+    {
+      "source": "companies/Apple中国.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/Google中国.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/MiniMax（稀宇科技）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5",
+        "章节过长，不利于 Chunk: 10668 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/Shopee中国.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5676 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/东方财富.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 4763 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/中国工商银行软开中心.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/中国建设银行数据中心.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/中国电科（CETC）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 5189 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/中国移动.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 5213 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/中小型互联网公司（100-2000人）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 3858 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/中软国际.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 4908 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/亚马逊中国.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/京东.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/华为.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5",
+        "章节过长，不利于 Chunk: 5520 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/同花顺.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 4689 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/哔哩哔哩.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5",
+        "章节过长，不利于 Chunk: 4604 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/国家电网.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 4918 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/字节跳动.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 6041 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/小米.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/小红书.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5",
+        "章节过长，不利于 Chunk: 4270 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/小鹏汽车.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5688 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/微软中国.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/快手.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/招商银行科技岗.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 5604 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/智谱AI.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 10659 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/月之暗面（Kimi）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5",
+        "章节过长，不利于 Chunk: 7545 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/比亚迪（BYD）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5587 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/理想汽车.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5587 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/百度.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/网易.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/美团.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5405 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/腾讯.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 6013 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/英伟达中国（NVIDIA）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5571 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/蔚来汽车.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/蚂蚁集团.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5",
+        "章节过长，不利于 Chunk: 5398 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "companies/阶跃星辰（StepFun）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 10674 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/阿里巴巴.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5461 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/零一万物（01.AI）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 11523 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "companies/高盛中国（Goldman Sachs）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 5629 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/ACM-ICPC国际大学生程序设计竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/CCF CSP计算机软件能力认证.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/CCPC中国大学生程序设计竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/CTF网络安全竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/Kaggle数据科学竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/中国国际大学生创新大赛（互联网+）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/全国大学生信息安全竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/全国大学生数学建模竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/大学生创新创业训练计划（大创）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/天池大数据竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/挑战杯全国大学生课外学术科技作品竞赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/蓝桥杯全国软件和信息技术大赛.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "competition/计算机专业竞赛全攻略.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/AI大模型应用开发面试题.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/AI大模型应用面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/AI算法面试题.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Go后端开发面试题.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Go语言面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/HR行为面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/HR面试与行为面试完全指南.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/interview_guide.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/JavaScript基础面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Java基础面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Java并发编程面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Java集合框架面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Java面试题.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/JVM面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/MySQL数据库面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Python后端开发面试题.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Python面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Redis面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Spring_Spring Boot面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/Vue-React框架面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/前端工程化与性能优化面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/前端开发面试题（2026版）.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/动态规划与贪心面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/技术面试项目介绍指南.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/操作系统面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/数据分析面试题.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/数据库与中间件面试题.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/数组与字符串面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/树与图面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/算法面试题指南（校招版）.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/系统设计面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/系统设计面试题（校招版）.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/计算机网络面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "interview/链表面试题.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/AI产品经理.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/AI产品运营.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/AI伦理与合规专员.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/AI内容创作师_AIGC内容运营.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/AI算法工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/AI解决方案架构师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/BI工程师_商业智能工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 9719 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/C++开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/Go后端开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/Java后端开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5",
+        "章节过长，不利于 Chunk: 6506 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/NLP算法工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/Prompt工程师_提示词工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/RAG知识库工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/Rust开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/UI_UX设计师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 10597 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/云原生开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/互联网产品经理.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 8113 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/人力资源HR.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 8260 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/人工智能训练师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/全栈开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/具身智能算法工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/内容运营.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 8151 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/前端开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 7328 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/区块链开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/多模态算法工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/大模型应用工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/大模型算法工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/嵌入式开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 10880 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/市场营销品牌营销.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 8868 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/技术产品经理.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/技术支持客户成功.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 9105 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/搜索算法工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/数字孪生工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/数据产品经理.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/数据仓库工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 10565 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/数据分析师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 9109 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/数据工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/新媒体运营.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 7903 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/智能体Agent开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/机器人产品经理.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/测试开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 10616 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/渗透测试工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/游戏客户端开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/游戏服务端开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/用户运营.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 7878 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/电商运营.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5",
+        "章节过长，不利于 Chunk: 8190 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/移动端开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/算法工程师-推荐算法.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "章节过长，不利于 Chunk: 9673 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/网络安全工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/计算机视觉算法工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/车载开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/软件测试工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "jobs/运维工程师_SRE.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5",
+        "章节过长，不利于 Chunk: 10536 字符"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "jobs/量化开发工程师.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年AI人工智能行业就业报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年中国大学生就业市场总报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年互联网行业就业趋势报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年新能源汽车行业就业报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年新质生产力行业就业报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年游戏行业就业报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年生物医药行业就业报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年电商行业就业报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年程序员薪资与职业发展报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年重点城市就业市场分析.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "market/2026年金融科技行业就业报告.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/2026年国家高校毕业生就业政策汇总.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/一线城市落户政策对比（北上广深）.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/加班费、调岗与辞退赔偿详解.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/劳动合同签订与试用期权益指南.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/应届生租房与生活补贴申请全攻略.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/应届生身份与择业期政策详解.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/新一线城市人才补贴政策汇总.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/校招与社招区别全面对比.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "policies/职场维权渠道与证据收集指南.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/AI 图像分类应用.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1529 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/AI智能体Agent协作平台.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 3/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/API 网关与限流系统.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1528 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/Docker 化 CI CD 流水线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1634 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/GitHub 风格个人主页.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1531 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/NLP 文本情感分析.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1627 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/RAG企业知识库问答系统.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/SaaS短链接系统.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/个人博客系统.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1631 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/云原生微服务部署平台.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/企业级权限管理系统.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1637 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/全栈项目实战：从0到1上线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/在线商城.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1549 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/大模型微调与私有化部署.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/实时聊天应用.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1532 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/开源项目贡献完全指南.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/技术面试题库.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1528 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/数据分析看板.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1632 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/文件云盘系统.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "正文偏短: 1586 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "projects/项目包装与简历书写指南.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "projects/高并发秒杀系统.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, tags, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "resume/AI大模型应用工程师简历模板与范例.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "resume/resume_guide.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "resume/前端开发工程师简历模板与范例.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "resume/后端开发工程师简历模板与范例.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "resume/简历写作避坑完全指南.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "resume/简历投递与面试邀约全攻略.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "resume/自我介绍与面试话术完全手册.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/AI产品经理学习路线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/AI大模型应用工程师学习路线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/career_paths.md",
+      "reasons": [
+        "缺少字段: category, id, keywords, source, status, summary, tags, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/learning_paths.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/云原生DevOps工程师学习路线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/大模型算法工程师学习路线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 1/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/测试开发工程师学习路线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/网络安全工程师学习路线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 2/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/计算机专业大学四年完整规划.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/计算机专业考研就业选择指南.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "roadmap/零基础转行程序员完整路线.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Agent智能体开发.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Burp Suite渗透测试工具.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/CSS.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Docker.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/FastAPI.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Git版本控制.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Go.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/HTML.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Java.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/JavaScript.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Kubernetes.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/LangChain.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Linux运维.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/MongoDB.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/MySQL.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Node.js.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/NumPy.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Pandas.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Prometheus监控.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Prompt Engineering提示工程.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Python.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "正文偏短: 1791 字符"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/PyTorch.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/RAG检索增强生成.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/React.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Redis.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Rust.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/skill_categories.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "正文偏短: 1507 字符",
+        "公开参考来源不足: 0/5"
+      ],
+      "priority": "high"
+    },
+    {
+      "source": "skills/Spring Boot.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/SQL.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/TensorFlow.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Terraform基础设施即代码.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/TypeScript.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/vLLM推理引擎.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/Vue.js.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/WebAssembly.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/产品思维.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/向量数据库.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/大模型微调.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/机器学习.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 3/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/沟通协作.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at",
+        "公开参考来源不足: 4/5"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/深度学习.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/网络安全基础.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/职场情商.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/自动化测试.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    },
+    {
+      "source": "skills/项目管理.md",
+      "reasons": [
+        "缺少字段: id, keywords, status, summary, updated_at"
+      ],
+      "priority": "medium"
+    }
+  ]
+}

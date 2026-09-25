@@ -160,34 +160,36 @@ SearchEngine.search(query, top_k, category)          retrieval/search_engine.py
 
 ---
 
-## 6. 预留模块现状表（均为接口框架，`规划/待实现`）
+## 6. 当前模块现状表
 
 | 模块 | 文件 | 状态 | 升级后职责 |
 |------|------|------|-----------|
-| embedding | `embedding/embedding_model.py` | 预留 | BGE-M3 / Qwen3-Embedding 向量化 |
-| vectorstore | `vectorstore/vector_store.py` | 预留 | FAISS / ChromaDB 本地向量库 |
-| splitter | `splitter/text_chunker.py` | 预留 | 递归分块（chunk_size=512 / overlap=50 默认值） |
-| reranker | `reranker/reranker.py` | 预留 | BGE-Reranker 二阶段精排 |
-| graph | `graph/knowledge_graph.py` | 预留 | 技能-岗位知识图谱（Graph RAG） |
-| evaluation | `evaluation/metrics.py` + `test_cases.json` | 预留 | RAGAS 风格检索评估回归 |
-| 多格式 Loader | `loader/{pdf,docx,excel,json,web}_loader.py` | 预留 | PDF/Word/Excel/网页摄取 |
-| workflow | `workflow/*_pipeline.py` | 骨架 | 按场景（job/resume/career…）编排检索→Prompt |
-| ingestion | `ingestion/pipeline.py` | 骨架 | Loader→Parser→Splitter→Indexes 全量摄取编排 |
+| embedding | `embedding/{base,factory,local}.py` | 已实现 | SentenceTransformers / Mock 向量化 |
+| vector store | `vector_store/pgvector_store.py` | 已实现 | PostgreSQL + pgvector + HNSW + FTS/GIN |
+| chunking | `chunking/recursive_chunker.py` | 已实现 | 标题、段落、句子优先的递归切块 |
+| reranker | `reranker/{factory,cross_encoder,default}.py` | 已实现 | Cross-Encoder 与 NoOp fallback |
+| evaluation | `evaluation/metrics.py` + `dataset/` | 已实现 | Recall、MRR、Hit Rate、NDCG |
+| 多格式 Loader | `loaders/{markdown,json,text}_loader.py` | 已实现 | Markdown/JSON/TXT |
+| retrieval | `retrieval/` | 已实现 | Query Rewrite、双路召回、RRF、过滤 |
+| pipeline | `pipeline/{index,rag}_pipeline.py` | 已实现 | 索引和在线 RAG 唯一编排入口 |
 
-`knowledge/config/*.json`（chunk/embedding/llm/retrieval/knowledge 配置）与 `cache/query_cache.json` 已备好配置位，随对应模块激活启用。
+Graph RAG、FAISS、Milvus、第二套缓存和场景级 workflow 不属于当前生产链路，
+没有保留空目录或预留实现。扩展时应先评估是否仍符合 PostgreSQL 单一事实源。
 
 ---
 
 ## 7. 升级路线（与 knowledge/ARCHITECTURE.md 一致）
 
 ```
-Keyword Retrieval（当前，已实现）
-  → Embedding（BGE-M3 / Qwen3-Embedding）
-  → FAISS 本地向量索引
-  → Hybrid Search（关键词 + 向量混合召回）
-  → Reranker（BGE-Reranker 精排）
-  → Milvus（可选，分布式）
-  → Graph RAG（知识图谱增强）
+Markdown
+  → Loader / Parser / Chunking
+  → Embedding
+  → PostgreSQL + pgvector / HNSW
+  → PostgreSQL FTS / GIN
+  → RRF Hybrid Retrieval
+  → Cross-Encoder（可选）
+  → Context Builder
+  → 业务 Prompt
 ```
 
 升级约束：`KnowledgeService` 的方法签名保持不变（业务层零改动），替换其内部实现；每次升级先用 `evaluation/` 的测试用例跑基线对比。

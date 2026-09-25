@@ -1,5 +1,42 @@
 {
-  "_comment": "文件名称：test_cases.json | 作用：RAG 评估测试用例集。当前为空，后续填充具体测试数据。",
-  "_version": "0.3.0",
-  "test_cases": []
+  "_comment": "离线检索回归集：expected_sources 使用 knowledge/documents 下的稳定相对路径。",
+  "_version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "job-frontend",
+      "query": "前端开发工程师需要掌握哪些技能",
+      "category": "job",
+      "expected_sources": ["jobs/前端开发工程师.md"]
+    },
+    {
+      "id": "skill-python",
+      "query": "Python 后端开发需要掌握什么",
+      "category": "skill",
+      "expected_sources": ["skills/Python.md"]
+    },
+    {
+      "id": "resume-star",
+      "query": "简历如何使用 STAR 法则描述项目",
+      "category": "resume",
+      "expected_sources": ["resume/项目包装与简历书写指南.md", "resume/简历写作避坑完全指南.md"]
+    },
+    {
+      "id": "roadmap-cloud",
+      "query": "云原生 DevOps 工程师学习路线",
+      "category": "growth",
+      "expected_sources": ["roadmap/云原生DevOps工程师学习路线.md"]
+    },
+    {
+      "id": "rag-skill",
+      "query": "RAG 检索增强生成和向量数据库",
+      "category": "skill",
+      "expected_sources": ["skills/RAG检索增强生成.md", "skills/向量数据库.md"]
+    },
+    {
+      "id": "interview-system-design",
+      "query": "校招系统设计面试如何准备",
+      "category": "interview",
+      "expected_sources": ["interview/系统设计面试题（校招版）.md", "interview/系统设计面试题.md"]
+    }
+  ]
 }
