@@ -10,6 +10,8 @@ from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user, require_owner
+from app.models.user import User
 from app.database.session import get_db
 from app.schemas.analysis import (
     ProfileAnalysisRequest,
@@ -19,7 +21,7 @@ from app.schemas.analysis import (
 from app.services.analysis_service import AnalysisService
 from app.utils.response import success
 
-router = APIRouter(prefix="/api/analysis", tags=["AI就业画像分析"])
+router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/analysis", tags=["AI就业画像分析"])
 
 
 def serialize_model(model: BaseModel) -> dict[str, Any]:
@@ -31,6 +33,7 @@ def serialize_model(model: BaseModel) -> dict[str, Any]:
 def analyze_profile(
     request: ProfileAnalysisRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """POST /api/analysis - 执行就业画像分析
 
@@ -59,6 +62,9 @@ def analyze_profile(
     }
     """
     service = AnalysisService(db)
+    if request.user_id is not None:
+        require_owner(request.user_id, current_user)
+    request = request.model_copy(update={'user_id': current_user.id})
     result = service.analyze_profile(request)
     return success(serialize_model(result), message="就业画像分析完成")
 
@@ -67,10 +73,12 @@ def analyze_profile(
 def get_analysis(
     analysis_id: int = Path(ge=1, description="分析记录ID"),
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """GET /api/analysis/{analysis_id} - 获取分析记录详情"""
     service = AnalysisService(db)
     result = service.get_analysis(analysis_id)
+    require_owner(result.user_id, current_user)
     return success(serialize_model(result), message="获取分析记录成功")
 
 
@@ -78,6 +86,7 @@ def get_analysis(
 def get_user_analyses(
     user_id: int = Path(ge=1, description="用户ID"),
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """GET /api/analysis/user/{user_id} - 获取用户的历史分析记录列表"""
     service = AnalysisService(db)

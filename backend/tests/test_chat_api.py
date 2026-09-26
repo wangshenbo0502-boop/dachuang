@@ -17,6 +17,7 @@ from app.config import get_settings
 from app.database.connection import Base, get_engine, reset_database_connection
 from app.database.session import get_db, get_session_factory
 from main import app
+from tests.auth_helpers import create_authenticated_profile
 
 
 class FakeAssistant:
@@ -55,15 +56,11 @@ class ChatApiTestCase(unittest.TestCase):
         Base.metadata.drop_all(get_engine())
         get_engine().dispose()
 
-    def create_user(self):
-        response = self.client.post(
-            "/api/users",
-            json={"name": "Test User", "school": "Test University", "major": "CS", "grade": "大三"},
-        )
-        self.assertEqual(response.status_code, 201)
-        return response.json()["data"]["id"]
+    def create_user(self) -> int:
+        return create_authenticated_profile(self.session, self.client, major="Computer Science")
 
     def test_usage_endpoint_returns_without_deadlock(self):
+        self.create_user()
         response = self.client.get("/api/usage")
         self.assertEqual(response.status_code, 200)
         self.assertIn("daily_cost_usd", response.json()["data"])

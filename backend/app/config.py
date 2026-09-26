@@ -37,6 +37,16 @@ class Settings:
         self.DB_POOL_RECYCLE: int = int(os.getenv("DB_POOL_RECYCLE", "3600"))
         self.DB_ECHO: bool = os.getenv("DB_ECHO", "false").lower() == "true"
 
+        # ── Account authentication and QQ email delivery ──
+        self.JWT_SECRET: str = os.getenv("JWT_SECRET", "")
+        self.JWT_ACCESS_MINUTES: int = max(1, int(os.getenv("JWT_ACCESS_MINUTES", "1440")))
+        self.DEV_EMAIL_CODE_MODE: bool = self.is_dev and os.getenv("DEV_EMAIL_CODE_MODE", "false").lower() == "true"
+        self.SMTP_HOST: str = os.getenv("SMTP_HOST", "")
+        self.SMTP_PORT: int = int(os.getenv("SMTP_PORT", "465"))
+        self.SMTP_USERNAME: str = os.getenv("SMTP_USERNAME", "")
+        self.SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
+        self.SMTP_FROM: str = os.getenv("SMTP_FROM", "")
+
         # ── CORS ──
         self.CORS_ORIGINS: list[str] = [
             origin.strip()

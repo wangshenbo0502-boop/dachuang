@@ -16,6 +16,7 @@ from fastapi import APIRouter, Depends, Path, Query
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user, require_owner
 from app.database.session import get_db
 from app.models.job import JobMatchRecord
 from app.models.user import User
@@ -30,7 +31,7 @@ from app.services.job_match_service import JobMatchService
 from app.utils.exceptions import ResourceNotFoundError
 from app.utils.response import success
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 def serialize_model(model: BaseModel) -> dict[str, Any]:
@@ -71,6 +72,7 @@ def get_job_detail(job_id: str = Path(description="岗位ID（文件名，如 Ja
 def match_jobs(
     request: JobMatchRequest,
     database_session: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """POST /api/match — 岗位技能匹配
     示例请求：
@@ -81,6 +83,9 @@ def match_jobs(
         "user_id": 1
     }
     """
+    if request.user_id is not None:
+        require_owner(request.user_id, current_user)
+    request = request.model_copy(update={"user_id": current_user.id})
     if request.user_id is not None and database_session.get(User, request.user_id) is None:
         raise ResourceNotFoundError(f"用户 {request.user_id} 不存在")
     service = JobMatchService.instance()
@@ -107,11 +112,13 @@ def match_jobs(
 def get_match_history(
     match_id: int = Path(ge=1, description="匹配记录ID"),
     database_session: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """GET /api/match/{match_id} — 查询历史匹配结果"""
     record = database_session.get(JobMatchRecord, match_id)
     if not record:
         raise ResourceNotFoundError(message=f"匹配记录 {match_id} 不存在")
+    require_owner(record.user_id, current_user)
     response = JobMatchRecordResponse(
         id=record.id,
         user_id=record.user_id,

@@ -9,6 +9,8 @@ from fastapi import APIRouter, Depends, Path, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user, require_owner
+from app.models.user import User
 from app.database.session import get_db
 from app.schemas.user import (
     StudentContextResponse,
@@ -22,8 +24,9 @@ from app.schemas.user import (
 )
 from app.services.user_service import UserService
 from app.utils.response import success
+from app.utils.exceptions import AppException
 
-router = APIRouter(prefix="/api/users", tags=["学生资料"])
+router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/users", tags=["学生资料"])
 
 
 def serialize_model(model: BaseModel) -> dict[str, Any]:
@@ -33,9 +36,19 @@ def serialize_model(model: BaseModel) -> dict[str, Any]:
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create_user(user_data: UserCreate, database_session: Session = Depends(get_db)) -> dict[str, Any]:
     """创建学生基本资料。"""
-    user = UserService(database_session).create_user(user_data)
-    response = UserProfileResponse.model_validate(user)
-    return success(serialize_model(response), message="学生资料创建成功")
+    raise AppException("请通过注册创建学生档案", code=5106, status_code=403)
+
+
+@router.get("/me")
+def get_my_profile(current_user: User = Depends(get_current_user), database_session: Session = Depends(get_db)) -> dict[str, Any]:
+    response = UserProfileResponse.model_validate(UserService(database_session).get_user(current_user.id))
+    return success(serialize_model(response))
+
+
+@router.put("/me")
+def update_my_profile(user_data: UserUpdate, current_user: User = Depends(get_current_user), database_session: Session = Depends(get_db)) -> dict[str, Any]:
+    user = UserService(database_session).update_user(current_user.id, user_data)
+    return success(serialize_model(UserProfileResponse.model_validate(user)), message="学生资料更新成功")
 
 
 @router.get("/{user_id}")

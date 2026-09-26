@@ -18,6 +18,7 @@ from app.config import get_settings
 from app.database.connection import Base, get_engine, reset_database_connection
 from app.database.session import get_db, get_session_factory
 from main import app
+from tests.auth_helpers import create_authenticated_profile
 
 
 class UserApiTestCase(unittest.TestCase):
@@ -46,19 +47,7 @@ class UserApiTestCase(unittest.TestCase):
         get_engine().dispose()
 
     def create_user(self) -> int:
-        response = self.client.post(
-            "/api/users",
-            json={
-                "name": "Test User",
-                "school": "Test University",
-                "major": "Computer Science",
-                "grade": "2024",
-                "bio": "Initial profile",
-            },
-        )
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json()["code"], 0)
-        return response.json()["data"]["id"]
+        return create_authenticated_profile(self.database_session, self.client, major="Computer Science")
 
     def test_create_get_update_and_context(self) -> None:
         user_id = self.create_user()
@@ -145,8 +134,8 @@ class UserApiTestCase(unittest.TestCase):
         self.assertEqual([skill["name"] for skill in profile_response.json()["data"]["skills"]], ["Python"])
 
         missing_response = self.client.get("/api/users/999")
-        self.assertEqual(missing_response.status_code, 404)
-        self.assertEqual(missing_response.json()["code"], 3001)
+        self.assertEqual(missing_response.status_code, 403)
+        self.assertEqual(missing_response.json()["code"], 5106)
 
 
 if __name__ == "__main__":

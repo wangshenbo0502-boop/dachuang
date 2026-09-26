@@ -12,7 +12,9 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat
+from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat, auth
+from app.auth.dependencies import get_current_account
+from fastapi import Depends
 from app.config import get_settings
 from app.database.bootstrap import initialize_database_schema
 from app.utils.exceptions import AppException
@@ -120,7 +122,7 @@ def health_check():
     })
 
 
-@app.get("/api/usage")
+@app.get("/api/usage", dependencies=[Depends(get_current_account)])
 def get_ai_usage():
     """GET /api/usage — 获取AI Token用量和成本统计"""
     stats = DeepSeekClient.get_usage_stats()
@@ -128,6 +130,7 @@ def get_ai_usage():
 
 
 # 注册路由
+app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(job_match.router, prefix="/api", tags=["岗位匹配"])
 app.include_router(analysis.router)

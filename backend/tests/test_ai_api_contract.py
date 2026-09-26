@@ -15,6 +15,7 @@ from app.config import get_settings
 from app.database.connection import Base, get_engine, reset_database_connection
 from app.database.session import get_db, get_session_factory
 from main import app
+from tests.auth_helpers import create_authenticated_profile
 
 
 class AiApiContractTestCase(unittest.TestCase):
@@ -41,14 +42,10 @@ class AiApiContractTestCase(unittest.TestCase):
         get_engine().dispose()
 
     def create_user(self) -> int:
-        response = self.client.post(
-            "/api/users",
-            json={"name": "Test User", "school": "Test University", "major": "CS", "grade": "大三"},
-        )
-        self.assertEqual(response.status_code, 201)
-        return response.json()["data"]["id"]
+        return create_authenticated_profile(self.session, self.client, major="Computer Science")
 
     def test_ai_requests_require_documented_profile_source(self) -> None:
+        self.create_user()
         requests = [
             ("/api/analysis", {"target_job": "Java后端开发工程师"}),
             ("/api/resume", {"target_job": "Java后端开发工程师"}),
@@ -85,12 +82,13 @@ class AiApiContractTestCase(unittest.TestCase):
                 self.assertEqual(history.json()["data"][0]["id"], record_id)
 
     def test_match_rejects_unknown_user_before_persisting_record(self) -> None:
+        self.create_user()
         response = self.client.post(
             "/api/match",
             json={"skills": ["Java"], "user_id": 999, "top_k": 1},
         )
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()["code"], 3001)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["code"], 5106)
 
     def test_route_inventory_request_id_and_sse_contract(self) -> None:
         expected_paths = {

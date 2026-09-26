@@ -1,5 +1,12 @@
 import request,{apiData} from "./request"; import type * as T from "@/types/api";
 export const api={
+ authSendCode:(email:string,purpose:"REGISTER"|"RESET_PASSWORD"="REGISTER")=>apiData<{expires_in:number}>(request.post("/auth/email/send-code",{email,purpose})),
+ authResetPassword:(body:object)=>apiData<null>(request.post("/auth/reset-password",body)),
+ authRegister:(body:object)=>apiData<{access_token:string;token_type:string;user:import("@/stores/auth").AccountIdentity}>(request.post("/auth/register",body)),
+ authLogin:(body:{email:string;password:string})=>apiData<{access_token:string;token_type:string;user:import("@/stores/auth").AccountIdentity}>(request.post("/auth/login",body)),
+ authMe:()=>apiData<import("@/stores/auth").AccountIdentity>(request.get("/auth/me")),
+ authLogout:(token:string)=>apiData<null>(request.post("/auth/logout",null,{headers:{Authorization:`Bearer ${token}`}})),
+
  getUser:(id:number)=>apiData<T.StudentProfile>(request.get(`/users/${id}`)), createUser:(b:object)=>apiData<T.StudentProfile>(request.post("/users",b)), updateUser:(id:number,b:object)=>apiData<T.StudentProfile>(request.put(`/users/${id}`,b)),
  skills:(id:number,v:T.Skill[])=>apiData<T.Skill[]>(request.put(`/users/${id}/skills`,{skills:v})), projects:(id:number,v:T.Project[])=>apiData<T.Project[]>(request.put(`/users/${id}/projects`,{projects:v})), competitions:(id:number,v:T.Competition[])=>apiData<T.Competition[]>(request.put(`/users/${id}/competitions`,{competitions:v})), internships:(id:number,v:T.Internship[])=>apiData<T.Internship[]>(request.put(`/users/${id}/internships`,{internships:v})),
  analysis:(b:object)=>apiData<T.AnalysisResponse>(request.post("/analysis",b)), analysisDetail:(id:number)=>apiData<T.AnalysisResponse>(request.get(`/analysis/${id}`)), analyses:(id:number)=>apiData<T.AnalysisHistory[]>(request.get(`/analysis/user/${id}`)),

@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import MainLayout from "@/layouts/MainLayout.vue";
+import { safeInternalRedirect } from "@/utils/authSession";
 
 const routes=[
-  {path:"/login",name:"login",component:()=>import("@/views/login/LoginView.vue"),meta:{title:"学生登录",public:true}},
+  {path:"/login",name:"login",component:()=>import("@/views/login/LoginView.vue"),meta:{title:"登录",public:true}},
+  {path:"/register",name:"register",component:()=>import("@/views/login/RegisterView.vue"),meta:{title:"注册",public:true}},
+  {path:"/forgot-password",name:"forgot-password",component:()=>import("@/views/login/ForgotPasswordView.vue"),meta:{title:"重置密码",public:true}},
   {path:"/",component:MainLayout,redirect:"/dashboard",children:[
     {path:"dashboard",name:"dashboard",component:()=>import("@/views/dashboard/DashboardView.vue"),meta:{title:"就业能力概览"}},
     {path:"profile",name:"profile",component:()=>import("@/views/profile/ProfileView.vue"),meta:{title:"我的就业档案"}},
@@ -21,5 +24,5 @@ const routes=[
   {path:"/:pathMatch(.*)*",redirect:"/dashboard"}
 ];
 const router=createRouter({history:createWebHistory(),routes,scrollBehavior:()=>({top:0})});
-router.beforeEach(async to=>{const u=useUserStore();document.title=`${String(to.meta.title||"")} - 大学生就业竞争力评估系统`;if(to.meta.public){if(u.isAuthenticated){await u.hydrate();if(u.isAuthenticated)return "/dashboard"}return true}if(!u.isAuthenticated)return{path:"/login",query:{redirect:to.fullPath}};const loaded=await u.hydrate();if(!loaded)return "/login";return true});
+router.beforeEach(async to=>{const u=useUserStore();document.title=`${String(to.meta.title||"")} - 大学生就业竞争力评估系统`;const loaded=await u.hydrate();if(to.meta.public){if(loaded)return safeInternalRedirect(to.query.redirect);return true}if(!loaded)return{path:"/login",query:{redirect:to.fullPath}};return true});
 export default router;

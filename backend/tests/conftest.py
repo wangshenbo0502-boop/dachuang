@@ -5,6 +5,7 @@ import os
 import pytest
 
 os.environ["APP_ENV"] = "testing"
+os.environ["JWT_SECRET"] = "test-only-secret-at-least-32-characters-long"
 os.environ["DEEPSEEK_API_KEY"] = ""
 os.environ["AI_TIMEOUT"] = "1"
 os.environ["AI_MAX_RETRIES"] = "1"

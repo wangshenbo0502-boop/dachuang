@@ -8,6 +8,8 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from app.ai.deepseek_client import DeepSeekClient
+from app.auth.dependencies import get_current_user, require_owner
+from app.models.user import User
 from app.database.session import get_db
 from app.schemas.chat import (
     ChatConversationRequest,
@@ -22,7 +24,7 @@ from app.services.resume_service import ResumeService
 from app.services.user_service import UserService
 from app.utils.response import success
 
-router = APIRouter(prefix="/api/chat", tags=["AI对话式求职助手"])
+router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/chat", tags=["AI对话式求职助手"])
 
 
 def _user_context(db: Session, user_id: int) -> dict[str, Any]:
@@ -64,15 +66,17 @@ def _sse_event(event: str, payload: dict[str, Any]) -> str:
 
 
 @router.post("/conversation")
-def chat_conversation(request: ChatConversationRequest, db: Session = Depends(get_db)) -> dict[str, Any]:
+def chat_conversation(request: ChatConversationRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
     """通用自由对话，不执行简历采集问卷。"""
+    require_owner(request.user_id, current_user)
     reply = DeepSeekClient.instance().chat(_conversation_messages(db, request), temperature=0.65, max_tokens=1800)
     return success({"reply": reply.strip(), "suggested_action": _suggested_action(request)}, message="回复生成成功")
 
 
 @router.post("/conversation-stream")
-def chat_conversation_stream(request: ChatConversationRequest, db: Session = Depends(get_db)) -> StreamingResponse:
+def chat_conversation_stream(request: ChatConversationRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> StreamingResponse:
     """Stream an open-ended consultation response as SSE."""
+    require_owner(request.user_id, current_user)
     messages = _conversation_messages(db, request)
     action = _suggested_action(request)
 
@@ -93,8 +97,9 @@ def chat_conversation_stream(request: ChatConversationRequest, db: Session = Dep
 
 
 @router.post("/turn")
-def chat_turn(request: ChatTurnRequest, db: Session = Depends(get_db)) -> dict[str, Any]:
+def chat_turn(request: ChatTurnRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
     """根据聊天上下文提出下一问，并返回结构化信息草稿。"""
+    require_owner(request.user_id, current_user)
     context = _user_context(db, request.user_id)
     question_number = sum(1 for m in request.messages if m.role == "user")
     system = """你是一个专业、友好的大学生求职教练。通过自然对话逐步了解学生并帮助生成真实、有竞争力的简历。
@@ -119,8 +124,9 @@ extracted只填写本轮对话中有明确依据的信息；技能格式为{name
 
 
 @router.post("/profile-turn")
-def profile_turn(request: ChatTurnRequest, db: Session = Depends(get_db)) -> dict[str, Any]:
+def profile_turn(request: ChatTurnRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
     """通过不限轮数的轻量访谈补全就业档案，结果只作为待审核草稿返回。"""
+    require_owner(request.user_id, current_user)
     context = _user_context(db, request.user_id)
     question_number = sum(1 for m in request.messages if m.role == "user")
     system = """你是大学生就业服务平台的档案助手。你的任务是通过自然对话，帮用户补全和优化就业档案，用户可以回答任意轮数。
@@ -147,8 +153,9 @@ def profile_turn(request: ChatTurnRequest, db: Session = Depends(get_db)) -> dic
 
 
 @router.post("/generate-resume")
-def generate_resume(request: ChatResumeRequest, db: Session = Depends(get_db)) -> dict[str, Any]:
+def generate_resume(request: ChatResumeRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
     """使用现有档案和对话补充信息，直接生成完整简历优化结果。"""
+    require_owner(request.user_id, current_user)
     context = _user_context(db, request.user_id)
     transcript = "\n".join(f"{m.role}: {m.content}" for m in request.messages)
     prompt = f"对话补充信息：\n{transcript[-7000:]}\n\n结构化补充信息：{request.extracted}"
@@ -164,8 +171,9 @@ def generate_resume(request: ChatResumeRequest, db: Session = Depends(get_db)) -
 
 
 @router.post("/sync-profile")
-def sync_profile(request: ChatProfileRequest, db: Session = Depends(get_db)) -> dict[str, Any]:
+def sync_profile(request: ChatProfileRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
     """Atomically merge only facts the user confirmed in the draft."""
+    require_owner(request.user_id, current_user)
     updated, skipped = UserService(db).sync_profile_draft(request.user_id, request.profile)
     profile = UserProfileResponse.model_validate(updated).model_dump(mode="json")
     return success(

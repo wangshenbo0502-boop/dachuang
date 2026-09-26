@@ -20,6 +20,8 @@ from app.ai.prompts import (
     GrowthPlanningPrompts,
     JobMatchPrompts,
 )
+from app.auth.dependencies import get_current_user, require_owner
+from app.models.user import User
 from app.database.session import get_db
 from app.models.user import User
 from app.knowledge.rag_integration import augment_prompt
@@ -28,7 +30,7 @@ from app.schemas.resume import ResumeOptimizationRequest
 from app.schemas.growth import GrowthPlanRequest
 from app.utils.exceptions import ResourceNotFoundError
 
-router = APIRouter(prefix="/api/stream", tags=["AI流式响应"])
+router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/stream", tags=["AI流式响应"])
 
 
 def _as_dict(value: Any) -> dict:
@@ -131,8 +133,12 @@ async def stream_analysis(
     request: Request,
     body: ProfileAnalysisRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     """POST /api/stream/analysis — 就业画像分析（流式SSE）"""
+    if body.user_id is not None:
+        require_owner(body.user_id, current_user)
+    body = body.model_copy(update={'user_id': current_user.id})
     ai_client = DeepSeekClient.instance()
 
     if body.user_id:
@@ -190,8 +196,12 @@ async def stream_resume(
     request: Request,
     body: ResumeOptimizationRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     """POST /api/stream/resume — 简历优化（流式SSE）"""
+    if body.user_id is not None:
+        require_owner(body.user_id, current_user)
+    body = body.model_copy(update={'user_id': current_user.id})
     ai_client = DeepSeekClient.instance()
 
     if body.user_id:
@@ -241,8 +251,12 @@ async def stream_growth(
     request: Request,
     body: GrowthPlanRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     """POST /api/stream/growth — 成长规划（流式SSE）"""
+    if body.user_id is not None:
+        require_owner(body.user_id, current_user)
+    body = body.model_copy(update={'user_id': current_user.id})
     ai_client = DeepSeekClient.instance()
 
     if body.user_id:

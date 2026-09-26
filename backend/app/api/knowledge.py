@@ -1,15 +1,16 @@
 """Knowledge management and retrieval API backed exclusively by PostgreSQL/pgvector."""
 from __future__ import annotations
 
-from fastapi import APIRouter, Path, Query
+from fastapi import APIRouter, Depends, Path, Query
 from fastapi.responses import JSONResponse
 
+from app.auth.dependencies import get_current_user
 from app.knowledge.knowledge_service import KnowledgeService, KnowledgeUnavailableError
 from app.schemas.knowledge import KnowledgeDocumentCreate, KnowledgeSearchRequest
 from app.utils.exceptions import AppException, ResourceNotFoundError
 from app.utils.response import success
 
-router = APIRouter(prefix="/api/knowledge", tags=["知识库"])
+router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/knowledge", tags=["知识库"])
 
 
 def _service() -> KnowledgeService:

@@ -10,6 +10,8 @@ from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user, require_owner
+from app.models.user import User
 from app.database.session import get_db
 from app.schemas.growth import (
     GrowthPlanRequest,
@@ -19,7 +21,7 @@ from app.schemas.growth import (
 from app.services.growth_service import GrowthService
 from app.utils.response import success
 
-router = APIRouter(prefix="/api/growth", tags=["AI成长规划"])
+router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/growth", tags=["AI成长规划"])
 
 
 def serialize_model(model: BaseModel) -> dict[str, Any]:
@@ -31,6 +33,7 @@ def serialize_model(model: BaseModel) -> dict[str, Any]:
 def generate_growth_plan(
     request: GrowthPlanRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """POST /api/growth - 生成成长规划
 
@@ -44,6 +47,9 @@ def generate_growth_plan(
     }
     """
     service = GrowthService(db)
+    if request.user_id is not None:
+        require_owner(request.user_id, current_user)
+    request = request.model_copy(update={'user_id': current_user.id})
     result = service.generate_plan(request)
     return success(serialize_model(result), message="成长规划生成完成")
 
@@ -52,10 +58,12 @@ def generate_growth_plan(
 def get_growth_plan(
     plan_id: int = Path(ge=1, description="规划记录ID"),
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """GET /api/growth/{plan_id} - 获取规划记录详情"""
     service = GrowthService(db)
     result = service.get_plan(plan_id)
+    require_owner(result.user_id, current_user)
     return success(serialize_model(result), message="获取规划记录成功")
 
 
@@ -63,6 +71,7 @@ def get_growth_plan(
 def get_user_growth_plans(
     user_id: int = Path(ge=1, description="用户ID"),
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """GET /api/growth/user/{user_id} - 获取用户的历史规划记录列表"""
     service = GrowthService(db)

@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import type { ApiEnvelope } from "@/types/api";
+import { getAuthToken, clearAuthToken } from "@/utils/authSession";
 export class ApiError extends Error {
   constructor(message: string, public code?: number, public status?: number) {
     super(message);
@@ -8,6 +9,12 @@ export class ApiError extends Error {
 }
 
 const request=axios.create({baseURL:import.meta.env.VITE_API_BASE_URL||"/api",timeout:90000});
+request.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 request.interceptors.response.use(
   (response) => {
     const payload = response.data as ApiEnvelope<unknown>;
@@ -19,6 +26,12 @@ request.interceptors.response.use(
   (error: AxiosError<ApiEnvelope<unknown>>) => {
     if (axios.isCancel(error)) return Promise.reject(error);
     const status = error.response?.status;
+    if (status === 401 && getAuthToken()) {
+      clearAuthToken();
+      if (window.location.pathname !== "/login" && window.location.pathname !== "/register") {
+        window.location.assign("/login");
+      }
+    }
     const code = error.response?.data?.code;
     const validationMessage = Array.isArray(error.response?.data?.data)
       ? error.response?.data?.data

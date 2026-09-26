@@ -20,4 +20,8 @@ __all__ = [
     "ResumeOptimization",
     "Resume",
     "GrowthPlan",
+    "Account",
+    "EmailCode",
 ]
+
+from app.models.account import Account, EmailCode

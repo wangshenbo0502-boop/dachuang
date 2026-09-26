@@ -16,10 +16,7 @@ from dotenv import load_dotenv
 # 加载环境变量
 load_dotenv()
 
-# 确保使用SQLite作为默认数据库（开发阶段）
-if not os.getenv("DATABASE_URL") or "your_password" in os.getenv("DATABASE_URL", ""):
-    os.environ["DATABASE_URL"] = "sqlite:///./ai_job_analysis.db"
-    print("未配置MySQL，使用SQLite数据库: ai_job_analysis.db")
+# Respect DATABASE_URL from the environment. The app's development default is SQLite.
 
 
 from app.database.bootstrap import initialize_database_schema
