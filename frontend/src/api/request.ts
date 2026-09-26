@@ -17,9 +17,16 @@ request.interceptors.response.use(
     return response;
   },
   (error: AxiosError<ApiEnvelope<unknown>>) => {
+    if (axios.isCancel(error)) return Promise.reject(error);
     const status = error.response?.status;
     const code = error.response?.data?.code;
+    const validationMessage = Array.isArray(error.response?.data?.data)
+      ? error.response?.data?.data
+          .map((item: any) => `${Array.isArray(item?.loc) ? item.loc.join(".") : "请求"}：${item?.msg || "参数不合法"}`)
+          .join("；")
+      : "";
     const message =
+      validationMessage ||
       error.response?.data?.message ||
       (code === 3101 || status === 503
         ? "知识库服务暂不可用，请先启动 PostgreSQL + pgvector 并完成知识库初始化"

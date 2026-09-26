@@ -1,134 +1,190 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
-import { ArrowRight, MagicStick, Promotion, Refresh } from "@element-plus/icons-vue";
+import { Check, CopyDocument, Edit, MagicStick, Plus, Printer, Refresh, Select } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useUserStore } from "@/stores/user";
-import type { ChatMessage, ChatTurnResponse, ResumeResponse } from "@/types/api";
+import type { ResumeVersion, StudentProfile } from "@/types/api";
 import PageHeader from "@/components/common/PageHeader.vue";
 import SectionPanel from "@/components/common/SectionPanel.vue";
 import StateView from "@/components/common/StateView.vue";
 
 const user = useUserStore();
-const target = ref("");
-const original = ref("");
-const result = ref<ResumeResponse | null>(null);
+const profile = ref<StudentProfile | null>(null);
+const versions = ref<ResumeVersion[]>([]);
+const selected = ref<ResumeVersion | null>(null);
 const loading = ref(true);
-const running = ref(false);
-const loadingHistory = ref(false);
-const messages = ref<ChatMessage[]>([]);
-const input = ref("");
-const questionNumber = ref(0);
-const finished = ref(false);
-const extracted = ref<Record<string, unknown>>({});
-const error = ref("");
-const interviewBody = ref<HTMLElement>();
+const saving = ref(false);
+const dialog = ref(false);
+const copySource = ref<ResumeVersion | null>(null);
+const optimizing = ref(false);
+const pending = ref<Record<string, unknown> | null>(null);
+const form = reactive({ name: "", target_job: "", selected_projects: [] as number[], selected_skills: [] as number[], selected_experiences: { competitions: [] as number[], internships: [] as number[] } });
+const selectedSkills = computed(() => {
+  if (!selected.value) return [];
+  const ids = new Set(selected.value.selected_skills);
+  return selected.value.profile.skills.filter((item) => ids.has(item.id!));
+});
+const selectedProjects = computed(() => {
+  if (!selected.value) return [];
+  const ids = new Set(selected.value.selected_projects);
+  return selected.value.profile.projects.filter((item) => ids.has(item.id!));
+});
+const selectedInternships = computed(() => {
+  if (!selected.value) return [];
+  const ids = new Set(selected.value.selected_experiences.internships || []);
+  return selected.value.profile.internships.filter((item) => ids.has(item.id!));
+});
+const selectedCompetitions = computed(() => {
+  if (!selected.value) return [];
+  const ids = new Set(selected.value.selected_experiences.competitions || []);
+  return selected.value.profile.competitions.filter((item) => ids.has(item.id!));
+});
+const optimizedProjects = computed(() => {
+  const items = selected.value?.optimized_content?.optimized_projects;
+  return Array.isArray(items) ? items as Array<{ project_name?: string; optimized?: string }> : [];
+});
 
-const isFirstRun = computed(() => !result.value);
-const progress = computed(() => Math.min(questionNumber.value * 10, 100));
-const storageKey = () => `career-copilot-chat-${user.userId}`;
-
-function mergeExtracted(next: Record<string, unknown>) {
-  for (const [key, value] of Object.entries(next || {})) {
-    if (Array.isArray(value) && value.length) extracted.value[key] = value;
-    else if (typeof value === "string" && value.trim()) extracted.value[key] = value;
-  }
+function projectDescription(name: string, fallback: string) {
+  return optimizedProjects.value.find((item) => item.project_name === name)?.optimized || fallback;
+}
+function formatDateRange(start?: string | null, end?: string | null) {
+  if (!start && !end) return "";
+  return `${start || "至今"} - ${end || "至今"}`;
+}
+function printResume() {
+  window.print();
+}
+function formatVersionTime(value?: string) {
+  if (!value) return "刚刚";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "刚刚" : date.toLocaleDateString("zh-CN", { year: "numeric", month: "numeric", day: "numeric" });
 }
 
-async function scrollInterview() {
-  await nextTick();
-  if (interviewBody.value) interviewBody.value.scrollTop = interviewBody.value.scrollHeight;
+function numberList(value: unknown): number[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is number => Number.isInteger(item))
+    : [];
+}
+
+function experienceList(value: unknown, key: "competitions" | "internships"): number[] {
+  if (!value || typeof value !== "object") return [];
+  return numberList((value as Record<string, unknown>)[key]);
 }
 
 async function load() {
   loading.value = true;
   try {
-    const history = await api.resumes(user.userId!);
-    if (history[0]) {
-      result.value = await api.resumeDetail(history[0].id);
-      target.value = result.value.target_job;
-    }
-    const saved = JSON.parse(localStorage.getItem(storageKey()) || "null");
-    if (Array.isArray(saved?.messages)) messages.value = saved.messages;
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : "简历记录加载失败";
-  } finally { loading.value = false; }
+    profile.value = await api.getUser(user.userId!);
+    versions.value = await api.resumeVersions(user.userId!);
+    if (selected.value) selected.value = await api.resumeVersion(selected.value.id);
+    else if (versions.value[0]) selected.value = versions.value[0];
+  } catch (error) { ElMessage.error(error instanceof Error ? error.message : "简历数据加载失败"); }
+  finally { loading.value = false; }
 }
-
-function startInterview() {
-  if (!target.value.trim()) return ElMessage.warning("请先填写目标岗位");
-  if (messages.value.length) return;
-  messages.value.push({ role: "assistant", content: `我们先用几分钟建立你的第一版简历。最多 10 个问题，不需要准备初稿。先说说你做过的一个项目：项目目标是什么，你具体负责哪部分？` });
-  scrollInterview();
+function openCreate(source?: ResumeVersion | null) {
+  copySource.value = source || null;
+  Object.assign(form, {
+    name: source ? `${source.name} - 复制` : "",
+    target_job: source?.target_job || "",
+    selected_projects: source ? numberList(source.selected_projects) : profile.value?.projects.map((item) => item.id!) || [],
+    selected_skills: source ? numberList(source.selected_skills) : profile.value?.skills.map((item) => item.id!) || [],
+    selected_experiences: source
+      ? { competitions: experienceList(source.selected_experiences, "competitions"), internships: experienceList(source.selected_experiences, "internships") }
+      : { competitions: profile.value?.competitions.map((item) => item.id!) || [], internships: profile.value?.internships.map((item) => item.id!) || [] },
+  });
+  dialog.value = true;
 }
-
-async function answerInterview() {
-  const text = input.value.trim();
-  if (!text || running.value || questionNumber.value >= 10) return;
-  input.value = "";
-  messages.value.push({ role: "user", content: text });
-  running.value = true;
+async function createVersion() {
+  if (!form.name.trim() || !form.target_job.trim()) return ElMessage.warning("请填写简历名称和目标岗位");
+  saving.value = true;
   try {
-    const response: ChatTurnResponse = await api.chatTurn({ user_id: user.userId, target_job: target.value, messages: messages.value });
-    messages.value.push({ role: "assistant", content: response.reply });
-    questionNumber.value = response.question_number;
-    finished.value = response.finished;
-    mergeExtracted(response.extracted);
-  } catch (e) { ElMessage.error(e instanceof Error ? e.message : "访谈暂时无法继续"); }
-  finally { running.value = false; await scrollInterview(); }
+    const created = await api.createResumeVersion({
+      user_id: user.userId,
+      ...form,
+      ...(copySource.value ? {
+        personal_summary: copySource.value.personal_summary,
+        optimized_content: copySource.value.optimized_content,
+        template: copySource.value.template,
+      } : {}),
+    });
+    versions.value = await api.resumeVersions(user.userId!);
+    selected.value = versions.value.find(item => item.id === created.id) || created;
+    pending.value = null;
+    copySource.value = null;
+    dialog.value = false;
+    ElMessage.success("新简历已创建并打开");
+  }
+  catch (error) { ElMessage.error(error instanceof Error ? error.message : "创建失败"); }
+  finally { saving.value = false; }
 }
-
-async function generateInitial() {
-  if (!messages.value.length || (!finished.value && questionNumber.value < 10)) return ElMessage.info("请先完成访谈，至少回答当前问题");
-  running.value = true;
-  try {
-    result.value = await api.chatResume({ user_id: user.userId, target_job: target.value, messages: messages.value, extracted: extracted.value });
-    ElMessage.success("初始简历已生成，接下来可以持续补充优化");
-  } catch (e) { ElMessage.error(e instanceof Error ? e.message : "初始简历生成失败"); }
-  finally { running.value = false; }
+async function saveSelection() {
+  if (!selected.value) return;
+  saving.value = true;
+  try { selected.value = await api.updateResumeVersion(selected.value.id, { selected_projects: selected.value.selected_projects, selected_skills: selected.value.selected_skills, selected_experiences: selected.value.selected_experiences }); ElMessage.success("展示内容已保存"); }
+  catch (error) { ElMessage.error(error instanceof Error ? error.message : "保存失败"); }
+  finally { saving.value = false; }
 }
-
 async function optimize() {
-  if (!target.value.trim()) return ElMessage.warning("请填写目标岗位");
-  if (!original.value.trim() && !messages.value.length) return ElMessage.info("请先输入想补充的内容，或前往 AI 求职教练聊天");
-  running.value = true;
-  try {
-    const transcript = messages.value.map((message) => `${message.role}: ${message.content}`).join("\n");
-    result.value = await api.resume({ user_id: user.userId, target_job: target.value, original_resume: `${original.value.trim()}\n\nAI对话补充：\n${transcript}`.slice(0, 10000) });
-    original.value = "";
-    ElMessage.success("简历已根据新内容优化");
-  } catch (e) { ElMessage.error(e instanceof Error ? e.message : "简历优化失败"); }
-  finally { running.value = false; }
+  if (!selected.value) return;
+  optimizing.value = true;
+  try { const result = await api.resume({ user_id: user.userId, target_job: selected.value.target_job, selected_project_ids: selected.value.selected_projects, selected_skill_ids: selected.value.selected_skills }); pending.value = result.result as unknown as Record<string, unknown>; ElMessage.success("AI 建议已生成，请确认后再写入简历"); }
+  catch (error) { ElMessage.error(error instanceof Error ? error.message : "AI 优化失败"); }
+  finally { optimizing.value = false; }
 }
-
-async function useChatContext() {
-  const saved = JSON.parse(localStorage.getItem(storageKey()) || "null");
-  messages.value = Array.isArray(saved?.messages) ? saved.messages : messages.value;
-  if (!messages.value.length) return ElMessage.info("AI 对话页还没有可用的聊天内容");
-  ElMessage.success("已读取 AI 对话内容，可以点击优化简历");
+async function acceptSuggestion() {
+  if (!selected.value || !pending.value) return;
+  saving.value = true;
+  try { selected.value = await api.updateResumeVersion(selected.value.id, { optimized_content: pending.value, personal_summary: String(pending.value.personal_summary || "") }); pending.value = null; ElMessage.success("AI 建议已采纳并写入当前简历"); }
+  catch (error) { ElMessage.error(error instanceof Error ? error.message : "采纳失败"); }
+  finally { saving.value = false; }
 }
-
-function resetInterview() {
-  messages.value = [];
-  extracted.value = {};
-  questionNumber.value = 0;
-  finished.value = false;
-  result.value = null;
-}
-
 onMounted(load);
 </script>
 
 <template>
-  <div class="resume-workspace">
-    <PageHeader title="AI简历优化" :description="isFirstRun ? '不用上传初稿，AI 通过最多 10 个问题帮你建立第一版简历。' : '你的简历会随着新经历和 AI 对话持续变得更准确、更有竞争力。'"><el-button v-if="isFirstRun && messages.length" text :icon="Refresh" @click="resetInterview">重新开始访谈</el-button><el-button v-else-if="!isFirstRun" type="primary" :icon="MagicStick" :loading="running" @click="optimize">立即优化</el-button></PageHeader>
-    <StateView :loading="loading" :error="error" @retry="load"><template #content>
-      <div v-if="isFirstRun">
-        <section class="resume-interview-hero"><div><span class="resume-kicker">FIRST RESUME</span><h2>先把经历聊清楚，再生成你的第一版简历</h2><p>AI 会主动追问项目、技能和成果，最多 10 个问题。每个回答都会成为简历的真实素材。</p></div><div class="resume-interview-progress"><strong>{{ questionNumber }}<small>/10</small></strong><span>访谈进度</span><el-progress :percentage="progress" :show-text="false" :stroke-width="7" /></div></section>
-        <div class="resume-interview-card"><header><div><h3>AI 简历访谈</h3><p>目标岗位决定简历重点，请先告诉 AI 你想申请什么。</p></div><el-tag type="info" effect="plain">{{ finished ? '可以生成' : '最多 10 问' }}</el-tag></header><div ref="interviewBody" class="interview-body"><div v-if="!messages.length" class="interview-empty"><el-icon><MagicStick /></el-icon><b>从目标岗位开始</b><p>不需要上传初稿，也不需要提前组织语言。</p><div class="suggestion-row"><button @click="target = '前端开发工程师'; startInterview()">前端开发工程师</button><button @click="target = 'Java 后端开发'; startInterview()">Java 后端开发</button><button @click="target = '产品经理'; startInterview()">产品经理</button></div></div><div v-for="(message, index) in messages" :key="index" class="chat-message" :class="message.role"><div class="message-avatar"><el-icon><MagicStick /></el-icon></div><div class="message-bubble">{{ message.content }}</div></div><div v-if="running" class="chat-message assistant"><div class="message-avatar"><el-icon><MagicStick /></el-icon></div><div class="message-bubble loading-dots">AI 正在整理<span>.</span><span>.</span><span>.</span></div></div></div><div class="interview-controls"><div class="interview-target"><el-input v-model="target" placeholder="目标岗位，例如：前端开发工程师" :disabled="!!messages.length"/><el-button type="primary" :disabled="!!messages.length" @click="startInterview">开始访谈</el-button></div><div class="interview-input"><el-input v-model="input" type="textarea" :rows="2" resize="none" :disabled="!messages.length || running || questionNumber >= 10" placeholder="直接回答当前问题..." @keydown.enter.exact.prevent="answerInterview"/><el-button type="primary" circle :icon="Promotion" :loading="running" :disabled="!input.trim()" @click="answerInterview"/></div></div></div>
-        <div class="resume-interview-actions"><el-button type="primary" :icon="MagicStick" :loading="running" :disabled="!finished && questionNumber < 10" @click="generateInitial">生成我的第一版简历</el-button><span>生成后可以继续补充，不满意的内容随时重新优化。</span></div>
+  <div class="resume-version-page">
+    <PageHeader title="我的简历" description="为不同求职方向准备多份简历，随时切换使用。"><el-button :icon="Refresh" @click="load">刷新</el-button><el-button type="primary" :icon="Plus" @click="openCreate">新建简历</el-button></PageHeader>
+    <StateView :loading="loading" :error="''" @retry="load"><template #content>
+      <div v-if="!versions.length" class="resume-empty"><el-icon><Edit /></el-icon><h3>还没有简历</h3><p>创建第一份简历，为你的求职方向准备一份专属版本。</p><el-button type="primary" :icon="Plus" @click="openCreate">创建第一份简历</el-button></div>
+      <div v-else class="resume-version-layout">
+        <aside class="version-list">
+          <div class="version-list-heading"><div><b>我的简历</b><span>{{ versions.length }} 份</span></div><el-button text :icon="Plus" aria-label="新建简历" title="新建简历" @click="openCreate" /></div>
+          <div v-for="item in versions" :key="item.id" class="version-item" :class="{ active: selected?.id === item.id }" @click="selected = item; pending = null"><b>{{ item.name }}</b><span>{{ item.target_job }}</span><small>更新于 {{ formatVersionTime(item.updated_at || item.created_at) }}</small></div>
+        </aside>
+        <main v-if="selected" class="version-editor">
+          <section class="version-heading"><div><span class="resume-kicker">岗位简历</span><h2>{{ selected.name }}</h2><p>目标岗位：{{ selected.target_job }}</p></div><div class="version-actions"><el-button :icon="CopyDocument" @click="openCreate(selected)">复制一份</el-button><el-button :icon="Printer" @click="printResume">打印 / 导出 PDF</el-button><el-button :icon="MagicStick" type="primary" :loading="optimizing" @click="optimize">AI 优化</el-button><el-button :icon="Select" :loading="saving" @click="saveSelection">保存选择</el-button></div></section>
+          <div class="resume-editor-grid">
+            <div class="resume-selection-column">
+              <div class="selection-caption"><b>选择要展示的内容</b><span>调整左侧内容，右侧会即时更新预览。</span></div>
+              <div class="source-grid">
+                <SectionPanel title="核心技能" subtitle="来自就业档案，可随档案更新"><el-checkbox-group v-model="selected.selected_skills" class="source-options"><el-checkbox v-for="item in selected.profile.skills" :key="item.id" :value="item.id">{{ item.name }}<small>{{ item.proficiency }}</small></el-checkbox></el-checkbox-group><el-empty v-if="!selected.profile.skills.length" description="请先在就业档案中添加技能" /></SectionPanel>
+                <SectionPanel title="项目经历" subtitle="选择最能证明岗位能力的项目"><el-checkbox-group v-model="selected.selected_projects" class="source-options"><el-checkbox v-for="item in selected.profile.projects" :key="item.id" :value="item.id">{{ item.name }}<small>{{ item.role }}</small></el-checkbox></el-checkbox-group><el-empty v-if="!selected.profile.projects.length" description="请先在就业档案中添加项目" /></SectionPanel>
+                <SectionPanel title="实习与竞赛" subtitle="按岗位需要组合展示"><el-checkbox-group v-model="selected.selected_experiences.internships" class="source-options"><el-checkbox v-for="item in selected.profile.internships" :key="item.id" :value="item.id">{{ item.company }}<small>{{ item.position }}</small></el-checkbox></el-checkbox-group><el-checkbox-group v-model="selected.selected_experiences.competitions" class="source-options"><el-checkbox v-for="item in selected.profile.competitions" :key="item.id" :value="item.id">{{ item.name }}<small>{{ item.award }}</small></el-checkbox></el-checkbox-group><el-empty v-if="!selected.profile.internships.length && !selected.profile.competitions.length" description="暂无可展示经历" /></SectionPanel>
+              </div>
+            </div>
+            <div class="resume-preview-column">
+              <div class="resume-preview-label"><b>简历预览</b><span>这是当前版本的打印效果</span></div>
+              <article class="resume-paper">
+                <header class="resume-paper-header">
+                  <div><h1>{{ selected.profile.name || "你的姓名" }}</h1><h2>{{ selected.target_job }}</h2></div>
+                  <div class="resume-contact"><span v-if="selected.profile.phone">{{ selected.profile.phone }}</span><span v-if="selected.profile.email">{{ selected.profile.email }}</span><span>{{ selected.profile.school }} · {{ selected.profile.major }}</span></div>
+                </header>
+                <section v-if="selected.profile.bio || selected.personal_summary" class="paper-section"><h3>个人简介</h3><p>{{ selected.personal_summary || selected.profile.bio }}</p></section>
+                <section v-if="selectedSkills.length" class="paper-section"><h3>核心技能</h3><div class="paper-skill-list"><span v-for="item in selectedSkills" :key="item.id"><b>{{ item.name }}</b><small>{{ item.proficiency }}</small></span></div></section>
+                <section v-if="selectedProjects.length" class="paper-section"><h3>项目经历</h3><article v-for="item in selectedProjects" :key="item.id" class="paper-entry"><div class="paper-entry-heading"><div><b>{{ item.name }}</b><span>{{ item.role }}</span></div><small>{{ formatDateRange(item.start_date, item.end_date) }}</small></div><div class="paper-tags"><span v-for="tag in item.tech_stack" :key="tag">{{ tag }}</span></div><p>{{ projectDescription(item.name, item.description) }}</p></article></section>
+                <section v-if="selectedInternships.length" class="paper-section"><h3>实习经历</h3><article v-for="item in selectedInternships" :key="item.id" class="paper-entry"><div class="paper-entry-heading"><div><b>{{ item.company }}</b><span>{{ item.position }}</span></div><small>{{ formatDateRange(item.start_date, item.end_date) }}</small></div><div class="paper-tags"><span v-for="tag in item.tech_stack" :key="tag">{{ tag }}</span></div><p>{{ item.description }}</p></article></section>
+                <section v-if="selectedCompetitions.length" class="paper-section"><h3>竞赛与获奖</h3><article v-for="item in selectedCompetitions" :key="item.id" class="paper-entry"><div class="paper-entry-heading"><div><b>{{ item.name }}</b><span>{{ item.level }} · {{ item.award }}</span></div><small>{{ item.competition_date || "" }}</small></div><p v-if="item.description">{{ item.description }}</p></article></section>
+                <section class="paper-section"><h3>教育背景</h3><article class="paper-entry"><div class="paper-entry-heading"><div><b>{{ selected.profile.school }}</b><span>{{ selected.profile.major }} · {{ selected.profile.grade }}</span></div></div></article></section>
+                <div v-if="!selectedSkills.length && !selectedProjects.length && !selectedInternships.length && !selectedCompetitions.length" class="paper-empty">请在左侧选择要展示的档案内容</div>
+              </article>
+            </div>
+          </div>
+          <section v-if="selected.optimized_content && Object.keys(selected.optimized_content).length" class="accepted-panel"><div><b>已采纳的 AI 表达</b><span>只优化你已选择的内容，不会凭空增加经历。</span></div><el-tag type="success">已写入当前版本</el-tag><p>{{ String(selected.optimized_content.personal_summary || selected.personal_summary || "暂无个人简介") }}</p></section>
+          <section v-if="pending" class="pending-panel"><div><b>AI 建议，等待你的确认</b><span>建议不会自动覆盖简历内容。</span></div><div class="pending-content"><p>{{ String(pending.personal_summary || "AI 已完成岗位针对性建议，请检查项目表达和技能关键词。") }}</p><div class="tag-row"><el-tag v-for="item in (pending.overall_suggestions as string[] || [])" :key="item" type="warning">{{ item }}</el-tag></div></div><div class="pending-actions"><el-button @click="pending = null">暂不采纳</el-button><el-button type="primary" :icon="Check" :loading="saving" @click="acceptSuggestion">采纳并写入简历</el-button></div></section>
+        </main>
       </div>
-      <div v-else class="resume-result-layout"><section><div class="resume-current-card"><div class="resume-card-heading"><div><span class="resume-kicker">CURRENT VERSION</span><h2>{{ result?.target_job }}简历</h2><p>最近更新：{{ result?.created_at || '刚刚' }}</p></div><div class="resume-score"><strong>{{ result?.result.resume_score }}</strong><span>综合评分</span></div></div><div class="resume-summary"><span>个人简介</span><p>{{ result?.result.personal_summary || '暂无个人简介' }}</p></div><h3>项目经历优化</h3><div v-for="item in result?.result.optimized_projects" :key="item.project_name" class="resume-compare"><b>{{ item.project_name }}</b><del>{{ item.original }}</del><p>{{ item.optimized }}</p><div class="tag-row"><el-tag v-for="tag in item.highlight_tags" :key="tag" size="small">{{ tag }}</el-tag></div></div><h3>整体建议</h3><ul class="result-list"><li v-for="item in result?.result.overall_suggestions" :key="item">{{ item }}</li></ul></div></section><aside class="resume-improve-panel"><SectionPanel title="继续优化" subtitle="告诉 AI 新经历，或者读取 AI 对话页内容"><el-input v-model="original" type="textarea" :rows="9" maxlength="10000" show-word-limit placeholder="例如：我刚完成了一个校园二手交易项目，负责商品搜索和推荐功能……"/><div class="resume-improve-actions"><el-button plain :icon="ArrowRight" @click="useChatContext">读取 AI 对话内容</el-button><el-button type="primary" :icon="MagicStick" :loading="running" @click="optimize">根据补充内容优化</el-button></div></SectionPanel><SectionPanel title="优化目标"><el-input v-model="target" placeholder="目标岗位"/><p class="side-note">每次优化都会生成一条新的简历记录，旧版本仍然保留。</p></SectionPanel></aside></div>
     </template></StateView>
+    <el-dialog v-model="dialog" title="新建简历" width="min(760px, 92vw)"><el-form label-position="top"><el-form-item label="简历名称"><el-input v-model="form.name" placeholder="例如：Java 后端开发工程师简历" /></el-form-item><el-form-item label="目标岗位"><el-input v-model="form.target_job" placeholder="例如：Java 后端开发工程师" /></el-form-item><el-alert title="先选好这份简历要展示的经历，创建后还可以继续调整。" type="info" :closable="false" /><div class="create-source-grid"><div><b>项目</b><el-checkbox-group v-model="form.selected_projects"><el-checkbox v-for="item in profile?.projects" :key="item.id" :value="item.id">{{ item.name }}</el-checkbox></el-checkbox-group></div><div><b>技能</b><el-checkbox-group v-model="form.selected_skills"><el-checkbox v-for="item in profile?.skills" :key="item.id" :value="item.id">{{ item.name }}</el-checkbox></el-checkbox-group></div><div><b>实习经历</b><el-checkbox-group v-model="form.selected_experiences.internships"><el-checkbox v-for="item in profile?.internships" :key="item.id" :value="item.id">{{ item.company }} · {{ item.position }}</el-checkbox></el-checkbox-group></div><div><b>竞赛与获奖</b><el-checkbox-group v-model="form.selected_experiences.competitions"><el-checkbox v-for="item in profile?.competitions" :key="item.id" :value="item.id">{{ item.name }}</el-checkbox></el-checkbox-group></div></div></el-form><template #footer><el-button @click="dialog = false">取消</el-button><el-button type="primary" :loading="saving" @click="createVersion">创建简历</el-button></template></el-dialog>
   </div>
 </template>

@@ -6,7 +6,7 @@
 from app.models.user import User, UserProject, UserSkill, UserCompetition, UserInternship
 from app.models.job import JobMatchRecord
 from app.models.analysis import ProfileAnalysis
-from app.models.resume import ResumeOptimization
+from app.models.resume import Resume, ResumeOptimization
 from app.models.growth import GrowthPlan
 
 __all__ = [
@@ -18,5 +18,6 @@ __all__ = [
     "JobMatchRecord",
     "ProfileAnalysis",
     "ResumeOptimization",
+    "Resume",
     "GrowthPlan",
 ]

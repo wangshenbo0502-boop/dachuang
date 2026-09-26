@@ -6,13 +6,9 @@ import {
   Briefcase,
   CollectionTag,
   DataAnalysis,
-  Document,
   DocumentChecked,
   FolderOpened,
   MagicStick,
-  TrendCharts,
-  Trophy,
-  UserFilled,
 } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useUserStore } from "@/stores/user";
@@ -36,11 +32,9 @@ const profile = computed(() => profiles.profile);
 const radar = computed(() => analysis.value ? Object.values(analysis.value.result.skill_assessment) : []);
 const labels = ["编程基础", "框架应用", "数据库", "工程实践", "项目经验"];
 const actions = [
-  ["/profile/assistant", "与 AI 对话", MagicStick],
-  ["/analysis", "开始AI分析", MagicStick],
+  ["/coach?mode=profile", "AI 完善档案", MagicStick],
+  ["/analysis", "生成就业画像", MagicStick],
   ["/jobs", "查看岗位推荐", Briefcase],
-  ["/resume", "优化简历", Document],
-  ["/growth", "查看成长规划", TrendCharts],
 ] as const;
 
 async function load() {
@@ -63,21 +57,21 @@ onMounted(load);
 
 <template>
   <div>
-    <PageHeader title="就业能力概览" description="基于个人经历、技能与AI分析生成的就业竞争力评估结果" />
+    <PageHeader title="你的就业工作台" description="从完善档案开始，逐步完成画像、岗位匹配与简历准备。" />
     <StateView :loading="loading" :error="error" @retry="load">
       <template #content>
         <section class="dashboard-welcome">
           <div class="welcome-copy">
-            <span class="welcome-label">CAREER INTELLIGENCE</span>
+            <span class="welcome-label">下一步建议</span>
             <h2>你好，{{ user.user?.name || "同学" }}</h2>
-            <p>AI 会通过一段轻松对话了解你，自动补全就业档案并给出更贴合的岗位建议与成长路线。</p>
+            <p>先和 AI 求职助手聊聊你的经历与目标。整理好的内容会先进入草稿，确认后再写入档案。</p>
             <div class="welcome-actions">
-              <el-button type="primary" @click="router.push('/analysis')">查看最新画像</el-button>
-              <el-button @click="router.push('/profile/assistant')">与 AI 对话完善档案</el-button>
+              <el-button type="primary" @click="router.push('/coach?mode=profile')">开始完善档案</el-button>
+              <el-button @click="router.push('/coach')">直接咨询求职问题</el-button>
             </div>
           </div>
           <div class="welcome-progress">
-            <el-progress type="dashboard" :percentage="profiles.completeness || 0" :width="118" :stroke-width="9" color="#2563eb" />
+            <el-progress type="dashboard" :percentage="profiles.completeness || 0" :width="118" :stroke-width="9" color="#176b5b" />
             <div><b>档案完整度</b><span>持续补充经历，让分析更贴合你的真实能力</span></div>
           </div>
         </section>
@@ -87,7 +81,6 @@ onMounted(load);
           <StatCard label="档案完整度" :value="profiles.completeness" unit="%" :icon="DocumentChecked" tone="green" />
           <StatCard label="掌握技能" :value="profile?.skills.length ?? 0" unit="项" :icon="CollectionTag" tone="cyan" />
           <StatCard label="项目经历" :value="profile?.projects.length ?? 0" unit="项" :icon="FolderOpened" tone="orange" />
-          <StatCard label="竞赛经历" :value="profile?.competitions.length ?? 0" unit="项" :icon="Trophy" tone="red" />
         </div>
 
         <div class="workflow-grid">

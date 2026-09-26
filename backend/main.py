@@ -4,6 +4,7 @@
 """
 
 import os
+from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, status
@@ -25,18 +26,20 @@ load_dotenv()
 settings = get_settings()
 configure_logging()
 
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    """Initialize persistent resources once for the application lifecycle."""
+    initialize_database_schema()
+    yield
+
 app = FastAPI(
     title=settings.APP_NAME,
     description="针对计算机专业大学生的AI就业竞争力分析平台 - 后端API",
     version=settings.APP_VERSION,
     debug=settings.APP_DEBUG,
+    lifespan=lifespan,
 )
-
-
-@app.on_event("startup")
-def initialize_database() -> None:
-    """Create missing tables and upgrade legacy local SQLite user profiles."""
-    initialize_database_schema()
 
 # ── 中间件注册 ──
 

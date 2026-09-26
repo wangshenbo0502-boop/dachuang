@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.ai.deepseek_client import DeepSeekClient
 from app.ai.prompts import SystemPrompts, ResumeOptimizationPrompts
-from app.models.resume import ResumeOptimization
+from app.models.resume import Resume, ResumeOptimization
 from app.models.user import User
 from app.knowledge.rag_integration import augment_prompt
 from app.schemas.resume import (
@@ -19,6 +19,7 @@ from app.schemas.resume import (
     ResumeOptimizationResponse,
     ResumeOptimizationResult,
     ResumeOptimizationHistoryItem,
+    ResumeVersionCreate, ResumeVersionUpdate, ResumeVersionResponse,
     OptimizedProject,
     OptimizedSkill,
 )
@@ -95,6 +96,65 @@ class ResumeService:
             created_at=record.created_at,
         )
 
+    def create_version(self, request: ResumeVersionCreate) -> ResumeVersionResponse:
+        user = self.db.get(User, request.user_id)
+        if not user:
+            raise ResourceNotFoundError(f"用户 {request.user_id} 不存在")
+        record = Resume(profile_id=user.id, user_id=user.id, **request.model_dump(exclude={"user_id"}))
+        self.db.add(record)
+        self.db.commit()
+        self.db.refresh(record)
+        return self._version_response(record, user)
+
+    def list_versions(self, user_id: int) -> list[ResumeVersionResponse]:
+        user = self.db.get(User, user_id)
+        if not user:
+            raise ResourceNotFoundError(f"用户 {user_id} 不存在")
+        records = self.db.scalars(select(Resume).where(Resume.user_id == user_id).order_by(Resume.updated_at.desc())).all()
+        return [self._version_response(record, user) for record in records]
+
+    def get_version(self, version_id: int) -> ResumeVersionResponse:
+        record = self.db.get(Resume, version_id)
+        if not record:
+            raise ResourceNotFoundError(f"简历版本 {version_id} 不存在")
+        user = self.db.get(User, record.profile_id)
+        return self._version_response(record, user)
+
+    def update_version(self, version_id: int, request: ResumeVersionUpdate) -> ResumeVersionResponse:
+        record = self.db.get(Resume, version_id)
+        if not record:
+            raise ResourceNotFoundError(f"简历版本 {version_id} 不存在")
+        for field, value in request.model_dump(exclude_unset=True).items():
+            setattr(record, field, value)
+        self.db.commit()
+        self.db.refresh(record)
+        return self._version_response(record, self.db.get(User, record.profile_id))
+
+    def _version_response(self, record: Resume, user: User) -> ResumeVersionResponse:
+        """按引用 ID 从就业档案实时组装，确保档案更新后简历不会产生副本。"""
+        project_ids = set(record.selected_projects or [])
+        skill_ids = set(record.selected_skills or [])
+        experience_ids = {key: set(value or []) for key, value in (record.selected_experiences or {}).items()}
+        profile = {
+            "name": user.name, "school": user.school, "major": user.major, "grade": user.grade,
+            "bio": user.bio, "email": user.email, "phone": user.phone,
+            "skills": [self._model_dict(item) for item in user.skills if item.id in skill_ids],
+            "projects": [self._model_dict(item) for item in user.projects if item.id in project_ids],
+            "competitions": [self._model_dict(item) for item in user.competitions if item.id in experience_ids.get("competitions", set())],
+            "internships": [self._model_dict(item) for item in user.internships if item.id in experience_ids.get("internships", set())],
+        }
+        return ResumeVersionResponse(
+            id=record.id, user_id=record.user_id, name=record.name, target_job=record.target_job,
+            profile_id=record.profile_id, selected_projects=record.selected_projects or [],
+            selected_skills=record.selected_skills or [], selected_experiences=record.selected_experiences or {},
+            personal_summary=record.personal_summary, optimized_content=record.optimized_content or {}, template=record.template, status=record.status,
+            profile=profile, created_at=record.created_at, updated_at=record.updated_at,
+        )
+
+    @staticmethod
+    def _model_dict(item) -> dict:
+        return {column.name: getattr(item, column.name) for column in item.__table__.columns}
+
     def get_optimization(self, optimization_id: int) -> ResumeOptimizationResponse:
         """获取单条优化记录详情
 
@@ -166,11 +226,13 @@ class ResumeService:
             if not user:
                 raise ResourceNotFoundError(f"用户 {request.user_id} 不存在")
 
+            selected_project_ids = set(request.selected_project_ids) if request.selected_project_ids is not None else None
+            selected_skill_ids = set(request.selected_skill_ids) if request.selected_skill_ids is not None else None
             return {
                 "name": user.name,
                 "skills": [
                     {"name": s.name, "proficiency": s.proficiency, "description": s.description}
-                    for s in user.skills
+                    for s in user.skills if selected_skill_ids is None or s.id in selected_skill_ids
                 ],
                 "projects": [
                     {
@@ -179,7 +241,7 @@ class ResumeService:
                         "description": p.description,
                         "tech_stack": p.tech_stack or [],
                     }
-                    for p in user.projects
+                    for p in user.projects if selected_project_ids is None or p.id in selected_project_ids
                 ],
             }
 

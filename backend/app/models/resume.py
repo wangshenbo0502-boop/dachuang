@@ -13,6 +13,27 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.database.connection import Base
 
 
+class Resume(Base):
+    """一份岗位定制简历，只保存就业档案条目的引用。"""
+
+    __tablename__ = "resumes"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    target_job: Mapped[str] = mapped_column(String(100), nullable=False)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    selected_projects: Mapped[list[int]] = mapped_column(JSON, nullable=False, default=list)
+    selected_skills: Mapped[list[int]] = mapped_column(JSON, nullable=False, default=list)
+    selected_experiences: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    personal_summary: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    optimized_content: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    template: Mapped[str] = mapped_column(String(50), nullable=False, default="standard")
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="draft")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+
+
 class ResumeOptimization(Base):
     """简历优化记录
 

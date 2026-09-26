@@ -21,6 +21,8 @@ class ResumeOptimizationRequest(BaseModel):
     skills: list[dict] = Field(default_factory=list, description="技能列表")
     projects: list[dict] = Field(default_factory=list, description="项目列表")
     original_resume: Optional[str] = Field(default="", max_length=10000, description="原始简历文本（可选）")
+    selected_project_ids: Optional[list[int]] = Field(default=None, description="当前简历选择的档案项目ID")
+    selected_skill_ids: Optional[list[int]] = Field(default=None, description="当前简历选择的档案技能ID")
 
     @model_validator(mode="after")
     def require_user_or_name(self) -> "ResumeOptimizationRequest":
@@ -71,3 +73,44 @@ class ResumeOptimizationHistoryItem(BaseModel):
     target_job: str
     resume_score: int
     created_at: Optional[datetime] = None
+# ── 简历版本（就业档案的选择视图） ──
+
+class ResumeVersionCreate(BaseModel):
+    user_id: int = Field(ge=1)
+    name: str = Field(min_length=1, max_length=100)
+    target_job: str = Field(min_length=1, max_length=100)
+    selected_projects: list[int] = Field(default_factory=list)
+    selected_skills: list[int] = Field(default_factory=list)
+    selected_experiences: dict[str, list[int]] = Field(default_factory=dict)
+    personal_summary: str = Field(default="", max_length=5000)
+    optimized_content: dict = Field(default_factory=dict)
+    template: str = Field(default="standard", max_length=50)
+
+
+class ResumeVersionUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    target_job: str | None = Field(default=None, min_length=1, max_length=100)
+    selected_projects: list[int] | None = None
+    selected_skills: list[int] | None = None
+    selected_experiences: dict[str, list[int]] | None = None
+    personal_summary: str | None = Field(default=None, max_length=5000)
+    optimized_content: dict | None = None
+    status: str | None = Field(default=None, max_length=20)
+
+
+class ResumeVersionResponse(BaseModel):
+    id: int
+    user_id: int
+    name: str
+    target_job: str
+    profile_id: int
+    selected_projects: list[int] = Field(default_factory=list)
+    selected_skills: list[int] = Field(default_factory=list)
+    selected_experiences: dict[str, list[int]] = Field(default_factory=dict)
+    personal_summary: str = ""
+    optimized_content: dict = Field(default_factory=dict)
+    template: str = "standard"
+    status: str = "draft"
+    profile: dict = Field(default_factory=dict)
+    created_at: datetime | None = None
+    updated_at: datetime | None = None

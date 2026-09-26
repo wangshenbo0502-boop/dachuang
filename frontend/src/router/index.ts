@@ -7,9 +7,9 @@ const routes=[
   {path:"/",component:MainLayout,redirect:"/dashboard",children:[
     {path:"dashboard",name:"dashboard",component:()=>import("@/views/dashboard/DashboardView.vue"),meta:{title:"就业能力概览"}},
     {path:"profile",name:"profile",component:()=>import("@/views/profile/ProfileView.vue"),meta:{title:"我的就业档案"}},
-    {path:"profile/assistant",name:"profile-assistant",component:()=>import("@/views/profile/ProfileAssistantView.vue"),meta:{title:"与 AI 对话完善档案"}},
+    {path:"profile/assistant",name:"profile-assistant",redirect:{path:"/coach",query:{mode:"profile"}}},
     {path:"analysis",name:"analysis",component:()=>import("@/views/analysis/AnalysisView.vue"),meta:{title:"AI就业画像"}},
-    {path:"coach",name:"coach",component:()=>import("@/views/coach/CoachView.vue"),meta:{title:"AI求职教练"}},
+    {path:"coach",name:"coach",component:()=>import("@/views/coach/CoachView.vue"),meta:{title:"AI求职助手"}},
     {path:"jobs",name:"jobs",component:()=>import("@/views/jobs/JobsView.vue"),meta:{title:"岗位方向匹配"}},
     {path:"jobs/:id",name:"job-detail",component:()=>import("@/views/jobs/JobDetailView.vue"),meta:{title:"岗位详情"}},
     {path:"resume",name:"resume",component:()=>import("@/views/resume/ResumeView.vue"),meta:{title:"简历优化"}},

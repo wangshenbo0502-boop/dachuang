@@ -102,14 +102,18 @@ class TokenUsageTracker:
     def to_dict(self) -> dict:
         with self._lock:
             self._check_daily_reset()
+            settings = get_settings()
+            budget = settings.AI_COST_BUDGET_PER_DAY
+            warning_threshold = budget * settings.AI_COST_WARNING_THRESHOLD
+            cost = self._total_cost
             return {
                 "daily_prompt_tokens": self._total_prompt_tokens,
                 "daily_completion_tokens": self._total_completion_tokens,
                 "daily_total_tokens": self._total_prompt_tokens + self._total_completion_tokens,
-                "daily_cost_usd": round(self._total_cost, 6),
+                "daily_cost_usd": round(cost, 6),
                 "daily_call_count": self._call_count,
-                "is_over_budget": self.is_over_budget(),
-                "is_near_limit": self.is_near_budget_limit(),
+                "is_over_budget": cost >= budget,
+                "is_near_limit": cost >= warning_threshold,
             }
 
 
@@ -304,7 +308,7 @@ class DeepSeekClient:
                 if chunk.choices and chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
         except Exception as e:
-            yield f"\n[AI流式响应出错: {str(e)}]"
+            raise AIServiceError(f"AI 流式调用失败: {str(e)}") from e
 
     def chat_json(
         self,
@@ -359,7 +363,11 @@ class DeepSeekClient:
                 last_user_msg = msg["content"]
                 break
 
-        if any("自由对话" in msg.get("content", "") for msg in messages if msg.get("role") == "system"):
+        if any(
+            any(marker in msg.get("content", "") for marker in ("自由对话", "开放式求职咨询"))
+            for msg in messages
+            if msg.get("role") == "system"
+        ):
             return f"我可以和你一起梳理这个问题。关于“{last_user_msg[:120]}”，建议先结合你的目标和真实经历拆成可执行的小步骤；如果你愿意，也可以告诉我你目前最想解决的具体困难。"
 
         # 提取用户消息中的技能名
@@ -369,14 +377,13 @@ class DeepSeekClient:
                 if g and len(g) > 1:
                     skills_in_msg.append(g)
 
-        if any("最多10个问题" in msg.get("content", "") for msg in messages if msg.get("role") == "system"):
-            assistant_turns = len(re.findall(r"(?:^|\n)assistant:", last_user_msg))
-            finished = assistant_turns >= 9
-            reply = (
-                "目前收集到的信息已经可以先生成一版简历。你也可以继续补充项目成果、实习经历或技能细节。"
-                if finished
-                else "我记下了。为了把经历写得更具体一些，请再补充一个可验证的细节：你负责的部分带来了什么结果，或者解决了什么问题？"
-            )
+        if any(
+            "档案助手" in msg.get("content", "") or "求职教练" in msg.get("content", "")
+            for msg in messages
+            if msg.get("role") == "system"
+        ):
+            finished = any(word in last_user_msg for word in ("确认", "保存", "结束访谈", "先这样"))
+            reply = "我记下了。为了把经历写得更具体一些，请再补充一个可验证的细节：你负责的部分带来了什么结果，或者解决了什么问题？"
             return json.dumps({
                 "reply": reply,
                 "finished": finished,

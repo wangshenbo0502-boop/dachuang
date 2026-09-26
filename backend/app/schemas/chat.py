@@ -12,13 +12,14 @@ class ChatMessage(BaseModel):
 
 class ChatTurnRequest(BaseModel):
     user_id: int = Field(ge=1)
-    messages: list[ChatMessage] = Field(default_factory=list, max_length=22)
+    messages: list[ChatMessage] = Field(default_factory=list, max_length=80)
     target_job: str = Field(default="", max_length=100)
 
 
 class ChatConversationRequest(BaseModel):
     user_id: int = Field(ge=1)
-    messages: list[ChatMessage] = Field(default_factory=list, max_length=100)
+    messages: list[ChatMessage] = Field(default_factory=list, max_length=60)
+    target_job: str = Field(default="", max_length=100)
 
 
 class ChatConversationResponse(BaseModel):
@@ -27,7 +28,8 @@ class ChatConversationResponse(BaseModel):
 
 class ChatTurnResponse(BaseModel):
     reply: str
-    question_number: int = Field(ge=1, le=10)
+    # 保留该字段兼容旧客户端；新版界面不展示轮次，也不限制访谈轮数。
+    question_number: int = Field(ge=0)
     finished: bool = False
     extracted: dict[str, Any] = Field(default_factory=dict)
     missing: list[str] = Field(default_factory=list)

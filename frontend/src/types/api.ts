@@ -16,6 +16,7 @@ export interface JobMatchResponse { user_skills:string[]; total_matches:number; 
 export interface ResumeResult { optimized_projects:Array<{project_name:string;original:string;optimized:string;highlight_tags:string[]}>; optimized_skills:Array<{original:string;optimized:string}>; overall_suggestions:string[]; personal_summary:string; resume_score:number }
 export interface ResumeResponse { id?:number; target_job:string; result:ResumeResult; is_mock:boolean; created_at?:string }
 export interface ResumeHistory { id:number; target_job:string; resume_score:number; created_at?:string }
+export interface ResumeVersion { id:number; user_id:number; name:string; target_job:string; profile_id:number; selected_projects:number[]; selected_skills:number[]; selected_experiences:Record<string,number[]>; personal_summary:string; optimized_content:Record<string,unknown>; template:string; status:string; profile:{name:string;school:string;major:string;grade:string;bio:string;email:string;phone:string;skills:Skill[];projects:Project[];competitions:Competition[];internships:Internship[]}; created_at?:string; updated_at?:string }
 export interface GrowthResult { current_situation:string; ability_gaps:Array<{skill:string;importance:string;difficulty:string;description:string}>; learning_roadmap:Array<{stage:string;focus:string;tasks:string[];milestone:string}>; recommended_projects:Array<{name:string;description:string;tech_stack:string[];difficulty:string}>; recommended_resources:string[]; interview_prep_tips:string[]; expected_timeline:string }
 export interface GrowthResponse { id?:number; target_job:string; result:GrowthResult; is_mock:boolean; created_at?:string }
 export interface GrowthHistory { id:number; target_job:string; expected_timeline:string; created_at?:string }
@@ -23,3 +24,4 @@ export interface KnowledgeResult { id?:number; document_id?:number; doc_id?:stri
 export interface ChatMessage { role:"user"|"assistant"; content:string }
 export interface ChatTurnResponse { reply:string; question_number:number; finished:boolean; extracted:Record<string,unknown>; missing:string[] }
 export interface ChatConversationResponse { reply:string; suggested_action?:"profile"|"resume"|"analysis"|"growth"|"jobs"|null; extracted?:Record<string,unknown> }
+export interface ChatProfileSyncResponse { profile:StudentProfile; skipped:string[] }

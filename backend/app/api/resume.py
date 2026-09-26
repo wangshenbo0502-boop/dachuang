@@ -15,6 +15,7 @@ from app.schemas.resume import (
     ResumeOptimizationRequest,
     ResumeOptimizationResponse,
     ResumeOptimizationHistoryItem,
+    ResumeVersionCreate, ResumeVersionUpdate,
 )
 from app.services.resume_service import ResumeService
 from app.utils.response import success
@@ -25,6 +26,26 @@ router = APIRouter(prefix="/api/resume", tags=["AI简历优化"])
 def serialize_model(model: BaseModel) -> dict[str, Any]:
     """将Pydantic模型转换为可序列化字典"""
     return model.model_dump(mode="json")
+
+
+@router.post("/versions")
+def create_resume_version(request: ResumeVersionCreate, db: Session = Depends(get_db)) -> dict[str, Any]:
+    return success(serialize_model(ResumeService(db).create_version(request)), message="简历版本创建成功")
+
+
+@router.get("/versions/user/{user_id}")
+def list_resume_versions(user_id: int = Path(ge=1), db: Session = Depends(get_db)) -> dict[str, Any]:
+    return success([serialize_model(item) for item in ResumeService(db).list_versions(user_id)], message="获取简历版本成功")
+
+
+@router.get("/versions/{version_id}")
+def get_resume_version(version_id: int = Path(ge=1), db: Session = Depends(get_db)) -> dict[str, Any]:
+    return success(serialize_model(ResumeService(db).get_version(version_id)), message="获取简历版本成功")
+
+
+@router.put("/versions/{version_id}")
+def update_resume_version(version_id: int, request: ResumeVersionUpdate, db: Session = Depends(get_db)) -> dict[str, Any]:
+    return success(serialize_model(ResumeService(db).update_version(version_id, request)), message="简历版本已保存")
 
 
 @router.post("", response_model_exclude_none=True)
