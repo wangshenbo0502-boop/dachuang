@@ -2957,3 +2957,280 @@ Traceback (most recent call last):
 sqlalchemy.exc.OperationalError: (psycopg.errors.ConnectionTimeout) connection timeout expired
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 2026-09-27 17:06:57,191 | INFO | [c48a6c84] GET /api/health -> 200 (0.6ms)
+2026-09-27 17:07:45,110 | INFO | [caad6a52] GET /api/health -> 200 (0.4ms)
+2026-09-27 17:08:02,137 | INFO | [48831466] GET /api/auth/me -> 200 (4.7ms)
+2026-09-27 17:08:02,153 | INFO | [5dc5f534] GET /api/users/1 -> 200 (9.5ms)
+2026-09-27 17:08:02,607 | INFO | [5ff95379] GET /api/users/1 -> 200 (9.8ms)
+2026-09-27 17:08:02,619 | INFO | [d5dfd377] GET /api/analysis/user/1 -> 200 (6.7ms)
+2026-09-27 17:08:02,620 | INFO | [fbaa673d] GET /api/growth/user/1 -> 200 (7.5ms)
+2026-09-27 17:08:02,627 | INFO | [94772380] GET /api/analysis/1 -> 200 (3.6ms)
+2026-09-27 17:08:05,495 | INFO | [c2365a70] GET /api/jobs -> 200 (85.5ms)
+2026-09-27 17:08:08,485 | INFO | [20e89cc4] GET /api/jobs/AI伦理与合规专员 -> 200 (5.5ms)
+2026-09-27 17:08:12,166 | INFO | keyword_search count=20 elapsed_ms=144.94
+2026-09-27 17:08:21,142 | INFO | [7c43246c] GET /api/applications -> 200 (10.0ms)
+2026-09-27 17:08:23,924 | INFO | [59a2bbd3] GET /api/jobs -> 200 (6.2ms)
+2026-09-27 17:08:25,177 | INFO | [8ea17531] GET /api/jobs/AI产品运营 -> 200 (5.8ms)
+2026-09-27 17:08:49,239 | INFO | [cec5f7d8] GET /api/users/1 -> 200 (13.4ms)
+2026-09-27 17:08:49,249 | INFO | [84cd0e6d] GET /api/resume/versions/user/1 -> 200 (5.5ms)
+2026-09-27 17:08:50,189 | INFO | [c0daef5f] GET /api/growth/user/1 -> 200 (6.0ms)
+2026-09-27 17:09:03,667 | INFO | keyword_search count=20 elapsed_ms=259.20
+2026-09-27 17:09:23,496 | INFO | No device provided, using cpu
+2026-09-27 17:09:23,500 | INFO | No device provided, using cpu
+2026-09-27 17:09:25,253 | INFO | Loading SentenceTransformer model from BAAI/bge-small-zh-v1.5.
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 1971.11it/s]
+2026-09-27 17:09:25,709 | DEBUG | Active modality config: {'text': {'method': 'forward', 'method_output_name': 'last_hidden_state'}}
+2026-09-27 17:09:25,714 | INFO | embedding_model_loaded model=BAAI/bge-small-zh-v1.5 elapsed_ms=2233.75
+2026-09-27 17:09:25,749 | INFO | embedding_completed count=1 elapsed_ms=73733.51
+2026-09-27 17:09:25,790 | INFO | vector_search count=18 elapsed_ms=38.91
+2026-09-27 17:09:25,971 | INFO | embedding_completed count=1 elapsed_ms=30.60
+2026-09-27 17:09:25,992 | INFO | vector_search count=18 elapsed_ms=20.16
+2026-09-27 17:09:26,007 | INFO | keyword_search count=20 elapsed_ms=62.20
+2026-09-27 17:09:26,184 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:26,377 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:26,377 | DEBUG | connect_tcp.started host='127.0.0.1' port=7890 local_address=None timeout=60.0 socket_options=None
+2026-09-27 17:09:26,396 | DEBUG | connect_tcp.complete return_value=<httpcore2._backends.sync.SyncStream object at 0x000001FC0E461A90>
+2026-09-27 17:09:26,397 | DEBUG | send_request_headers.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:26,398 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:26,398 | DEBUG | send_request_body.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:26,398 | DEBUG | send_request_body.complete
+2026-09-27 17:09:26,399 | DEBUG | receive_response_headers.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:26,399 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'Connection established', [])
+2026-09-27 17:09:26,399 | DEBUG | start_tls.started ssl_context=<truststore._api.SSLContext object at 0x000001FC1D20AFD0> server_hostname='api.deepseek.com' timeout=60.0
+2026-09-27 17:09:26,884 | DEBUG | start_tls.complete return_value=<httpcore2._backends.sync.SyncStream object at 0x000001FC0E504690>
+2026-09-27 17:09:26,885 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:26,886 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:26,886 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:26,886 | DEBUG | send_request_body.complete
+2026-09-27 17:09:26,886 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:27,009 | INFO | Loading SentenceTransformer model from BAAI/bge-small-zh-v1.5.
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 1092.48it/s]
+2026-09-27 17:09:27,256 | DEBUG | Active modality config: {'text': {'method': 'forward', 'method_output_name': 'last_hidden_state'}}
+2026-09-27 17:09:27,261 | INFO | embedding_model_loaded model=BAAI/bge-small-zh-v1.5 elapsed_ms=3780.27
+2026-09-27 17:09:27,287 | INFO | embedding_completed count=1 elapsed_ms=23881.16
+2026-09-27 17:09:27,302 | INFO | vector_search count=19 elapsed_ms=12.73
+2026-09-27 17:09:27,306 | INFO | [0db5dc24] POST /api/stream/growth -> 200 (23947.0ms)
+2026-09-27 17:09:27,307 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:27,308 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:27,308 | DEBUG | connect_tcp.started host='127.0.0.1' port=7890 local_address=None timeout=60.0 socket_options=None
+2026-09-27 17:09:27,309 | DEBUG | connect_tcp.complete return_value=<httpcore2._backends.sync.SyncStream object at 0x000001FC0E5056D0>
+2026-09-27 17:09:27,309 | DEBUG | send_request_headers.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:27,309 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:27,310 | DEBUG | send_request_body.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:27,310 | DEBUG | send_request_body.complete
+2026-09-27 17:09:27,310 | DEBUG | receive_response_headers.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:27,311 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'Connection established', [])
+2026-09-27 17:09:27,311 | DEBUG | start_tls.started ssl_context=<truststore._api.SSLContext object at 0x000001FC1D20AFD0> server_hostname='api.deepseek.com' timeout=60.0
+2026-09-27 17:09:27,546 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:27 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'1fe7cde20a6659a42b756f7761f8f01f'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'J1rHIXGnymMWAxn9SHSoSs_JUOu9L7H-tKdTBGpnltDsHolMkXR0WA==')])
+2026-09-27 17:09:27,548 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:27,548 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:27,908 | DEBUG | start_tls.complete return_value=<httpcore2._backends.sync.SyncStream object at 0x000001FC0E41F820>
+2026-09-27 17:09:27,909 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:27,910 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:27,910 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:27,910 | DEBUG | send_request_body.complete
+2026-09-27 17:09:27,910 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:28,496 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'text/event-stream; charset=utf-8'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:28 GMT'), (b'X-Content-Type-Options', b'nosniff'), (b'Server', b'elb'), (b'cache-control', b'no-cache'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'60bbbe34945f0936206e5c29e73c9083'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 b2b215a89cc2734b2940e2eb59ea4bd0.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P9'), (b'X-Amz-Cf-Id', b'E5_XnL1RySdhG40p3m1CMRmz5USPvUBEvBr_uakAsZuac-2e3JgjXA==')])
+2026-09-27 17:09:28,499 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:28,499 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:28,499 | DEBUG | request_id: None
+2026-09-27 17:09:28,500 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:29,766 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:29,768 | DEBUG | response_closed.started
+2026-09-27 17:09:29,768 | DEBUG | response_closed.complete
+2026-09-27 17:09:29,768 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:29,768 | DEBUG | request_id: None
+2026-09-27 17:09:29,811 | INFO | embedding_completed count=1 elapsed_ms=26.00
+2026-09-27 17:09:29,825 | INFO | vector_search count=18 elapsed_ms=10.64
+2026-09-27 17:09:29,852 | INFO | keyword_search count=20 elapsed_ms=64.72
+2026-09-27 17:09:29,857 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:29,857 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:29,858 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:29,858 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:29,858 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:29,859 | DEBUG | send_request_body.complete
+2026-09-27 17:09:29,859 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:30,433 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:30 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'2fe4f11f6ca71c17413c2a1697809d09'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'-Tn1cKJjJeMXvxhyiTlltrs0a5T7pJm_zqUh0DIPShJ4cHFRgMgN5A==')])
+2026-09-27 17:09:30,435 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:30,435 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:32,530 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:32,535 | DEBUG | response_closed.started
+2026-09-27 17:09:32,535 | DEBUG | response_closed.complete
+2026-09-27 17:09:32,535 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:32,535 | DEBUG | request_id: None
+2026-09-27 17:09:32,576 | INFO | embedding_completed count=1 elapsed_ms=28.11
+2026-09-27 17:09:32,591 | INFO | vector_search count=18 elapsed_ms=12.56
+2026-09-27 17:09:32,616 | INFO | keyword_search count=20 elapsed_ms=65.64
+2026-09-27 17:09:32,621 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:32,622 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:32,622 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:32,622 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:32,623 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:32,623 | DEBUG | send_request_body.complete
+2026-09-27 17:09:32,623 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:33,200 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:33 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'2448fcd527cec796bbdd94810e5582db'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'ybLIqZc01gbwaJzOnoQh8Z8YeEAtdy6qvtLPaYqDZ-LW982ZG7boXg==')])
+2026-09-27 17:09:33,209 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:33,209 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:34,791 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:34,800 | DEBUG | response_closed.started
+2026-09-27 17:09:34,800 | DEBUG | response_closed.complete
+2026-09-27 17:09:34,800 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:34,800 | DEBUG | request_id: None
+2026-09-27 17:09:34,841 | INFO | embedding_completed count=1 elapsed_ms=26.88
+2026-09-27 17:09:34,855 | INFO | vector_search count=18 elapsed_ms=12.23
+2026-09-27 17:09:34,878 | INFO | keyword_search count=20 elapsed_ms=62.76
+2026-09-27 17:09:34,883 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:34,884 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:34,884 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:34,884 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:34,885 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:34,885 | DEBUG | send_request_body.complete
+2026-09-27 17:09:34,885 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:35,446 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:35 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'03b002d16857f612e8b833af6a147ab0'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'ZZFg47sllXChHLN8vdrqKWMJ_BJZ1-d5r2l7qA8hqnSVSjph6HGVkw==')])
+2026-09-27 17:09:35,447 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:35,447 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:35,893 | DEBUG | response_closed.started
+2026-09-27 17:09:35,902 | DEBUG | response_closed.complete
+2026-09-27 17:09:35,902 | DEBUG | receive_response_body.failed exception=GeneratorExit()
+2026-09-27 17:09:35,939 | INFO | embedding_completed count=1 elapsed_ms=27.54
+2026-09-27 17:09:35,954 | INFO | vector_search count=20 elapsed_ms=12.42
+2026-09-27 17:09:35,971 | INFO | keyword_search count=20 elapsed_ms=57.65
+2026-09-27 17:09:35,975 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:35,976 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:35,976 | DEBUG | connect_tcp.started host='127.0.0.1' port=7890 local_address=None timeout=60.0 socket_options=None
+2026-09-27 17:09:35,977 | DEBUG | connect_tcp.complete return_value=<httpcore2._backends.sync.SyncStream object at 0x000001FC0E41CE90>
+2026-09-27 17:09:35,977 | DEBUG | send_request_headers.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:35,978 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:35,978 | DEBUG | send_request_body.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:35,978 | DEBUG | send_request_body.complete
+2026-09-27 17:09:35,978 | DEBUG | receive_response_headers.started request=<Request [b'CONNECT']>
+2026-09-27 17:09:35,978 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'Connection established', [])
+2026-09-27 17:09:35,979 | DEBUG | start_tls.started ssl_context=<truststore._api.SSLContext object at 0x000001FC1D20AFD0> server_hostname='api.deepseek.com' timeout=60.0
+2026-09-27 17:09:36,451 | DEBUG | start_tls.complete return_value=<httpcore2._backends.sync.SyncStream object at 0x000001FC14BBC290>
+2026-09-27 17:09:36,452 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:36,453 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:36,453 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:36,453 | DEBUG | send_request_body.complete
+2026-09-27 17:09:36,453 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:37,042 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:36 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'513db34dc12ef1c6d18e7b632152c15a'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 a495fef6e6b69b68fb77fc4bee015b9a.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'oKwFgiNFGZs821WIKmSMtTxa8KhZlBdTCrwWlaxjnUJ9nhd_pUI-sg==')])
+2026-09-27 17:09:37,051 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:37,051 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:37,703 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:37,704 | DEBUG | response_closed.started
+2026-09-27 17:09:37,704 | DEBUG | response_closed.complete
+2026-09-27 17:09:37,705 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:37,705 | DEBUG | request_id: None
+2026-09-27 17:09:37,743 | INFO | embedding_completed count=1 elapsed_ms=24.67
+2026-09-27 17:09:37,758 | INFO | vector_search count=18 elapsed_ms=12.72
+2026-09-27 17:09:37,775 | INFO | keyword_search count=20 elapsed_ms=56.56
+2026-09-27 17:09:37,780 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:37,780 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:37,781 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:37,781 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:37,781 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:37,782 | DEBUG | send_request_body.complete
+2026-09-27 17:09:37,782 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:38,371 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:38 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'1bdaa26e119297d9d51fae53287df861'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'e-vFcM2khq0cisrReAMGpoP0Qrjy8c1FDUfoY2gxsqJegI8E1wpohw==')])
+2026-09-27 17:09:38,380 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:38,380 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:40,654 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:40,663 | DEBUG | response_closed.started
+2026-09-27 17:09:40,664 | DEBUG | response_closed.complete
+2026-09-27 17:09:40,664 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:40,664 | DEBUG | request_id: None
+2026-09-27 17:09:40,700 | INFO | embedding_completed count=1 elapsed_ms=24.35
+2026-09-27 17:09:40,712 | INFO | vector_search count=18 elapsed_ms=10.61
+2026-09-27 17:09:40,737 | INFO | keyword_search count=20 elapsed_ms=59.23
+2026-09-27 17:09:40,741 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:40,742 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:40,743 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:40,743 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:40,743 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:40,744 | DEBUG | send_request_body.complete
+2026-09-27 17:09:40,744 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:41,315 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:41 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'8a5460b5075a192e40a07edba8adf4b9'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'vxMJxbCVDzELPTrazsJu1rV8h0PmE6qr8xv4PfPUFZcPiiaMD343kg==')])
+2026-09-27 17:09:41,322 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:41,324 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:43,107 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:43,109 | DEBUG | response_closed.started
+2026-09-27 17:09:43,109 | DEBUG | response_closed.complete
+2026-09-27 17:09:43,109 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:43,109 | DEBUG | request_id: None
+2026-09-27 17:09:43,146 | INFO | embedding_completed count=1 elapsed_ms=24.03
+2026-09-27 17:09:43,160 | INFO | vector_search count=20 elapsed_ms=12.50
+2026-09-27 17:09:43,182 | INFO | keyword_search count=20 elapsed_ms=58.39
+2026-09-27 17:09:43,186 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:43,187 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:43,187 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:43,188 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:43,188 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:43,188 | DEBUG | send_request_body.complete
+2026-09-27 17:09:43,188 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:43,841 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:43 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'bc329d473d7bdbaa8213940bacf36e89'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'pPTnhsqK1iE0vKk2Py0MOKUvaV0M-XYwvFlZRhMbdqFAjqI9YR9oKg==')])
+2026-09-27 17:09:43,850 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:43,851 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:44,249 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:44,258 | DEBUG | response_closed.started
+2026-09-27 17:09:44,258 | DEBUG | response_closed.complete
+2026-09-27 17:09:44,258 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:44,258 | DEBUG | request_id: None
+2026-09-27 17:09:44,272 | INFO | [c5b26d33] POST /api/growth -> 200 (8366.2ms)
+2026-09-27 17:09:45,382 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:45,384 | DEBUG | response_closed.started
+2026-09-27 17:09:45,384 | DEBUG | response_closed.complete
+2026-09-27 17:09:45,384 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:45,384 | DEBUG | request_id: None
+2026-09-27 17:09:45,424 | INFO | embedding_completed count=1 elapsed_ms=29.00
+2026-09-27 17:09:45,438 | INFO | vector_search count=20 elapsed_ms=11.46
+2026-09-27 17:09:45,454 | INFO | keyword_search count=20 elapsed_ms=56.02
+2026-09-27 17:09:45,458 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:45,459 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:45,459 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:45,460 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:45,460 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:45,460 | DEBUG | send_request_body.complete
+2026-09-27 17:09:45,460 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:46,137 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:46 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'2042b7dc0b26dd9761bea694bb51652e'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'W4WKSN_xS14XmMr8P9XTL99KQVc9mw2CiJ2bk1yLR1R6nHMepQD2lw==')])
+2026-09-27 17:09:46,146 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:46,147 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:48,016 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:48,025 | DEBUG | response_closed.started
+2026-09-27 17:09:48,025 | DEBUG | response_closed.complete
+2026-09-27 17:09:48,026 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:48,026 | DEBUG | request_id: None
+2026-09-27 17:09:48,059 | INFO | embedding_completed count=1 elapsed_ms=21.56
+2026-09-27 17:09:48,073 | INFO | vector_search count=18 elapsed_ms=10.96
+2026-09-27 17:09:48,097 | INFO | keyword_search count=20 elapsed_ms=57.84
+2026-09-27 17:09:48,102 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:48,102 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:48,103 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:48,103 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:48,103 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:48,104 | DEBUG | send_request_body.complete
+2026-09-27 17:09:48,104 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:48,687 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:48 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'075daa50c4611ca05252510eeae8a6f5'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'kjv4yVviGFdIKOa0Jpw3G1z3_8RxuUNMr3Pq8DYBMsPeqcRqWFEqtQ==')])
+2026-09-27 17:09:48,688 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:48,689 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:50,666 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:50,675 | DEBUG | response_closed.started
+2026-09-27 17:09:50,675 | DEBUG | response_closed.complete
+2026-09-27 17:09:50,675 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:50,676 | DEBUG | request_id: None
+2026-09-27 17:09:50,713 | INFO | embedding_completed count=1 elapsed_ms=26.23
+2026-09-27 17:09:50,727 | INFO | vector_search count=16 elapsed_ms=10.90
+2026-09-27 17:09:50,745 | INFO | keyword_search count=20 elapsed_ms=55.81
+2026-09-27 17:09:50,749 | DEBUG | Building HTTP request: method=POST retries_taken=0
+2026-09-27 17:09:50,750 | DEBUG | Sending HTTP Request: POST
+2026-09-27 17:09:50,750 | DEBUG | send_request_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:50,751 | DEBUG | send_request_headers.complete
+2026-09-27 17:09:50,751 | DEBUG | send_request_body.started request=<Request [b'POST']>
+2026-09-27 17:09:50,751 | DEBUG | send_request_body.complete
+2026-09-27 17:09:50,751 | DEBUG | receive_response_headers.started request=<Request [b'POST']>
+2026-09-27 17:09:51,347 | DEBUG | receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Date', b'Sun, 27 Sep 2026 09:09:51 GMT'), (b'Server', b'elb'), (b'Content-Encoding', b'gzip'), (b'vary', b'origin, access-control-request-method, access-control-request-headers'), (b'access-control-allow-credentials', b'true'), (b'x-ds-trace-id', b'e662ff7fdd4205cee799f21ec676a218'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains; preload'), (b'X-Content-Type-Options', b'nosniff'), (b'X-Cache', b'Miss from cloudfront'), (b'Via', b'1.1 8022225795c46f1908607265602fbdf8.cloudfront.net (CloudFront)'), (b'X-Amz-Cf-Pop', b'SEA900-P13'), (b'X-Amz-Cf-Id', b'IA7aWb8UIDdy4XqYFpwv0aIkL3Pvy7UOiHKbuqxpkkzgs7vM2NjU8g==')])
+2026-09-27 17:09:51,351 | INFO | HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-09-27 17:09:51,352 | DEBUG | receive_response_body.started request=<Request [b'POST']>
+2026-09-27 17:09:53,872 | DEBUG | receive_response_body.complete
+2026-09-27 17:09:53,881 | DEBUG | response_closed.started
+2026-09-27 17:09:53,881 | DEBUG | response_closed.complete
+2026-09-27 17:09:53,881 | DEBUG | HTTP Response: POST 200
+2026-09-27 17:09:53,882 | DEBUG | request_id: None
+2026-09-27 17:09:53,899 | INFO | [67e059b3] POST /api/match -> 200 (101891.2ms)
