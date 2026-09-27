@@ -2956,3 +2956,4 @@ Traceback (most recent call last):
     raise last_ex.with_traceback(None)
 sqlalchemy.exc.OperationalError: (psycopg.errors.ConnectionTimeout) connection timeout expired
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-09-27 17:06:57,191 | INFO | [c48a6c84] GET /api/health -> 200 (0.6ms)
