@@ -88,8 +88,8 @@ class UserProject(Base):
         index=True,
     )
     name: Mapped[str] = mapped_column(String(150), nullable=False)
-    role: Mapped[str] = mapped_column(String(100), nullable=False)
-    description: Mapped[str] = mapped_column(Text, nullable=False)
+    role: Mapped[str] = mapped_column(String(100), nullable=False, default="主要负责人")
+    description: Mapped[str] = mapped_column(Text, nullable=False, default="")
     tech_stack: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
     start_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     end_date: Mapped[date | None] = mapped_column(Date, nullable=True)
@@ -98,7 +98,7 @@ class UserProject(Base):
 
 
 class UserCompetition(Base):
-    """学生竞赛获奖经历。"""
+    """学生参赛及获奖经历。"""
 
     __tablename__ = "user_competitions"
 
@@ -109,8 +109,8 @@ class UserCompetition(Base):
         index=True,
     )
     name: Mapped[str] = mapped_column(String(200), nullable=False)
-    level: Mapped[str] = mapped_column(String(30), nullable=False, default="校级")
-    award: Mapped[str] = mapped_column(String(100), nullable=False, default="参与奖")
+    level: Mapped[str] = mapped_column(String(30), nullable=False, default="")
+    award: Mapped[str] = mapped_column(String(100), nullable=False, default="已参加")
     description: Mapped[str] = mapped_column(Text, nullable=False, default="")
     competition_date: Mapped[date | None] = mapped_column(Date, nullable=True)
 

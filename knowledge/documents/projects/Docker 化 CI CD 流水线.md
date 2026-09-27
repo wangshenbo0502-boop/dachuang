@@ -1,11 +1,13 @@
 ---
-title: Docker 化 CI/CD 流水线
-category: 工程
-difficulty: 挑战
-tech_stack: [Docker, Docker Compose, GitHub Actions, Nginx]
-estimated_hours: 40
-source: projects.json
-date: 2026-07-28
+id: "projects-docker-ci-cd-c77a86aa5b"
+title: "Docker 化 CI/CD 流水线"
+category: "projects"
+tags: ["项目", "Docker 化 CI/CD 流水线"]
+keywords: ["Docker 化 CI/CD 流水线", "项目", "Docker", "CI/CD", "流水线", "项目概述", "核心功能", "技术收获", "适合人群", "前置技能"]
+summary: "为一个已有的前后端项目搭建完整的 Docker 化 CI/CD 流水线。DevOps 方向的核心实践，所有岗位都加分。"
+source: ["projects.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # Docker 化 CI/CD 流水线
@@ -40,7 +42,7 @@ date: 2026-07-28
 - Git
 - 有任一可部署的项目
 
-# 技术难点与面试展开点
+## 技术难点与面试展开点
 
 **流水线的阶段设计**是主线：代码提交（Webhook 触发）→ 静态检查（lint/单测，失败快速反馈）→ 构建（Docker 多阶段构建产物镜像）→ 镜像推送（打 tag 规范：commit sha + 语义化版本）→ 部署（开发环境自动、生产环境审批后手动触发）→ 回滚预案（按 tag 回退上一版本）。"为什么每个阶段都要 Docker 化"——环境一致性：构建、测试、运行使用同一基础镜像，消灭"我本地是好的"。
 
@@ -48,17 +50,30 @@ date: 2026-07-28
 
 **安全与治理**：镜像漏洞扫描（Trivy）纳入流水线门禁、密钥管理（不硬编码在 YAML，用 CI 的 secrets 机制）、制品库权限（私有 registry）、部署凭据最小化。面试高频：CI 与 CD 的区别、蓝绿部署与滚动部署/金丝雀发布的取舍、Docker 层缓存原理、如何在 K8s 中实现金丝雀、回滚策略设计。
 
-# 项目演进路线与推荐资源
+## 项目演进路线与推荐资源
 
 **演进路线**：基础版（GitHub Actions 构建 + 推送镜像到 registry）→ 进阶版（多环境部署、Trivy 镜像扫描门禁、构建缓存优化）→ 完整版（K8s 金丝雀发布或 Docker Compose 蓝绿切换、失败自动回滚、构建时长对比报告）。
 
 **推荐资源**：GitHub Actions 官方文档（workflow 语法与缓存机制）；Docker 官方文档（多阶段构建与 BuildKit）；Trivy 官方文档（漏洞扫描）；《Continuous Delivery》（Jez Humble，CI/CD 理论经典）。
 
-# 简历定位
+## 简历定位
 
 适合后端/运维/DevOps 方向。定位示例："基于 GitHub Actions 与 Docker 多阶段构建搭建全自动 CI/CD，接入镜像漏洞扫描门禁，构建时长由 8 分钟优化至 2 分钟"。体现工程效率意识，是校招生相对稀缺的 DevOps 实战背书。
 
-# Reference
+## Reference
 
 1. GitHub. 相关开源项目与技术文档. github.com. 访问时间: 2026-09-13.
 2. LeetCode. 力扣题库（项目相关算法题）. leetcode.cn. 访问时间: 2026-09-13.
+
+## Docker 化 CI/CD 流水线的实践与求职证据
+
+使用本项目知识时，建议把项目目标、使用者、核心流程、个人负责范围、技术选择、异常处理、测试结果和可展示材料分别记录。描述项目经历时，优先写清楚本人完成了什么、解决了什么问题、产出了什么结果；没有可靠数据时不要补写用户量、性能提升或商业收益。
+
+实践验证可以从最小可运行版本开始：准备一组正常输入、一组边界输入和一组错误输入，记录系统行为、预期结果和待改进点。展示材料可包括架构图、接口文档、测试记录、部署截图、演示地址、代码仓库或复盘文档，但涉及个人信息、企业数据和商业秘密时应脱敏。
+
+面向求职时，可将本项目整理为一张能力证据卡，注明项目时间、团队规模、个人职责、关键决策和证据链接。AI 只能帮助压缩表达和匹配岗位关键词，不能新增不存在的角色、奖项、数字或技术成果。
+## Related Knowledge
+
+- [AI 图像分类应用](AI 图像分类应用.md)
+- [AI智能体Agent协作平台](AI智能体Agent协作平台.md)
+- [API 网关与限流系统](API 网关与限流系统.md)

@@ -214,17 +214,17 @@ class GrowthService:
                 difficulty=g.get("difficulty", "中"),
                 description=g.get("description", ""),
             )
-            for g in ai_result.get("ability_gaps", [])
+            for g in self._dict_list(ai_result.get("ability_gaps"))
         ]
 
         learning_roadmap = [
             LearningStage(
                 stage=s.get("stage", f"阶段{i+1}"),
                 focus=s.get("focus", ""),
-                tasks=s.get("tasks", [])[:5],
+                tasks=self._string_list(s.get("tasks"))[:5],
                 milestone=s.get("milestone", ""),
             )
-            for i, s in enumerate(ai_result.get("learning_roadmap", []))
+            for i, s in enumerate(self._dict_list(ai_result.get("learning_roadmap")))
         ]
 
         recommended_projects = [
@@ -234,7 +234,7 @@ class GrowthService:
                 tech_stack=p.get("tech_stack", []),
                 difficulty=p.get("difficulty", "中级"),
             )
-            for p in ai_result.get("recommended_projects", [])
+            for p in self._dict_list(ai_result.get("recommended_projects"))
         ]
 
         return GrowthPlanResult(
@@ -242,10 +242,22 @@ class GrowthService:
             ability_gaps=ability_gaps,
             learning_roadmap=learning_roadmap,
             recommended_projects=recommended_projects,
-            recommended_resources=ai_result.get("recommended_resources", [])[:5],
-            interview_prep_tips=ai_result.get("interview_prep_tips", [])[:5],
-            expected_timeline=ai_result.get("expected_timeline", "3-6个月"),
+            recommended_resources=self._string_list(ai_result.get("recommended_resources"))[:5],
+            interview_prep_tips=self._string_list(ai_result.get("interview_prep_tips"))[:5],
+            expected_timeline=self._text(ai_result.get("expected_timeline"), "3-6个月"),
         )
+
+    @staticmethod
+    def _dict_list(value: object) -> list[dict]:
+        return [item for item in value if isinstance(item, dict)] if isinstance(value, list) else []
+
+    @staticmethod
+    def _string_list(value: object) -> list[str]:
+        return [item.strip() for item in value if isinstance(item, str) and item.strip()] if isinstance(value, list) else []
+
+    @staticmethod
+    def _text(value: object, fallback: str = "") -> str:
+        return value.strip() if isinstance(value, str) else fallback
 
     def _save_record(
         self,

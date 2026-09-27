@@ -1,11 +1,13 @@
 ---
+id: "interview-mysql-0e821754d6"
 title: "MySQL数据库面试题（20题）"
-category: "面试题"
-type: "数据库"
-difficulty: "中等"
+category: "interview"
 tags: ["MySQL", "数据库", "索引", "事务", "锁"]
+keywords: ["MySQL数据库面试题（20题）", "面试", "MySQL", "数据库面试题", "Q1: MySQL的存储引擎（InnoDB和MyISAM的区别）", "Q2: MySQL的索引类型和底层结构（B+树）", "Q3: MySQL的索引失效场景", "Q4: MySQL的事务四大特性（ACID）", "Q5: MySQL的事务隔离级别", "Q6: MySQL的MVCC（多版本并发控制）", "Q7: MySQL的锁机制（行锁/表锁/间隙锁/Next-Key Lock）", "Q8: MySQL的死锁及解决方法"]
+summary: "Q1: MySQL的存储引擎（InnoDB和MyISAM的区别）。"
 source: ["MySQL官方文档", "《高性能MySQL》", "阿里技术面试题"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 ## Q1: MySQL的存储引擎（InnoDB和MyISAM的区别）
@@ -1840,3 +1842,8 @@ log_queries_not_using_indexes = ON
 3. MySQL技术内幕：InnoDB存储引擎 - 姜承尧 (访问时间：2026-07-28)
 4. 阿里技术团队MySQL面试题集 (访问时间：2026-07-28)
 5. 掘金小册 - MySQL实战45讲 - 丁奇 (访问时间：2026-07-28)
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

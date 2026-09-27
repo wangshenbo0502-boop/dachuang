@@ -1,9 +1,13 @@
 ---
-title: TypeScript
-category: skills
-tags: [编程语言, 前端, 类型系统]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-typescript-608830afa1"
+title: "TypeScript"
+category: "skills"
+tags: ["编程语言", "前端", "类型系统"]
+keywords: ["TypeScript", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 2 周）"]
+summary: "JavaScript 的超集，增加静态类型系统。大中型项目标配，前端/全栈岗位几乎必会。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # TypeScript
@@ -56,7 +60,7 @@ date: 2026-07-28
 
 **评估方式：** 类型挑战 — 能完成 type-challenges 中等难度的 5 道题
 
-# 进阶要点与面试高频
+## 进阶要点与面试高频
 
 TypeScript 的类型系统是**结构化类型（structural typing）**：只要形状匹配即兼容（duck typing 的编译期版本），这与 Java/C# 的名义类型系统本质不同——理解这一点是回答"interface 和 type 区别"（语义上几乎等价，差异在扩展语法与联合类型表达力）与"为什么 TS 是 JS 的超集而非 Java 的类型系统"的基础。
 
@@ -64,8 +68,13 @@ TypeScript 的类型系统是**结构化类型（structural typing）**：只要
 
 工程实践决定了 TS 的真实价值：strict 模式全开（noImplicitAny/strictNullChecks 是底线）、any 与 unknown 的区别（unknown 类型安全、使用前必须收窄）、类型收窄手段（typeof/in/可辨识联合/discriminated union）、泛型的默认值与约束（extends）。编译层面：tsc 只做类型检查与类型擦除（不优化运行时），构建性能靠 Vite/esbuild/swc 转译 + tsc 仅做类型检查的组合方案；tsconfig 的 module/moduleResolution/target 与 paths 别名配置是工程化基本功。
 
-# Reference
+## Reference
 
 1. Microsoft. TypeScript 官方文档（The TypeScript Handbook）. typescriptlang.org/docs/handbook. 访问时间: 2026-09-13. https://www.typescriptlang.org/docs/handbook/intro.html
 2. Microsoft. TypeScript tsconfig Reference. typescriptlang.org/tsconfig. 访问时间: 2026-09-13.
 3. Microsoft. TypeScript GitHub 仓库与 Release Notes. github.com/microsoft/TypeScript. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

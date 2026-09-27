@@ -1,9 +1,13 @@
 ---
-title: JavaScript
-category: skills
-tags: [编程语言, 前端, 全栈]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-javascript-5ba2cf3872"
+title: "JavaScript"
+category: "skills"
+tags: ["编程语言", "前端", "全栈"]
+keywords: ["JavaScript", "技能", "阶段 1 — 目标：了解（预估 3 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）"]
+summary: "Web 开发核心语言，全栈开发的基础。从浏览器交互到 Node.js 服务端，几乎所有现代 Web 技术都基于 JS。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # JavaScript
@@ -82,8 +86,13 @@ date: 2026-07-28
 - 为之前的 Todo List 写单元测试
 
 **评估方式：** 代码审查 — 代码模块化清晰，有测试覆盖，虚拟滚动列表流畅支持万级数据
-# Reference
+## Reference
 
 1. MDN Web Docs. JavaScript 参考文档. developer.mozilla.org/zh-CN/docs/Web/JavaScript. 访问时间: 2026-09-13.
 2. ECMA International. ECMAScript® 2024 Language Specification. ecma-international.org. 访问时间: 2026-09-13.
 3. 现代JavaScript教程. javascript.info（高质量开源教程，中文版）. zh.javascript.info. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

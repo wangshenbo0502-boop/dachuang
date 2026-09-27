@@ -1,11 +1,13 @@
 ---
-title: AI智能体Agent协作平台
-category: AI大模型
-difficulty: 高级
-tech_stack: [Python, LangGraph, LangChain, OpenAI/Anthropic API, FastAPI, Redis, Docker]
-estimated_hours: 100
-source: [CSDN AI Agent实战手册, LangGraph官方文档, awesome-llm-apps GitHub, AutoGen/CrewAI官方文档]
-last_update: 2026-07-28
+id: "projects-ai-agent-8478d7eb0a"
+title: "AI智能体Agent协作平台"
+category: "projects"
+tags: ["项目", "AI智能体Agent协作平台"]
+keywords: ["AI智能体Agent协作平台", "项目", "AI", "智能体", "Agent", "协作平台", "项目概述", "核心功能", "技术收获", "适合人群", "前置技能", "技术栈详解"]
+summary: "基于 LangGraph 构建的多智能体协作系统，实现多个专业 Agent 分工合作完成复杂任务。2026 年 AI 方向最热项目题材，从单 Agent 到多 Agent 协作，代表了 AI 应用的下一个演进方向。这个项目能让你深入理解 Agent 的核心原理：思考、行动、观察的循环，以及多 Agent 之间的。"
+source: ["CSDN AI Agent实战手册", "LangGraph官方文档", "awesome-llm-apps GitHub", "AutoGen/CrewAI官方文档"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # AI智能体Agent协作平台
@@ -125,9 +127,14 @@ last_update: 2026-07-28
 - awesome-llm-apps（GitHub: 89k+ stars）：LLM 应用和 Agent 开源项目精选
 
 > Reference: 访问时间 2026-07-28
-# Reference
+## Reference
 
 1. LangChain. LangGraph 官方文档（多智能体编排）. langchain-ai.github.io/langgraph. 访问时间: 2026-09-13.
 2. Microsoft. AutoGen 开源多智能体框架. github.com/microsoft/autogen. 访问时间: 2026-09-13.
 3. OpenBMB. MetaGPT 多智能体协作开源项目. github.com/geekan/MetaGPT. 访问时间: 2026-09-13.
 4. Anthropic. Building effective agents 官方工程指南. anthropic.com/research. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [AI 图像分类应用](AI 图像分类应用.md)
+- [API 网关与限流系统](API 网关与限流系统.md)
+- [Docker 化 CI CD 流水线](Docker 化 CI CD 流水线.md)

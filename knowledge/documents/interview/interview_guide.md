@@ -1,8 +1,13 @@
 ---
-title: 校招面试综合指南
-type: interview_guide
-target_audience: 应届生
-version: "0.2.0"
+id: "interview-interview-guide-a70fc04737"
+title: "校招面试综合指南"
+category: "interview"
+tags: ["面试", "校招面试综合指南"]
+keywords: ["校招面试综合指南", "面试", "一、备面时间线", "二、典型面试流程（3-4轮）", "三、行为面试题库", "四、算法笔试准备"]
+summary: "阶段 时间 关键行动 ------ ------ ---------- 大三上学期 9-12月 确定求职方向、补齐核心技能、开始做项目、刷 LeetCode 简单题 大三寒假 1-2月 准备简历、系统刷 LeetCode 中等题（100道）、复习计算机基础（OS/网络/数据库） 大三下学期 3-5月 投递暑期实。"
+source: ["待人工核验：原文未提供公开来源"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # 校招面试综合指南
@@ -102,9 +107,14 @@ version: "0.2.0"
 3. **用白板/纸练习手写代码** — 面试时要在无提示的环境下写
 4. **重视时间/空间复杂度分析** — 每次写完都要分析
 5. **牛客网的 ACM 模式输入输出要提前练习** — 不同于 LeetCode 的函数模式
-# Reference
+## Reference
 
 1. LeetCode. 力扣（LeetCode）官方题库与 Hot 100 专题. leetcode.cn/studyplan/top-100-liked. 访问时间: 2026-09-13.
 2. 牛客网. 面经与企业题库（校招真题）. nowcoder.com. 访问时间: 2026-09-13.
 3. Codeforces. Codeforces 在线竞赛与题库. codeforces.com. 访问时间: 2026-09-13.
 4. AcWing. 算法基础课与题库（公开目录）. acwing.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

@@ -1,9 +1,13 @@
 ---
-title: CSS
-category: skills
-tags: [前端, 样式, Web开发]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-css-73cf749344"
+title: "CSS"
+category: "skills"
+tags: ["前端", "样式", "Web开发"]
+keywords: ["CSS", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 2 周）", "阶段 3 — 目标：掌握（预估 2 周）"]
+summary: "网页样式和布局语言，从简单的颜色字体到复杂的响应式布局和动画效果。前端岗位必会技能。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # CSS
@@ -76,7 +80,7 @@ date: 2026-07-28
 
 **评估方式：** 工具检测 — Lighthouse Performance 评分 > 90，动画使用 GPU 加速
 
-# 进阶要点与面试高频
+## 进阶要点与面试高频
 
 超越基础语法后，CSS 的三个进阶主线值得系统掌握。**布局体系**：Flex 一维布局（主轴/交叉轴、flex:1 的完整含义 flex-grow/shrink/basis）、Grid 二维布局（模板区域、minmax/fr 单位）、以及现代响应式单位（rem/em/vw/vh、clamp() 流体排版）；**容器查询（Container Queries）**已获主流浏览器支持，组件可依据父容器而非视口自适应，是组件化时代的重要演进。
 
@@ -84,8 +88,13 @@ date: 2026-07-28
 
 现代工程实践：CSS 变量（custom properties）实现主题切换、@media 与 dark mode 适配、BEM 命名或 CSS Modules/CSS-in-JS 的工程选型。面试高频：水平垂直居中的 N 种写法、BFC 的触发条件与应用（清除浮动/防止 margin 合并）、flex:1 细节、sticky 定位原理、重排重绘优化、移动端 1px 问题。
 
-# Reference
+## Reference
 
 1. MDN Web Docs. CSS 参考文档. developer.mozilla.org/zh-CN/docs/Web/CSS. 访问时间: 2026-09-13.
 2. Google Chrome Team. web.dev Learn CSS（官方交互教程）. web.dev/learn/css. 访问时间: 2026-09-13.
 3. Can I use. 浏览器兼容性数据查询. caniuse.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [Docker](Docker.md)

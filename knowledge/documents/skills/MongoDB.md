@@ -1,9 +1,13 @@
 ---
-title: MongoDB
-category: skills
-tags: [数据库, NoSQL, 全栈]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-mongodb-a5e648b3d8"
+title: "MongoDB"
+category: "skills"
+tags: ["数据库", "NoSQL", "全栈"]
+keywords: ["MongoDB", "技能", "阶段 1 — 目标：了解（预估 1 周）", "阶段 2 — 目标：熟悉（预估 1 周）"]
+summary: "流行的 NoSQL 文档数据库，适合灵活 Schema 的场景。Node.js 全栈项目的常见选择。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # MongoDB
@@ -52,7 +56,7 @@ date: 2026-07-28
 
 **评估方式：** 实操 — 能写出至少 1 个包含 $match/$group/$sort 的聚合查询
 
-# 原理与面试高频
+## 原理与面试高频
 
 MongoDB 是文档型数据库，数据以 **BSON**（二进制 JSON）存储，支持嵌套文档与数组，天然贴合对象模型，免去了关系库的多表关联。存储引擎为 **WiredTiger**：文档级并发控制、快照隔离、压缩（snappy/zlib/zstd）。
 
@@ -62,8 +66,13 @@ MongoDB 是文档型数据库，数据以 **BSON**（二进制 JSON）存储，�
 
 适用场景：内容管理、用户画像、IoT 时序数据、商品目录等 schema 灵活或需要水平扩展的场景；强事务型场景（资金账务）仍首选关系库。面试高频：BSON 与 JSON 区别、副本集选举与读写分离、分片键如何选择、与 MySQL 选型对比、聚合管道（$match/$group/$lookup）。
 
-# Reference
+## Reference
 
 1. MongoDB Inc. MongoDB 官方手册. mongodb.com/docs/manual. 访问时间: 2026-09-13. https://www.mongodb.com/docs/manual/
 2. MongoDB Inc. MongoDB University（官方免费课程）. learn.mongodb.com. 访问时间: 2026-09-13.
 3. MongoDB Inc. pymongo 驱动官方文档. pymongo.readthedocs.io. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

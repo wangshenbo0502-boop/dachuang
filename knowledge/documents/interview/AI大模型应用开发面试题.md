@@ -1,8 +1,13 @@
 ---
-title: AI大模型应用开发面试题
-type: interview_questions
-role: 大模型应用工程师 / AI应用开发工程师
-version: "2026.07"
+id: "interview-ai-b7a70055ab"
+title: "AI大模型应用开发面试题"
+category: "interview"
+tags: ["面试", "AI大模型应用开发面试题"]
+keywords: ["AI大模型应用开发面试题", "面试", "AI", "大模型应用开发面", "试题", "技术考察重点", "高频面试题", "Reference"]
+summary: "- RAG 原理与优化（分块/检索/重排序/评估） - Agent 架构与开发（规划/工具调用/记忆/反思） - LangChain / LangGraph 框架核心组件 - 向量数据库与 Embedding 原理 - Prompt 工程（CoT / Few-shot / ReAct） - 模型部署与推理加速（。"
+source: ["待人工核验：原文未提供公开来源"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # AI大模型应用开发面试题
@@ -544,3 +549,8 @@ version: "2026.07"
 - Bilibili - 大模型面试真题合集
 - 面试鸭 2026 - 大模型应用开发高频题
 - 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)
+- [Go后端开发面试题](Go后端开发面试题.md)

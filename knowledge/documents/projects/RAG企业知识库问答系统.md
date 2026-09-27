@@ -1,11 +1,13 @@
 ---
-title: RAG企业知识库问答系统
-category: AI大模型
-difficulty: 进阶
-tech_stack: [Python, LangChain, OpenAI/DeepSeek API, Milvus/Chroma, FastAPI, Vue3, Docker]
-estimated_hours: 80
-source: [CSDN AI Agent实战手册, awesome-llm-apps GitHub, LangChain官方文档, 吴恩达DeepLearning.AI课程]
-last_update: 2026-07-28
+id: "projects-rag-d807d60217"
+title: "RAG企业知识库问答系统"
+category: "projects"
+tags: ["项目", "RAG企业知识库问答系统"]
+keywords: ["RAG企业知识库问答系统", "项目", "RAG", "企业知识库问答系", "项目概述", "核心功能", "技术收获", "适合人群", "前置技能", "技术栈详解", "实现步骤", "扩展方向"]
+summary: "基于大语言模型和向量数据库构建的企业内部知识库智能问答系统，支持上传文档、智能检索、精准回答、来源溯源。2026年AI应用岗最常见的面试项目，几乎所有做AI应用的公司都在做RAG相关的产品，掌握这个项目等于掌握了AI应用开发的核心方法论。"
+source: ["CSDN AI Agent实战手册", "awesome-llm-apps GitHub", "LangChain官方文档", "吴恩达DeepLearning.AI课程"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # RAG企业知识库问答系统
@@ -126,9 +128,14 @@ last_update: 2026-07-28
 - RAGAS 官方文档：https://docs.ragas.io/ （RAG 效果评估框架）
 
 > Reference: 访问时间 2026-07-28
-# Reference
+## Reference
 
 1. Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (NeurIPS 2020). arxiv.org/abs/2005.11401. 访问时间: 2026-09-13.
 2. LangChain. Build a Retrieval Augmented Generation (RAG) App 官方教程. python.langchain.com/docs/tutorials/rag. 访问时间: 2026-09-13.
 3. Zilliz. Milvus 向量数据库官方文档. milvus.io/docs. 访问时间: 2026-09-13.
 4. DeepSeek. DeepSeek API 官方文档. api-docs.deepseek.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [AI 图像分类应用](AI 图像分类应用.md)
+- [AI智能体Agent协作平台](AI智能体Agent协作平台.md)
+- [API 网关与限流系统](API 网关与限流系统.md)

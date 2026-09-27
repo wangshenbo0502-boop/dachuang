@@ -1,9 +1,13 @@
 ---
-title: Node.js
-category: skills
-tags: [后端, JavaScript, 全栈]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-node-js-9a7fb7ab2d"
+title: "Node.js"
+category: "skills"
+tags: ["后端", "JavaScript", "全栈"]
+keywords: ["Node.js", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 2 周）"]
+summary: "让 JavaScript 运行在服务端的能力。全栈工程师必备，也是前端工程师理解后端的基础。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # Node.js
@@ -55,7 +59,7 @@ date: 2026-07-28
 
 **评估方式：** 安全审查 — 密码加密存储，敏感路由有认证中间件保护
 
-# 原理与面试高频
+## 原理与面试高频
 
 Node.js 的核心是 **V8 引擎 + libuv**：V8 执行 JavaScript，libuv 提供事件循环与异步 I/O。事件循环按阶段轮转：timers（setTimeout/setInterval 回调）→ pending callbacks → poll（I/O 事件）→ check（setImmediate）→ close callbacks，两个阶段间执行微任务（Promise.then、process.nextTick，其中 nextTick 优先级最高）。
 
@@ -65,8 +69,13 @@ Node 的 JavaScript 执行是单线程的，因此**CPU 密集任务会阻塞事
 
 面试高频：事件循环六个阶段与微任务时机、nextTick 与 Promise 区别、单线程模型与多核利用（cluster/worker_threads）、stream 四种类型与 backpressure、CommonJS 与 ESM 差异、中间件洋葱模型原理。
 
-# Reference
+## Reference
 
 1. OpenJS Foundation. Node.js 官方文档（含事件循环机制）. nodejs.org/docs. 访问时间: 2026-09-13. https://nodejs.org/docs/latest/api/
 2. OpenJS Foundation. npm 官方文档. docs.npmjs.com. 访问时间: 2026-09-13.
 3. Node.js. Node.js Best Practices（社区高质量实践库）. github.com/goldbergyoni/nodebestpractices. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

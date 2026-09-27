@@ -1,9 +1,13 @@
 ---
-title: Pandas
-category: skills
-tags: [Python, 数据分析, 数据处理]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-pandas-17e3bd429a"
+title: "Pandas"
+category: "skills"
+tags: ["Python", "数据分析", "数据处理"]
+keywords: ["Pandas", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 2 周）", "阶段 3 — 目标：掌握（预估 3 周）"]
+summary: "Python 数据分析的核心库，提供高性能的数据结构(DataFrame)和数据处理工具。数据分析师入门必备。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # Pandas
@@ -77,8 +81,13 @@ date: 2026-07-28
 - 处理百万级数据文件并优化内存占用
 
 **评估方式：** 性能验证 — 百万级数据处理内存占用降低50%以上，处理时间在可接受范围内，有优化前后对比报告
-# Reference
+## Reference
 
 1. Pandas. pandas 官方文档与 10 minutes to pandas. pandas.pydata.org/docs. 访问时间: 2026-09-13. https://pandas.pydata.org/docs/
 2. Pandas. pandas 用户指南（User Guide）. pandas.pydata.org/docs/user_guide. 访问时间: 2026-09-13.
 3. Kaggle. Pandas 课程（数据科学实战）. kaggle.com/learn/pandas. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

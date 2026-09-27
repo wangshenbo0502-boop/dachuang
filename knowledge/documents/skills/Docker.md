@@ -1,9 +1,13 @@
 ---
-title: Docker
-category: skills
-tags: [工具, 容器化, DevOps]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-docker-efcd5fcf55"
+title: "Docker"
+category: "skills"
+tags: ["工具", "容器化", "DevOps"]
+keywords: ["Docker", "技能", "阶段 1 — 目标：了解（预估 1 周）", "阶段 2 — 目标：熟悉（预估 2 周）"]
+summary: "容器化部署的标准方案。解决了\\"在我电脑上能跑\\"的经典痛点。全栈和运维岗位的加分项。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # Docker
@@ -54,7 +58,7 @@ date: 2026-07-28
 
 **评估方式：** 实操 — docker-compose up 一键启动整个项目栈，5 个服务均能正常通信
 
-# 原理与面试高频
+## 原理与面试高频
 
 Docker 的核心是操作系统级虚拟化：通过 Linux 的 **namespace**（隔离进程视图：PID、网络、挂载点等）与 **cgroup**（限制 CPU/内存等资源配额）实现进程级隔离，再借助 **overlay2** 联合文件系统实现镜像的分层存储。容器与虚拟机的本质区别在于：虚拟机虚拟的是完整硬件并运行独立内核，容器共享宿主机内核、以进程形态存在，因此启动以秒计、开销极小。
 
@@ -64,8 +68,13 @@ Docker 的核心是操作系统级虚拟化：通过 Linux 的 **namespace**（�
 
 面试高频：容器与虚拟机区别（namespace/cgroup）、镜像分层原理、Dockerfile 优化、volume 与 bind mount 区别、容器网络模式（bridge/host/overlay）、如何排查容器内网络问题（exec 进容器、nslookup、curl 检查连通性）。
 
-# Reference
+## Reference
 
 1. Docker Inc. Docker 官方文档（含 Compose）. docs.docker.com. 访问时间: 2026-09-13. https://docs.docker.com/
 2. Docker Inc. Dockerfile Reference（指令规范）. docs.docker.com/reference/dockerfile. 访问时间: 2026-09-13.
 3. Kubernetes. Kubernetes 官方文档（容器编排进阶）. kubernetes.io/zh-cn/docs. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

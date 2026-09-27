@@ -441,18 +441,21 @@ async function requestChange() {
 async function confirmSync() {
   const userId = getUserId();
   if (!userId || !hasDraft.value) return;
+  const session = activeSession.value;
   syncing.value = true;
   try {
-    const result = await api.syncChatProfile({ user_id: userId, profile: draft.value });
+    const result = await api.syncChatProfile({ user_id: userId, profile: session.draft });
     profiles.profile = result.profile as StudentProfile;
     user.user = result.profile as StudentProfile;
-    draft.value = {};
-    profileMessages.value.push(createMessage("assistant", "已按你的确认更新就业档案。我们还可以继续聊，之后识别出的新内容仍会先放进草稿。"));
-    touchSession();
+    if (!result.skipped.length) session.draft = {};
+    session.profileMessages.push(createMessage("assistant", result.skipped.length
+      ? "可保存的内容已更新到就业档案，草稿已保留。尚未保存的内容：" + result.skipped.join("；") + "。你可以继续补充后再次确认。"
+      : "已按你的确认更新就业档案。我们还可以继续聊，之后识别出的新内容仍会先放进草稿。"));
+    session.updatedAt = new Date().toISOString();
     persist();
-    draftDrawer.value = false;
+    if (!result.skipped.length) draftDrawer.value = false;
     if (result.skipped.length) {
-      ElMessage.warning(`档案已更新；${result.skipped.join("；")}，这些内容需要继续补充后才能保存。`);
+      ElMessage.warning(`可保存的内容已更新，草稿已保留；${result.skipped.join("；")}。`);
     } else {
       ElMessage.success("档案已更新");
     }

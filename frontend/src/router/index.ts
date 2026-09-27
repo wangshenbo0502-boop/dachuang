@@ -15,6 +15,7 @@ const routes=[
     {path:"coach",name:"coach",component:()=>import("@/views/coach/CoachView.vue"),meta:{title:"AI求职助手"}},
     {path:"jobs",name:"jobs",component:()=>import("@/views/jobs/JobsView.vue"),meta:{title:"岗位方向匹配"}},
     {path:"jobs/:id",name:"job-detail",component:()=>import("@/views/jobs/JobDetailView.vue"),meta:{title:"岗位详情"}},
+    {path:"applications",name:"applications",component:()=>import("@/views/applications/ApplicationsView.vue"),meta:{title:"投递助手"}},
     {path:"resume",name:"resume",component:()=>import("@/views/resume/ResumeView.vue"),meta:{title:"简历优化"}},
     {path:"growth",name:"growth",component:()=>import("@/views/growth/GrowthView.vue"),meta:{title:"成长规划"}},
     {path:"resources",name:"resources",component:()=>import("@/views/resources/ResourcesView.vue"),meta:{title:"就业资源"}},

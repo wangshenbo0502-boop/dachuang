@@ -1,9 +1,13 @@
 ---
-title: Go语言
-category: skills
-tags: [Go, Golang, 后端开发, 云原生, 编程语言]
-source: [Go官方文档, 菜鸟教程, 掘金Go专栏, Go语言高级编程]
-last_update: 2026-07-28
+id: "skills-go-3a7738ae2a"
+title: "Go语言"
+category: "skills"
+tags: ["Go", "Golang", "后端开发", "云原生", "编程语言"]
+keywords: ["Go语言", "技能", "Go", "语言", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）", "学习建议与进阶路径"]
+summary: "云原生时代的首选编程语言，以简洁高效、原生并发、编译型强类型著称。Go 是 Docker、Kubernetes、etcd 等云原生基础设施的核心语言，2026 年 Go 开发者岗位需求持续增长，在微服务、云原生、分布式系统领域占据主导地位，平均薪资位列后端开发前三。"
+source: ["Go官方文档", "菜鸟教程", "掘金Go专栏", "Go语言高级编程"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # Go语言
@@ -122,8 +126,13 @@ last_update: 2026-07-28
 - **工程实践**：积极参与开源项目，学习大型 Go 项目的工程化最佳实践
 - **云原生方向**：结合 Docker、Kubernetes、etcd 深入云原生生态，是 Go 开发者的核心赛道
 - **性能意识**：养成使用 pprof、race detector、benchmark 等工具进行性能分析与调优
-# Reference
+## Reference
 
 1. The Go Authors. Go 官方文档与 A Tour of Go. go.dev/doc. 访问时间: 2026-09-13. https://go.dev/doc/
 2. The Go Authors. Effective Go（官方工程实践指南）. go.dev/doc/effective_go. 访问时间: 2026-09-13.
 3. Go by Example. go by example（标准库用法示例）. gobyexample.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

@@ -1,9 +1,13 @@
 ---
-title: Python
-category: skills
-tags: [编程语言, 通用, 后端, 数据科学]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-python-d9f63826e6"
+title: "Python"
+category: "skills"
+tags: ["编程语言", "通用", "后端", "数据科学"]
+keywords: ["Python", "技能", "阶段 1 — 目标：了解（预估 3 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 3 周）"]
+summary: "简洁优雅的通用编程语言。就业方向极广：后端开发、数据分析、AI/机器学习、自动化运维。学生最容易上手的第一门语言。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # Python
@@ -79,8 +83,13 @@ date: 2026-07-28
 - 为关键接口写 pytest 测试
 
 **评估方式：** 测试覆盖率 — 核心业务代码测试覆盖率 > 80%，接口文档完整可交互
-# Reference
+## Reference
 
 1. Python Software Foundation. Python 3 官方文档. docs.python.org/zh-cn/3. 访问时间: 2026-09-13. https://docs.python.org/zh-cn/3/
 2. Python Software Foundation. PEP 索引（Python 增强提案）. peps.python.org. 访问时间: 2026-09-13.
 3. PyPA. pip 与 Python 打包官方文档. pip.pypa.io. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

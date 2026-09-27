@@ -8,6 +8,7 @@ from app.models.job import JobMatchRecord
 from app.models.analysis import ProfileAnalysis
 from app.models.resume import Resume, ResumeOptimization
 from app.models.growth import GrowthPlan
+from app.models.application import JobApplication
 
 __all__ = [
     "User",
@@ -20,6 +21,7 @@ __all__ = [
     "ResumeOptimization",
     "Resume",
     "GrowthPlan",
+    "JobApplication",
     "Account",
     "EmailCode",
 ]

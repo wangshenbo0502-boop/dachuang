@@ -1,9 +1,13 @@
 ---
-title: Google中国
-category: companies
-tags: [外企, 搜索引擎, 云计算, AI, 超大型]
-source: [Google招聘官网, BOSS直聘, 脉脉, 牛客网, CSDN 2026薪资报告]
-last_update: 2026-07-28
+id: "companies-google-695034541f"
+title: "Google中国"
+category: "companies"
+tags: ["外企", "搜索引擎", "云计算", "AI", "超大型"]
+keywords: ["Google中国", "企业", "Google", "中国", "公司概况", "主营业务", "招聘岗位", "校招情况", "社招情况", "技术栈", "面试特点", "薪资福利"]
+summary: "- 行业 : 搜索引擎/云计算/人工智能 - 规模 : 超大型（全球18万+人，中国区约1500人） - 中国区总部 : 上海 - 研发中心 : 北京、上海、深圳 - 目标院校 : 985顶尖院校及海外名校为主，学历背景要求极高 - 公司地位 : 全球最大搜索引擎公司，Alphabet旗下核心子公司，AI技术全。"
+source: ["Google招聘官网", "BOSS直聘", "脉脉", "牛客网", "CSDN 2026薪资报告"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # Google中国
@@ -180,3 +184,8 @@ Google中国的业务以Google Cloud（谷歌云）和广告业务为主，核�
 - 脉脉 - Google员工薪资与面试经验分享
 - 牛客网 - Google面试题与面经汇总
 - CSDN 2026薪资报告 - 外企薪资调研
+## Related Knowledge
+
+- [Apple中国](Apple中国.md)
+- [MiniMax（稀宇科技）](MiniMax（稀宇科技）.md)
+- [Shopee中国](Shopee中国.md)

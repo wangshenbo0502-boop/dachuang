@@ -1,11 +1,13 @@
 ---
-title: NLP 文本情感分析
-category: AI
-difficulty: 进阶
-tech_stack: [Python, PyTorch/Transformers, FastAPI]
-estimated_hours: 50
-source: projects.json
-date: 2026-07-28
+id: "projects-nlp-dd62307d2a"
+title: "NLP 文本情感分析"
+category: "projects"
+tags: ["项目", "NLP 文本情感分析"]
+keywords: ["NLP 文本情感分析", "项目", "NLP", "文本情感分析", "项目概述", "核心功能", "技术收获", "适合人群", "前置技能"]
+summary: "用预训练 BERT 模型微调一个中文文本情感分析器并部署为 API。NLP 方向入门的最佳实践项目。"
+source: ["projects.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # NLP 文本情感分析
@@ -39,7 +41,7 @@ date: 2026-07-28
 - 深度学习基础
 - PyTorch基础
 
-# 技术难点与面试展开点
+## 技术难点与面试展开点
 
 **文本预处理管线**是第一层展示：中文分词（jieba）或子词切分（BPE/WordPiece）、停用词过滤的利弊权衡（"不"类停用词不能删——直接翻转情感）、文本清洗（HTML/表情/URL 的处理策略）。
 
@@ -49,17 +51,30 @@ date: 2026-07-28
 
 **面试高频**：TF-IDF 原理、Word2Vec 的两种结构（CBOW/Skip-gram）、BERT 的预训练任务（MLM/NSP）、为什么中文 BERT 前要分词处理或直接用字级、评估指标选择（不均衡场景看什么）。
 
-# 项目演进路线与推荐资源
+## 项目演进路线与推荐资源
 
 **演进路线**：基础版（TF-IDF + 朴素贝叶斯基线，建立指标参照）→ 进阶版（BiLSTM + 注意力，与基线对比）→ 完整版（BERT 微调 + FastAPI 部署 + 误判案例分析报告）。"三阶段对比实验表格"（准确率/F1/推理耗时）是这份简历最有说服力的一行。
 
 **推荐资源**：HuggingFace Course（官方免费 NLP 课程，含中文）；《Speech and Language Processing》（Jurafsky & Martin，第 3 版草稿免费公开）；Chinese-BERT-wwm 与 RoBERTa-wwm（中文预训练模型，哈工大讯飞开源）；天河等公开中文情感数据集（ChnSentiCorp 等）。
 
-# 简历定位
+## 简历定位
 
 适合算法/AI 应用方向。定位示例："情感分析三阶段对比实验（TF-IDF+NB / BiLSTM / BERT 微调），F1 从 0.81 提升至 0.93，FastAPI 服务化"。用对比实验展示方法演进认知，是大模型应用岗位的有效敲门砖。
 
-# Reference
+## Reference
 
 1. GitHub. 相关开源项目与技术文档. github.com. 访问时间: 2026-09-13.
 2. LeetCode. 力扣题库（项目相关算法题）. leetcode.cn. 访问时间: 2026-09-13.
+
+## NLP 文本情感分析的实践与求职证据
+
+使用本项目知识时，建议把项目目标、使用者、核心流程、个人负责范围、技术选择、异常处理、测试结果和可展示材料分别记录。描述项目经历时，优先写清楚本人完成了什么、解决了什么问题、产出了什么结果；没有可靠数据时不要补写用户量、性能提升或商业收益。
+
+实践验证可以从最小可运行版本开始：准备一组正常输入、一组边界输入和一组错误输入，记录系统行为、预期结果和待改进点。展示材料可包括架构图、接口文档、测试记录、部署截图、演示地址、代码仓库或复盘文档，但涉及个人信息、企业数据和商业秘密时应脱敏。
+
+面向求职时，可将本项目整理为一张能力证据卡，注明项目时间、团队规模、个人职责、关键决策和证据链接。AI 只能帮助压缩表达和匹配岗位关键词，不能新增不存在的角色、奖项、数字或技术成果。
+## Related Knowledge
+
+- [AI 图像分类应用](AI 图像分类应用.md)
+- [AI智能体Agent协作平台](AI智能体Agent协作平台.md)
+- [API 网关与限流系统](API 网关与限流系统.md)

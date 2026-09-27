@@ -1,9 +1,13 @@
 ---
-title: RAG检索增强生成
-category: skills
-tags: [AI, 大模型, 检索增强, 知识库]
-source: [腾讯云开发者社区, DeepSeek RAG实战, CSDN 2026技术趋势, LangChain官方博客]
-last_update: 2026-07-28
+id: "skills-rag-c22b5f990b"
+title: "RAG检索增强生成"
+category: "skills"
+tags: ["AI", "大模型", "检索增强", "知识库"]
+keywords: ["RAG检索增强生成", "技能", "RAG", "检索增强生成", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）", "学习建议与进阶路径"]
+summary: "企业级AI应用的标准架构，通过外部知识库检索增强大模型回答，有效解决幻觉和知识时效性问题。2026年超过75%的企业AI落地采用RAG架构，RAG工程师岗位同比增长80%以上，是AI应用开发的核心技术方向。"
+source: ["腾讯云开发者社区", "DeepSeek RAG实战", "CSDN 2026技术趋势", "LangChain官方博客"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # RAG检索增强生成
@@ -118,8 +122,13 @@ last_update: 2026-07-28
 - **关注前沿**：跟踪 Graph RAG、Agentic RAG、Self-RAG 等新兴技术方向
 - **全栈能力**：结合向量数据库、Embedding 模型、推理引擎，构建端到端优化能力
 - **业务理解**：深入理解业务场景与知识结构，设计与业务匹配的 RAG 架构方案
-# Reference
+## Reference
 
 1. Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (NeurIPS 2020). arxiv.org/abs/2005.11401. 访问时间: 2026-09-13.
 2. LangChain. RAG 官方教程（Build a RAG App）. python.langchain.com/docs/tutorials/rag. 访问时间: 2026-09-13.
 3. LlamaIndex. LlamaIndex 官方文档（数据框架与索引）. docs.llamaindex.ai. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

@@ -1,9 +1,13 @@
 ---
-title: Kubernetes
-category: skills
-tags: [云原生, 容器编排, DevOps, 运维]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-kubernetes-7482578d04"
+title: "Kubernetes"
+category: "skills"
+tags: ["云原生", "容器编排", "DevOps", "运维"]
+keywords: ["Kubernetes", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）"]
+summary: "容器编排的事实标准，云原生时代的\\"操作系统\\"，DevOps/SRE 必备技能。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # Kubernetes
@@ -82,8 +86,13 @@ date: 2026-07-28
 ---
 
 **来源：** CNCF 2025 云原生报告、Kubernetes 官方文档、掘金云原生专栏、猎聘运维岗位 JD（访问时间：2026-07-28）
-# Reference
+## Reference
 
 1. Kubernetes. Kubernetes 官方文档（中文）. kubernetes.io/zh-cn/docs. 访问时间: 2026-09-13. https://kubernetes.io/zh-cn/docs/home/
 2. CNCF. Cloud Native Computing Foundation 项目全景图. landscape.cncf.io. 访问时间: 2026-09-13.
 3. Kubernetes. Kubernetes API 概念与 Pod 生命周期规范. kubernetes.io/docs/concepts. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

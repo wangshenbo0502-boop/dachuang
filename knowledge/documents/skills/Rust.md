@@ -1,9 +1,13 @@
 ---
-title: Rust语言
-category: skills
-tags: [Rust, 系统编程, WebAssembly, 内存安全, 编程语言]
-source: [Rust官方文档, Rust程序设计语言, 掘金Rust专栏, Rust圣经]
-last_update: 2026-07-28
+id: "skills-rust-a76f3871b2"
+title: "Rust语言"
+category: "skills"
+tags: ["Rust", "系统编程", "WebAssembly", "内存安全", "编程语言"]
+keywords: ["Rust语言", "技能", "Rust", "语言", "阶段 1 — 目标：了解（预估 3 周）", "阶段 2 — 目标：熟悉（预估 4 周）", "阶段 3 — 目标：掌握（预估 5 周）", "学习建议与进阶路径"]
+summary: "由Mozilla主导开发的系统级编程语言，以内存安全、零成本抽象和并发安全为核心特性。2026年Rust连续第11年蝉联Stack Overflow\\"最受喜爱编程语言\\"，Linux内核、Android系统、Windows驱动均已引入Rust，区块链(Solana)、WebAssembly、云原生基础设施等领域R。"
+source: ["Rust官方文档", "Rust程序设计语言", "掘金Rust专栏", "Rust圣经"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # Rust语言
@@ -128,8 +132,13 @@ last_update: 2026-07-28
 - **拥抱生态**：crates.io有丰富的第三方库，优先使用成熟crate，避免重复造轮子
 - **社区参与**：关注Rust官方博客、Inside Rust论坛，参与RFC讨论，紧跟语言演进
 - **方向深耕**：Rust应用领域广泛（系统编程/区块链/WebAssembly/云原生/嵌入式），建议选定一个方向深入发展
-# Reference
+## Reference
 
 1. The Rust Project. The Rust Programming Language（官方书，中文版）. doc.rust-lang.org/book. 访问时间: 2026-09-13. https://kaisery.github.io/trpl-zh-cn/
 2. The Rust Project. Rust 标准库文档. doc.rust-lang.org/std. 访问时间: 2026-09-13.
 3. Rust Community. Rust by Example. doc.rust-lang.org/rust-by-example. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

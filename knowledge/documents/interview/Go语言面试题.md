@@ -1,11 +1,13 @@
 ---
+id: "interview-go-7749e4a4a8"
 title: "Go语言面试题（20题）"
-category: "面试题"
-type: "Go后端"
-difficulty: "中等"
+category: "interview"
 tags: ["Go", "Golang", "后端", "并发", "GMP"]
+keywords: ["Go语言面试题（20题）", "面试", "Go", "语言面试题", "Q1: Go的GMP调度模型", "Q2: Go的协程（goroutine）和线程的区别", "Q3: Go的channel原理和使用", "Q4: Go的defer执行顺序", "Q5: Go的make和new的区别", "Q6: Go的切片（slice）底层实现", "Q7: Go的map底层实现和是否线程安全", "Q8: Go的interface底层实现"]
+summary: "考察点 : Go并发调度原理、GMP模型组成、调度流程。"
 source: ["Go官方文档", "《Go语言设计与实现》", "字节跳动面试题"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 ## Q1: Go的GMP调度模型
@@ -1454,3 +1456,8 @@ Go并发安全的最佳实践：
 3. Go 语言圣经（The Go Programming Language）- https://gopl.io/ (访问时间：2026-07-28)
 4. 深度解密Go语言 - https://www.51cto.com/ (访问时间：2026-07-28)
 5. 字节跳动技术团队Go面试题集 (访问时间：2026-07-28)
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

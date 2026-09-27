@@ -1,11 +1,13 @@
 ---
+id: "interview-vue-react-9f415a3931"
 title: "Vue/React框架面试题（20题）"
-category: "面试题"
-type: "前端"
-difficulty: "中等"
+category: "interview"
 tags: ["Vue", "React", "前端框架", "响应式", "虚拟DOM"]
+keywords: ["Vue/React框架面试题（20题）", "面试", "Vue/React", "框架面试题", "Q1: Vue 的响应式原理是什么？（Object.defineProperty / Proxy）", "Q2: Vue 的虚拟 DOM 和 Diff 算法", "Q3: Vue 组件通信的方式有哪些？", "Q4: Vue 的生命周期钩子函数有哪些？", "Q5: computed 和 watch 的区别是什么？", "Q6: v-if 和 v-show 的区别是什么？", "Q7: v-for 为什么要加 key？", "Q8: nextTick 的原理和使用场景是什么？"]
+summary: "Vue/React 框架面试题（20题）。"
 source: ["Vue官方文档", "React官方文档", "前端面试题库", "掘金前端社区"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # Vue/React 框架面试题（20题）
@@ -1846,3 +1848,8 @@ function MyComponent() {
 
 5. Vue3 源码解析 - GitHub. https://github.com/vuejs/core
    访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

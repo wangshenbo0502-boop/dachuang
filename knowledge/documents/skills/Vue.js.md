@@ -1,9 +1,13 @@
 ---
-title: Vue.js
-category: skills
-tags: [框架, 前端, JavaScript]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-vue-js-cb63890b90"
+title: "Vue.js"
+category: "skills"
+tags: ["框架", "前端", "JavaScript"]
+keywords: ["Vue.js", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 3 周）"]
+summary: "国内使用最广泛的前端框架之一，上手友好但生态完整。初级前端岗位高频要求项。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # Vue.js
@@ -80,7 +84,7 @@ date: 2026-07-28
 
 **评估方式：** 代码审查+性能测试 — 组件的 props 类型完整，有使用文档，Lighthouse 评分 > 80
 
-# 进阶要点与面试高频
+## 进阶要点与面试高频
 
 Vue 3 的响应式系统建立在 **Proxy** 之上（对比 Vue 2 的 Object.defineProperty：可监听新增/删除属性与数组索引、无需递归初始化）：track 在 getter 中收集依赖（副作用函数），trigger 在 setter 中派发更新；ref 对基本类型包装为带 value 的响应式对象，reactive 用于对象。**编译优化**是 Vue 3 的杀手锏：模板编译期进行静态提升（hoistStatic）、Patch Flag（标记动态节点类型，diff 时只比较标记部分）、块树（Block Tree）收集动态后代——这使得 Vue 的更新性能接近手写优化代码。
 
@@ -88,8 +92,13 @@ Vue 3 的响应式系统建立在 **Proxy** 之上（对比 Vue 2 的 Object.def
 
 生态坐标：Vite（作者同为尤雨溪，基于原生 ESM 的秒级冷启动）、Pinia（官方状态管理，TypeScript 友好）、Vue Router 4。与 React 的选型对比要客观：Vue 的模板 DSL 与编译优化在中小团队上手更快，React 的 JSX 灵活性与生态纵深在超大规模团队更主流；面试中能说出双方 Trade-off 而非站队，是加分的表达方式。面试高频：Proxy 与 defineProperty 区别、ref 与 reactive 选用、computed 与 watch 场景、v-if 与 v-show、key 的作用与 diff 策略、nextTick 原理。
 
-# Reference
+## Reference
 
 1. Vue.js. Vue 3 官方文档（中文）. cn.vuejs.org/guide. 访问时间: 2026-09-13. https://cn.vuejs.org/guide/introduction.html
 2. Vue.js. Vue 3 深入响应式系统（官方原理篇）. cn.vuejs.org/guide/extras/reactivity-in-depth. 访问时间: 2026-09-13.
 3. Vue.js. Pinia 官方文档（官方状态管理）. pinia.vuejs.org/zh. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

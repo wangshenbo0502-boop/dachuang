@@ -1,9 +1,13 @@
 ---
-title: PyTorch
-category: skills
-tags: [AI, 深度学习, Python, 框架]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-pytorch-c96f49da90"
+title: "PyTorch"
+category: "skills"
+tags: ["AI", "深度学习", "Python", "框架"]
+keywords: ["PyTorch", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 2 周）"]
+summary: "当前学术界和工业界最主流的深度学习框架，API 设计直观 Pythonic，动态计算图灵活方便。AI 岗位必会框架。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # PyTorch
@@ -55,7 +59,7 @@ date: 2026-07-28
 
 **评估方式：** 代码审查 — GPU 利用率 > 70%，训练日志能在 TensorBoard 中查看
 
-# 原理与面试高频
+## 原理与面试高频
 
 PyTorch 是动态图（define-by-run）深度学习框架：计算图随代码执行即时构建，调试直观、与 Python 生态无缝衔接，这使它成为学术研究与工业研发的主流选择（主流顶会论文复现与开源大模型几乎都以 PyTorch 为首选项）。
 
@@ -65,8 +69,13 @@ PyTorch 是动态图（define-by-run）深度学习框架：计算图随代码�
 
 面试高频：动态图与静态图区别、autograd 原理与 requires_grad 作用、zero_grad 为什么必要、DDP 与 DP 区别、混合精度原理与精度损失处理、过拟合时的训练策略（正则化/早停/数据增强）。
 
-# Reference
+## Reference
 
 1. PyTorch. PyTorch 官方文档与 Tutorials. pytorch.org/docs / pytorch.org/tutorials. 访问时间: 2026-09-13. https://pytorch.org/tutorials/
 2. PyTorch. torch.distributed 与 DDP 官方指南. pytorch.org/docs/stable/distributed.html. 访问时间: 2026-09-13.
 3. PyTorch Foundation. PyTorch GitHub 仓库. github.com/pytorch/pytorch. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

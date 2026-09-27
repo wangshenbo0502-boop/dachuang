@@ -1,11 +1,13 @@
 ---
+id: "interview-redis-a8288a09b0"
 title: "Redis面试题（20题）"
-category: "面试题"
-type: "中间件"
-difficulty: "中等"
+category: "interview"
 tags: ["Redis", "缓存", "中间件", "数据结构", "分布式"]
+keywords: ["Redis面试题（20题）", "面试", "Redis", "面试题", "Q1: Redis的特点和应用场景", "Q2: Redis的数据类型及使用场景", "Q3: Redis为什么快", "Q4: Redis的持久化机制（RDB和AOF）", "Q5: Redis的过期键删除策略", "Q6: Redis的内存淘汰策略", "Q7: Redis的缓存穿透、缓存击穿、缓存雪崩", "Q8: Redis和数据库的双写一致性"]
+summary: "考察点 : Redis特性、适用场景、与其他缓存的区别。"
 source: ["Redis官方文档", "《Redis设计与实现》", "字节跳动面试题"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 ## Q1: Redis的特点和应用场景
@@ -854,14 +856,14 @@ Redis提供了发布订阅模式，实现消息的一对多传播。
 # 订阅者
 SUBSCRIBE news        # 订阅news频道
 
-# 发布者
+## 发布者
 PUBLISH news "hello"  # 向news频道发布消息
 ```
 
 **模式匹配订阅**：
 ```bash
 PSUBSCRIBE news.*     # 订阅所有以news.开头的频道
-# news.sport、news.tech等频道的消息都能收到
+## news.sport、news.tech等频道的消息都能收到
 ```
 
 **特点**：
@@ -1203,22 +1205,22 @@ Redis官方提供的分布式集群方案，实现了数据分片和高可用。
 ```bash
 SETNX lock_key value    # 加锁
 EXPIRE lock_key 30      # 设过期时间，防止死锁
-# 问题：SETNX和EXPIRE之间可能崩溃，导致锁永远不释放
+## 问题：SETNX和EXPIRE之间可能崩溃，导致锁永远不释放
 ```
 
 **方案2：SET命令原子操作（推荐）**：
 ```bash
 SET lock_key value NX EX 30
-# NX：key不存在时才设置（Not eXists）
-# EX 30：过期时间30秒
-# 原子操作，不会有中间状态
+## NX：key不存在时才设置（Not eXists）
+## EX 30：过期时间30秒
+## 原子操作，不会有中间状态
 ```
 
 **方案3：解锁（需要原子性）**：
 ```bash
-# 不能直接DEL，因为可能删了别人的锁
-# 应该先判断是不是自己的锁，再删除
-# 用Lua脚本保证原子性
+## 不能直接DEL，因为可能删了别人的锁
+## 应该先判断是不是自己的锁，再删除
+## 用Lua脚本保证原子性
 if redis.call("get", KEYS[1]) == ARGV[1] then
     return redis.call("del", KEYS[1])
 else
@@ -1578,11 +1580,11 @@ Redis的有序集合，每个元素有一个score，按score排序。
 
 **使用示例**（伪代码）：
 ```python
-# 不用管道：N次命令 → N次网络往返
+## 不用管道：N次命令 → N次网络往返
 for i in range(1000):
     redis.set(f"key{i}", i)
 
-# 用管道：1次网络往返
+## 用管道：1次网络往返
 pipe = redis.pipeline()
 for i in range(1000):
     pipe.set(f"key{i}", i)
@@ -1847,3 +1849,8 @@ Redis和Memcached都是常用的内存键值存储系统，常用作缓存。
 3. 《Redis深度历险：核心原理和应用实践》 - 钱文品 (访问时间：2026-07-28)
 4. Redis 设计与实现源码分析 - https://redisbook.readthedocs.io/ (访问时间：2026-07-28)
 5. 字节跳动技术团队Redis面试题集 (访问时间：2026-07-28)
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

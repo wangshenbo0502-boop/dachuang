@@ -1,9 +1,13 @@
 ---
-title: Linux运维
-category: skills
-tags: [运维, Linux, 服务器]
-source: [鸟哥的Linux私房菜, Linux官方文档, 掘金运维专栏, BOSS直聘运维岗位JD]
-last_update: 2026-07-28
+id: "skills-linux-ced75f4853"
+title: "Linux运维"
+category: "skills"
+tags: ["运维", "Linux", "服务器"]
+keywords: ["Linux运维", "技能", "Linux", "运维", "技能图谱概览", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）", "常见面试题", "学习路径建议"]
+summary: "Linux 是服务器操作系统的绝对主流，是后端、运维、DevOps、安全岗位的基础技能，掌握 Linux 是进入云计算时代的必备通行证。"
+source: ["鸟哥的Linux私房菜", "Linux官方文档", "掘金运维专栏", "BOSS直聘运维岗位JD"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # Linux运维
@@ -174,8 +178,13 @@ Linux 运维
 - **深入阶段（5-10个月）**：学习 Ansible 自动化运维、Keepalived 高可用、Prometheus 监控、MySQL 运维、Docker 容器化、Kubernetes 入门，开始向云原生和 DevOps 方向转型。
 - **职业发展**：传统运维 → 自动化运维 → DevOps/SRE → 云原生架构师/技术专家，薪资随能力提升呈现阶梯式增长，向云原生转型普遍有 30%-100% 的薪资涨幅。
 - **持续学习**：关注掘金、思否、Linux 中国等技术社区，学习 Terraform、Kubernetes、Service Mesh 等云原生技术，考取 CKA、CKAD、RHCE 等认证，保持对新技术的学习热情。
-# Reference
+## Reference
 
 1. The Linux Foundation. Linux kernel 文档与 man-pages. kernel.org/doc / man7.org. 访问时间: 2026-09-13.
 2. Red Hat. Red Hat Enterprise Linux 系统管理员官方指南. access.redhat.com/documentation. 访问时间: 2026-09-13.
 3. The Linux Documentation Project. TLDP 文档集. tldp.org. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

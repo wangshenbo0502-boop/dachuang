@@ -1,11 +1,13 @@
 ---
+id: "interview-javascript-532d1d25bf"
 title: "JavaScript基础面试题（20题）"
-category: "面试题"
-type: "前端"
-difficulty: "中等"
+category: "interview"
 tags: ["JavaScript", "前端基础", "闭包", "原型链", "事件循环"]
+keywords: ["JavaScript基础面试题（20题）", "面试", "JavaScript", "基础面试题", "Q1: 什么是闭包？闭包的应用场景有哪些？", "Q2: 什么是原型和原型链？", "Q3: 什么是事件循环（Event Loop）？", "Q4: 宏任务和微任务有哪些？执行顺序是怎样的？", "Q5: var、let、const 的区别是什么？", "Q6: 箭头函数和普通函数的区别是什么？", "Q7: this 的指向问题有哪些场景？", "Q8: 什么是作用域和作用域链？"]
+summary: "JavaScript 基础面试题（20题）。"
 source: ["MDN Web Docs", "ECMAScript 标准", "前端面试题库", "掘金前端社区"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # JavaScript 基础面试题（20题）
@@ -1742,3 +1744,8 @@ function delegate(parent, eventType, selector, handler) {
 
 5. 前端面试题精选 - GitHub. https://github.com/haizlin/fe-interview
    访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

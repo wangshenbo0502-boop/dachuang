@@ -1,8 +1,13 @@
 ---
-title: AI算法工程师面试题
-type: interview_questions
-role: AI算法工程师
-version: "0.2.0"
+id: "interview-ai-18c3d7787c"
+title: "AI算法工程师面试题"
+category: "interview"
+tags: ["面试", "AI算法工程师面试题"]
+keywords: ["AI算法工程师面试题", "面试", "AI", "算法工程师面试题", "技术考察重点", "高频面试题"]
+summary: "- 机器学习理论（过拟合/正则化/偏差方差） - 深度学习（CNN/RNN/Transformer） - PyTorch/TensorFlow 实战 - 数学基础（线性代数/概率论） - 模型评估与优化 - 模型部署。"
+source: ["https://leetcode.cn/"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # AI算法工程师面试题
@@ -230,10 +235,15 @@ Attention(Q, K, V) = softmax(QK^T / √d_k) V
 **加分项**：能说出论文名称、GitHub 上有实现、提到部署相关经验。
 
 </details>
-# Reference
+## Reference
 
 1. LeetCode. 力扣题库与官方题解. leetcode.cn. 访问时间: 2026-09-13. https://leetcode.cn/
 2. Andrew Ng. CS229 Machine Learning 讲义. cs229.stanford.edu. 访问时间: 2026-09-13.
 3. 李沐等. 动手学深度学习（中文开源教材）. zh.d2l.ai. 访问时间: 2026-09-13.
 4. HuggingFace. Transformers 官方文档. huggingface.co/docs/transformers. 访问时间: 2026-09-13.
 5. 牛客网. AI 算法岗面经汇总. nowcoder.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [Go后端开发面试题](Go后端开发面试题.md)

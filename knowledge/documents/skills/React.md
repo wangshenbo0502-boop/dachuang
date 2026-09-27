@@ -1,9 +1,13 @@
 ---
-title: React
-category: skills
-tags: [框架, 前端, JavaScript]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-react-359e8b35b2"
+title: "React"
+category: "skills"
+tags: ["框架", "前端", "JavaScript"]
+keywords: ["React", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 3 周）"]
+summary: "全球使用最广泛的前端 UI 库，大厂主流选择。配合 TypeScript 和 Next.js 是全栈岗位的核心技术。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # React
@@ -75,7 +79,7 @@ date: 2026-07-28
 
 **评估方式：** 性能测试 — Lighthouse 评分 > 85，首屏加载 < 2s
 
-# 原理与面试高频
+## 原理与面试高频
 
 React 的现代核心是 **Fiber 架构**：把渲染工作拆分为可中断的小单元（Fiber 节点），通过调度器（Scheduler，基于优先级与 MessageChannel 时间切片）协调渲染与用户交互，实现"并发渲染"。两棵 Fiber 树（current 与 workInProgress）配合双缓冲实现增量更新与中断恢复。
 
@@ -83,8 +87,13 @@ React 的现代核心是 **Fiber 架构**：把渲染工作拆分为可中断的
 
 工程层面：状态管理从 Redux（单一 store、action 不可变流）演进到轻量方案（Zustand/Jotai 原子化状态）与服务端状态专用库（TanStack Query 解决缓存/重试/失效）；Next.js 提供 SSR/SSG/RSC 全栈能力，是 React 生态事实上的全栈标准。diff 算法三假设（同类型元素复用、key 标识跨层级移动、同级多节点 O(n) 比较）决定了"为什么列表要稳定唯一的 key"这类高频题的标准答案。
 
-# Reference
+## Reference
 
 1. Meta Open Source. React 官方文档（react.dev）. react.dev. 访问时间: 2026-09-13. https://react.dev/
 2. Meta Open Source. React 19 Release Notes（Server Components / Actions）. react.dev/blog. 访问时间: 2026-09-13.
 3. Vercel. Next.js 官方文档（React 全栈框架）. nextjs.org/docs. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

@@ -1,9 +1,13 @@
 ---
-title: LangChain
-category: skills
-tags: [AI, 大模型, 应用开发, 编排框架]
-source: [LangChain官方文档, CSDN 2026技术趋势, 腾讯云开发者社区, 猎聘AI岗位JD]
-last_update: 2026-07-28
+id: "skills-langchain-974577ee91"
+title: "LangChain"
+category: "skills"
+tags: ["AI", "大模型", "应用开发", "编排框架"]
+keywords: ["LangChain", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）", "学习建议与进阶路径"]
+summary: "大模型应用开发最流行的编排框架，连接LLM与外部工具/数据的\\"胶水层\\"。LangChain + RAG 已成为大模型应用开发的事实标准，据猎聘 2026 年数据，RAG 工程师/大模型应用工程师岗位同比增长 80%+，LangChain 是该岗位的核心技能要求。"
+source: ["LangChain官方文档", "CSDN 2026技术趋势", "腾讯云开发者社区", "猎聘AI岗位JD"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # LangChain
@@ -119,8 +123,13 @@ last_update: 2026-07-28
 - **横向拓展**：结合 RAG、Agent、向量数据库等技能，构建端到端 AI 应用能力
 - **纵向深入**：研究 LangGraph 与 LangSmith 的高级用法，向 AI 架构师方向发展
 - **生态视野**：关注 LlamaIndex、Haystack 等同类框架，保持技术选型的开阔视野
-# Reference
+## Reference
 
 1. LangChain. LangChain Python 官方文档. python.langchain.com. 访问时间: 2026-09-13.
 2. LangChain. LangGraph 官方文档（Agent 工作流）. langchain-ai.github.io/langgraph. 访问时间: 2026-09-13.
 3. OpenAI. OpenAI API 官方参考. platform.openai.com/docs/api-reference. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

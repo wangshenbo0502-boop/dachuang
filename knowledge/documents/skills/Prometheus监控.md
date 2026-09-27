@@ -1,9 +1,13 @@
 ---
-title: Prometheus监控
-category: skills
-tags: [监控, 云原生, DevOps, 可观测性]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-prometheus-5f906ec87e"
+title: "Prometheus监控"
+category: "skills"
+tags: ["监控", "云原生", "DevOps", "可观测性"]
+keywords: ["Prometheus监控", "技能", "Prometheus", "监控", "阶段 1 — 目标：了解（预估 1.5 周）", "阶段 2 — 目标：熟悉（预估 2 周）", "阶段 3 — 目标：掌握（预估 3 周）"]
+summary: "云原生时代的监控标准，CNCF 毕业项目，与 Grafana 组成可观测性核心。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # Prometheus监控
@@ -81,8 +85,13 @@ date: 2026-07-28
 ---
 
 **来源：** Prometheus 官方文档、CNCF 可观测性报告、腾讯云监控、阿里云 Prometheus（访问时间：2026-07-28）
-# Reference
+## Reference
 
 1. Prometheus. Prometheus 官方文档. prometheus.io/docs. 访问时间: 2026-09-13. https://prometheus.io/docs/introduction/overview/
 2. CNCF. Prometheus（CNCF 毕业项目）. cncf.io/projects/prometheus. 访问时间: 2026-09-13.
 3. Grafana Labs. Grafana 官方文档（可视化与告警）. grafana.com/docs. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

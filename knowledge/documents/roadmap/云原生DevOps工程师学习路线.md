@@ -1,9 +1,13 @@
 ---
-title: 云原生/DevOps工程师学习路线
-category: roadmap
-tags: [云原生, DevOps, Kubernetes, 运维开发, 学习路线]
-source: [CNCF 2025年度报告, 猎聘DevOps岗位薪酬分析, 掘金云原生专栏, 阿里云开发者社区, InfoQ技术社区]
-last_update: 2026-07-28
+id: "roadmap-devops-af6419ad5b"
+title: "云原生/DevOps工程师学习路线"
+category: "roadmap"
+tags: ["云原生", "DevOps", "Kubernetes", "运维开发", "学习路线"]
+keywords: ["云原生/DevOps工程师学习路线", "成长路线", "云原生", "DevOps", "工程师学习路线", "路线概述", "分阶段成长路径", "学习资源推荐", "证书推荐", "常见误区", "职业发展建议", "Reference"]
+summary: "云原生是基础设施的未来，Kubernetes已成为容器编排的事实标准。DevOps是研发效能提升的关键方法论，横跨开发、测试、运维三大领域。伴随企业全面上云和数字化转型，云原生/DevOps工程师需求持续爆发式增长。"
+source: ["CNCF 2025年度报告", "猎聘DevOps岗位薪酬分析", "掘金云原生专栏", "阿里云开发者社区", "InfoQ技术社区"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # 云原生/DevOps工程师学习路线
@@ -179,3 +183,8 @@ last_update: 2026-07-28
 - 掘金. 云原生技术专栏. https://juejin.cn. 访问时间：2026-07-28
 - 阿里云开发者社区. 云原生学习路径. https://developer.aliyun.com. 访问时间：2026-07-28
 - InfoQ. 云原生架构与实践专题. https://www.infoq.cn. 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI产品经理学习路线](AI产品经理学习路线.md)
+- [AI大模型应用工程师学习路线](AI大模型应用工程师学习路线.md)
+- [career_paths](career_paths.md)

@@ -10,7 +10,7 @@ const app = useAppStore();
 <template>
   <header class="top-header">
     <div class="header-left">
-      <el-button class="mobile-menu" :icon="Menu" circle aria-label="打开导航" @click="app.toggleMobile" />
+      <el-button class="mobile-menu" :icon="Menu" circle aria-label="打开导航" aria-controls="app-sidebar" :aria-expanded="app.mobileSidebarOpen" @click="app.toggleMobile" />
       <div><span class="header-eyebrow">CAREER WORKSPACE</span><h1>就业工作台</h1></div>
     </div>
     <div class="header-actions">

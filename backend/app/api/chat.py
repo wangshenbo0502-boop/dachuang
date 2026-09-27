@@ -106,6 +106,7 @@ def chat_turn(request: ChatTurnRequest, db: Session = Depends(get_db), current_u
 严禁编造经历、数字或技能。每轮只问一个最关键的问题，问题要具体，优先追问项目中的目标、个人职责、技术方案和可验证成果。
 请严格返回JSON：{"reply":"给用户的一句话和一个问题","finished":false,"extracted":{"target_job":"","bio":"","skills":[],"projects":[],"competitions":[],"internships":[]},"missing":[]}。
 extracted只填写本轮对话中有明确依据的信息；技能格式为{name,proficiency,description}，项目格式为{name,role,description,tech_stack}。
+项目角色、项目说明、竞赛级别和奖项均为选填，不应因缺少这些信息阻止保存或反复追问。有名称即可保存项目或参赛经历；未说明的字段在 extracted 中省略，保存时新项目角色默认“主要负责人”，新竞赛奖项默认“已参加”，级别留空，不推断获奖。
 当用户明确表示要结束访谈、生成或保存时finished=true；否则允许继续补充。"""
     user = f"目标岗位：{request.target_job or '尚未确定'}\n已有档案：{context}\n对话：\n{_conversation_text(request)}"
     result = DeepSeekClient.instance().chat_json(
@@ -135,6 +136,8 @@ def profile_turn(request: ChatTurnRequest, db: Session = Depends(get_db), curren
 请严格返回JSON：{"reply":"自然的一句话加一个问题","finished":false,"extracted":{"name":"","school":"","major":"","grade":"","bio":"","target_city":"","target_salary":"","skills":[],"projects":[],"competitions":[],"internships":[]},"missing":[]}。
 技能格式{name,proficiency,description}；项目格式{name,role,description,tech_stack}；竞赛格式{name,level,award,description}；实习格式{company,position,description,tech_stack}。
 用户提出更正时，extracted 必须返回相同名称或相同公司岗位的记录，并只填写有明确依据的修正字段。不要自动补“掌握”“项目成员”“校级”“参与奖”等默认事实。
+项目角色、项目说明、竞赛级别和奖项均为选填，有名称即可保存项目或参赛经历；不要将这些选填字段列入 missing，不要因缺少这些字段反复追问或阻止确认保存。
+未说明的字段在 extracted 中省略，由保存逻辑为新项目默认角色“主要负责人”，为新竞赛默认“已参加”，竞赛级别留空。可以向用户说明这些默认规则，但不能把默认值当成用户明确说过的事实，也不能覆盖已有的具体角色或奖项。
 当用户明确表示准备确认或保存时finished=true；否则允许继续补充。回复要让用户知道可以直接说“没有”或“跳过”。"""
     user = f"已有档案：{context}\n对话：\n{_conversation_text(request)}"
     result = DeepSeekClient.instance().chat_json(

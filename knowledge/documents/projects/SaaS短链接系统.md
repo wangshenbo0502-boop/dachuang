@@ -1,11 +1,13 @@
 ---
-title: SaaS短链接系统
-category: 后端
-difficulty: 进阶
-tech_stack: [Java 17, Spring Boot 3, Spring Cloud Alibaba, MySQL, Redis, RocketMQ, ShardingSphere, Elasticsearch, Vue3]
-estimated_hours: 90
-source: [Gitee爆炸坚果star仓库, CSDN后端项目, GitHub shortlink开源项目]
-last_update: 2026-07-28
+id: "projects-saas-9187ab0d43"
+title: "SaaS短链接系统"
+category: "projects"
+tags: ["项目", "SaaS短链接系统"]
+keywords: ["SaaS短链接系统", "项目", "SaaS", "短链接系统", "项目概述", "核心功能", "技术收获", "适合人群", "前置技能", "技术栈详解", "实现步骤", "扩展方向"]
+summary: "构建一个高可用、高性能的SaaS短链接服务，支持海量短链接生成与访问统计。短链接系统是2026年后端校招的热门项目题材，涵盖分布式ID、分库分表、缓存架构、异步统计、多租户隔离等核心技术点，业务场景清晰且技术覆盖面广。"
+source: ["Gitee爆炸坚果star仓库", "CSDN后端项目", "GitHub shortlink开源项目"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # SaaS短链接系统
@@ -139,7 +141,12 @@ last_update: 2026-07-28
 - 极客时间：《Redis核心技术与实战》
 
 > Reference: 访问时间 2026-07-28
-# Reference
+## Reference
 
 1. Redis Ltd. Redis 官方文档. redis.io/docs. 访问时间: 2026-09-13.
 2. Broder et al. Network Applications of Bloom Filters (2004，布隆过滤器经典论文). 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [AI 图像分类应用](AI 图像分类应用.md)
+- [AI智能体Agent协作平台](AI智能体Agent协作平台.md)
+- [API 网关与限流系统](API 网关与限流系统.md)

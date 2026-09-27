@@ -1,11 +1,13 @@
 ---
+id: "interview-jvm-013fa019fe"
 title: "JVM面试题（20题）"
-category: "面试题"
-type: "Java后端"
-difficulty: "中等"
+category: "interview"
 tags: ["JVM", "垃圾回收", "类加载", "内存模型", "性能调优"]
+keywords: ["JVM面试题（20题）", "面试", "JVM", "面试题", "Q1: JVM内存区域划分", "Q2: 垃圾回收算法有哪些", "Q3: 垃圾收集器有哪些，各有什么特点", "Q4: 什么是类加载机制，类加载过程", "Q5: 什么是双亲委派模型，有什么好处", "Q6: 如何判断对象是否可以被回收", "Q7: 什么是内存泄漏和内存溢出", "Q8: JVM调优的常用参数"]
+summary: "本文档涵盖JVM的核心知识点，包括内存区域、垃圾回收、类加载机制、性能调优、监控工具等内容，是中高级Java工程师面试的必考内容。"
 source: ["深入理解Java虚拟机", "JVM源码分析", "美团技术团队博客"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # JVM面试题（20题）
@@ -2130,7 +2132,7 @@ jstack -F <pid>            # 强制打印（进程挂起时用）
 **常用命令**：
 ```bash
 jhat heap.hprof
-# 访问 http://localhost:7000/ 查看
+## 访问 http://localhost:7000/ 查看
 ```
 
 现在一般不用 jhat，都用 MAT（Memory Analyzer Tool）等更专业的工具。
@@ -2179,3 +2181,8 @@ JDK 自带的这些命令行工具是排查 JVM 问题的基础，必须掌握�
 3. Oracle. *Java Virtual Machine Specification*. https://docs.oracle.com/javase/specs/jvms/se8/html/, 访问时间：2026-07-28
 4. 牛客网. *JVM面试题精选*. https://www.nowcoder.com, 访问时间：2026-07-28
 5. 阿里中间件团队. *JVM源码分析之完全解读*. https://github.com/alibaba, 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

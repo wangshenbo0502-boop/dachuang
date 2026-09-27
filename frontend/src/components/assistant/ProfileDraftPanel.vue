@@ -32,6 +32,7 @@ const hasDraft = computed(() => Object.values(props.draft).some(value =>
       <el-tag effect="plain" type="success">待你确认</el-tag>
     </div>
     <p class="draft-hint">先和 AI 把信息聊清楚。这里的内容还没有写入档案，确认无误后再保存。</p>
+    <p class="draft-hint">项目角色、项目说明、竞赛级别和奖项均为选填。新项目未说明角色时默认为“主要负责人”；新竞赛未说明奖项时仅记录“已参加”，级别留空。已有的具体角色和奖项会保留。</p>
     <div class="draft-content">
       <div v-for="[key, label] in fields" :key="key" v-show="draft[key]" class="draft-row">
         <span>{{ label }}</span><b>{{ draft[key] }}</b>

@@ -1,9 +1,13 @@
 ---
-title: Apple中国
-category: companies
-tags: [外企, 硬件, 消费电子, AI, 超大型]
-source: [Apple招聘官网, BOSS直聘, 脉脉, 牛客网, 猎聘]
-last_update: 2026-07-28
+id: "companies-apple-e41fd16005"
+title: "Apple中国"
+category: "companies"
+tags: ["外企", "硬件", "消费电子", "AI", "超大型"]
+keywords: ["Apple中国", "企业", "Apple", "中国", "公司概况", "主营业务", "招聘岗位", "校招情况", "社招情况", "技术栈", "面试特点", "薪资福利"]
+summary: "- 行业 : 消费电子/硬件/软件服务 - 规模 : 超大型（全球16万+人，中国区技术岗约2000人） - 中国区总部 : 上海 - 研发中心 : 上海、北京、深圳、苏州、成都 - 目标院校 : 985/211 及海外名校，设计和硬件岗背景要求高 - 公司地位 : 全球市值最高科技公司，消费电子领域绝对领导者。"
+source: ["Apple招聘官网", "BOSS直聘", "脉脉", "牛客网", "猎聘"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # Apple中国
@@ -190,3 +194,8 @@ Apple中国以零售和支持团队为主，研发团队规模相对较小但精
 - 脉脉 - Apple员工薪资与面试经验分享
 - 牛客网 - Apple面试题与面经汇总
 - 猎聘 - Apple社招岗位与薪资信息
+## Related Knowledge
+
+- [Google中国](Google中国.md)
+- [MiniMax（稀宇科技）](MiniMax（稀宇科技）.md)
+- [Shopee中国](Shopee中国.md)

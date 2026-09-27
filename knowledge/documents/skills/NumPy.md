@@ -1,9 +1,13 @@
 ---
-title: NumPy
-category: skills
-tags: [Python, 科学计算, 数据处理]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-numpy-c417f6d859"
+title: "NumPy"
+category: "skills"
+tags: ["Python", "科学计算", "数据处理"]
+keywords: ["NumPy", "技能", "阶段 1 — 目标：了解（预估 1 周）", "阶段 2 — 目标：熟悉（预估 1 周）", "阶段 3 — 目标：掌握（预估 1.5 周）"]
+summary: "Python 科学计算基础库，提供了高效的多维数组运算。是 Pandas、机器学习等几乎所有数据相关库的底层依赖。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # NumPy
@@ -77,7 +81,7 @@ date: 2026-07-28
 
 **评估方式：** 性能对比 — 优化后的矩阵运算相比纯Python版本提速100倍以上，有基准测试报告
 
-# 进阶要点与面试高频
+## 进阶要点与面试高频
 
 NumPy 的价值核心是**向量化（vectorization）**：把循环下放到 C 层执行，比纯 Python 循环快一到两个数量级。关键机制是**广播（broadcasting）**——不同形状数组运算时按后缘维度对齐、维度不足自动补 1 再扩展的规则集；理解广播是写出地道 NumPy 代码与避免隐式错误的前提。
 
@@ -85,8 +89,13 @@ NumPy 的价值核心是**向量化（vectorization）**：把循环下放到 C 
 
 NumPy 是整个科学计算栈的地基：pandas 建立在其上（DataFrame 底层是 NumPy 数组块）、PyTorch/TensorFlow 的张量 API 与 NumPy 高度同构（numpy 与 tensor 可互相转换）、scikit-learn 的输入接口接受 ndarray。机器学习面试中的手写题（如手写 KMeans、欧氏距离矩阵计算、softmax 的数值稳定实现——减最大值防溢出）本质都考察向量化思维。面试高频：广播规则、view 与 copy 区别、axis 参数、np.where 与布尔索引、如何避免 Python 循环。
 
-# Reference
+## Reference
 
 1. NumPy. NumPy 官方文档与新手教程. numpy.org/doc. 访问时间: 2026-09-13. https://numpy.org/doc/stable/
 2. NumPy. NumPy 绝对新手指南（官方中文）. numpy.org/doc/stable/user/absolute_beginners.html. 访问时间: 2026-09-13.
 3. SciPy Lectures. Scientific Python Lectures（官方教程）. scipy-lectures.org. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

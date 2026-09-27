@@ -1,8 +1,13 @@
 ---
-title: 简历撰写综合指南
-type: resume_guide
-target_audience: 应届生
-version: "0.2.0"
+id: "resume-resume-guide-1b0a2cf106"
+title: "简历撰写综合指南"
+category: "resume"
+tags: ["简历", "简历撰写综合指南"]
+keywords: ["简历撰写综合指南", "简历", "一、推荐简历结构", "二、各模块写法规范", "三、ATS 优化技巧", "四、常见错误及修正", "五、按岗位的针对性建议"]
+summary: "1. 基本信息 2. 求职意向 3. 教育背景 4. 技术能力 5. 项目经历 6. 实习/工作经历 7. 竞赛与证书 8. 自我评价。"
+source: ["待人工核验：原文未提供公开来源"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # 简历撰写综合指南
@@ -237,8 +242,13 @@ version: "0.2.0"
 - 系统设计能力
 
 **推荐技术栈**：`React/Vue3 + TypeScript + Node.js/Python + MySQL + Docker`
-# Reference
+## Reference
 
 1. 超级简历WonderCV. 简历写作规范与HR筛选研究. wondercv.com. 访问时间: 2026-09-13.
 2. BOSS直聘. 简历投递与HR搜索机制官方说明. zhipin.com. 访问时间: 2026-09-13.
 3. 牛客网. 简历修改与校招投递经验汇总. nowcoder.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [AI大模型应用工程师简历模板与范例](AI大模型应用工程师简历模板与范例.md)
+- [前端开发工程师简历模板与范例](前端开发工程师简历模板与范例.md)
+- [后端开发工程师简历模板与范例](后端开发工程师简历模板与范例.md)

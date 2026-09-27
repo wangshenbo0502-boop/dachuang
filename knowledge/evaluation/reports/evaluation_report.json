@@ -1,0 +1,61 @@
+{
+  "executed_at": "2026-09-27T03:17:41.973008+00:00",
+  "dataset": "knowledge\\evaluation\\dataset\\rag_eval_dataset.json",
+  "queries": 30,
+  "results": {
+    "keyword": {
+      "queries": 30,
+      "recall_at_k": 0.827778,
+      "mrr": 0.734722,
+      "hit_rate_at_k": 0.866667,
+      "ndcg_at_k": 1.618646,
+      "recall_at_10": 0.9,
+      "mean_latency_ms": 54.738
+    },
+    "vector_exact": {
+      "queries": 30,
+      "recall_at_k": 0.85,
+      "mrr": 0.788611,
+      "hit_rate_at_k": 0.9,
+      "ndcg_at_k": 1.330654,
+      "recall_at_10": 0.883333,
+      "mean_latency_ms": 15.831
+    },
+    "hnsw": {
+      "queries": 30,
+      "recall_at_k": 0.8,
+      "mrr": 0.780278,
+      "hit_rate_at_k": 0.866667,
+      "ndcg_at_k": 1.299589,
+      "recall_at_10": 0.833333,
+      "mean_latency_ms": 10.581
+    },
+    "hybrid_weighted": {
+      "queries": 30,
+      "recall_at_k": 0.85,
+      "mrr": 0.762817,
+      "hit_rate_at_k": 0.9,
+      "ndcg_at_k": 1.493533,
+      "recall_at_10": 0.916667,
+      "mean_latency_ms": 0.025
+    },
+    "hybrid_rrf": {
+      "queries": 30,
+      "recall_at_k": 0.872222,
+      "mrr": 0.816667,
+      "hit_rate_at_k": 0.933333,
+      "ndcg_at_k": 1.604225,
+      "recall_at_10": 0.9,
+      "mean_latency_ms": 0.037
+    },
+    "hybrid_rrf_reranker": {
+      "queries": 30,
+      "recall_at_k": 0.872222,
+      "mrr": 0.816667,
+      "hit_rate_at_k": 0.933333,
+      "ndcg_at_k": 1.604225,
+      "recall_at_10": 0.9,
+      "mean_latency_ms": 0.001
+    }
+  }
+}

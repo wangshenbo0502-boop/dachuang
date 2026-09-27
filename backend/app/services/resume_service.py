@@ -263,7 +263,7 @@ class ResumeService:
         """
         # 处理优化后的项目
         optimized_projects = []
-        ai_projects = ai_result.get("optimized_projects", [])
+        ai_projects = self._dict_list(ai_result.get("optimized_projects"))
         user_projects = user_info.get("projects", [])
 
         # 确保每个项目都有结果
@@ -274,7 +274,7 @@ class ResumeService:
                     project_name=ai_proj.get("project_name", proj.get("name", f"项目{i+1}")),
                     original=ai_proj.get("original", proj.get("description", "")),
                     optimized=ai_proj.get("optimized", proj.get("description", "")),
-                    highlight_tags=ai_proj.get("highlight_tags", []),
+                    highlight_tags=self._string_list(ai_proj.get("highlight_tags")),
                 ))
             else:
                 optimized_projects.append(OptimizedProject(
@@ -286,7 +286,7 @@ class ResumeService:
 
         # 处理优化后的技能
         optimized_skills = []
-        ai_skills = ai_result.get("optimized_skills", [])
+        ai_skills = self._dict_list(ai_result.get("optimized_skills"))
         user_skills = user_info.get("skills", [])
 
         for i, skill in enumerate(user_skills):
@@ -305,10 +305,30 @@ class ResumeService:
         return ResumeOptimizationResult(
             optimized_projects=optimized_projects,
             optimized_skills=optimized_skills,
-            overall_suggestions=ai_result.get("overall_suggestions", [])[:5],
-            personal_summary=ai_result.get("personal_summary", ""),
-            resume_score=ai_result.get("resume_score", 60),
+            overall_suggestions=self._string_list(ai_result.get("overall_suggestions"))[:5],
+            personal_summary=self._text(ai_result.get("personal_summary")),
+            resume_score=self._score(ai_result.get("resume_score"), 60),
         )
+
+    @staticmethod
+    def _dict_list(value: object) -> list[dict]:
+        return [item for item in value if isinstance(item, dict)] if isinstance(value, list) else []
+
+    @staticmethod
+    def _string_list(value: object) -> list[str]:
+        return [item.strip() for item in value if isinstance(item, str) and item.strip()] if isinstance(value, list) else []
+
+    @staticmethod
+    def _text(value: object, fallback: str = "") -> str:
+        return value.strip() if isinstance(value, str) else fallback
+
+    @staticmethod
+    def _score(value: object, fallback: int) -> int:
+        try:
+            score = int(float(value))
+        except (TypeError, ValueError):
+            return fallback
+        return max(0, min(100, score))
 
     def _save_record(
         self,

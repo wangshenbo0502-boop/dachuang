@@ -1,9 +1,13 @@
 ---
-title: ACM-ICPC国际大学生程序设计竞赛
-category: competition
-tags: [算法竞赛, ACM, ICPC, 程序设计, 团队竞赛]
-source: [ICPC官方网站, 中国计算机学会, 牛客网, CSDN, 知乎竞赛话题]
-last_update: 2026-07-28
+id: "competition-acm-icpc-d0c2ffecf3"
+title: "ACM-ICPC国际大学生程序设计竞赛"
+category: "competition"
+tags: ["算法竞赛", "ACM", "ICPC", "程序设计", "团队竞赛"]
+keywords: ["ACM-ICPC国际大学生程序设计竞赛", "竞赛", "ACM-ICPC", "国际大学生程序设", "计竞赛", "竞赛简介", "竞赛价值", "参赛要求", "赛制说明", "含金量评级", "学习路线", "必刷OJ与题库"]
+summary: "ACM-ICPC（International Collegiate Programming Contest，国际大学生程序设计竞赛）由国际计算机协会（ACM）主办，是全球规模最大、水平最高、影响力最广的大学生程序设计竞赛，被誉为\\"算法竞赛世界杯\\"。赛事始于1977年，至今已有近50年历史，每年吸引来自全球100。"
+source: ["ICPC官方网站", "中国计算机学会", "牛客网", "CSDN", "知乎竞赛话题"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # ACM-ICPC国际大学生程序设计竞赛
@@ -163,3 +167,8 @@ ACM-ICPC在算法领域具有金字招牌般的地位，其价值体现在多个
 6. OI Wiki - https://oi-wiki.org/
 7. 《算法竞赛入门经典》刘汝佳著
 8. 牛客网2025年度竞赛就业报告
+## Related Knowledge
+
+- [CCF CSP计算机软件能力认证](CCF CSP计算机软件能力认证.md)
+- [CCPC中国大学生程序设计竞赛](CCPC中国大学生程序设计竞赛.md)
+- [CTF网络安全竞赛](CTF网络安全竞赛.md)

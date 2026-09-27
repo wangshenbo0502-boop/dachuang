@@ -1,9 +1,13 @@
 ---
-title: AI大模型应用工程师学习路线
-category: roadmap
-tags: [AI, 大模型, 应用开发, 学习路线, LangChain, RAG]
-source: [猎聘2026AI人才报告, CSDN AI工程师成长路线, 吴恩达DeepLearning.AI课程, LangChain官方文档, HuggingFace课程]
-last_update: 2026-07-28
+id: "roadmap-ai-c839145e41"
+title: "AI大模型应用工程师学习路线"
+category: "roadmap"
+tags: ["AI", "大模型", "应用开发", "学习路线", "LangChain", "RAG"]
+keywords: ["AI大模型应用工程师学习路线", "成长路线", "AI", "大模型应用工程师", "学习路线", "路线概述", "分阶段成长路径", "学习资源推荐", "常见误区", "职业发展建议", "Reference"]
+summary: "2026年最热门的AI就业方向之一，技术门槛低于算法岗，薪资普遍高于传统开发岗，适合有编程基础的开发者转型进入AI领域。"
+source: ["猎聘2026AI人才报告", "CSDN AI工程师成长路线", "吴恩达DeepLearning.AI课程", "LangChain官方文档", "HuggingFace课程"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # AI大模型应用工程师学习路线
@@ -161,3 +165,8 @@ AI大模型应用工程师（又称LLM应用工程师/AI应用开发工程师）
 - 吴恩达 DeepLearning.AI 课程系列 — 访问时间：2026-07-28
 - LangChain 官方文档 https://python.langchain.com — 访问时间：2026-07-28
 - HuggingFace 学习中心 https://huggingface.co/learn — 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI产品经理学习路线](AI产品经理学习路线.md)
+- [career_paths](career_paths.md)
+- [learning_paths](learning_paths.md)

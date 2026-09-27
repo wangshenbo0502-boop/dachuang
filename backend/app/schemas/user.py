@@ -6,9 +6,9 @@
 from datetime import date, datetime
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-ProficiencyLevel = Literal["了解", "熟悉", "掌握", "精通"]
+ProficiencyLevel = Literal["未知", "了解", "熟悉", "掌握", "精通"]
 
 
 class UserBase(BaseModel):
@@ -56,11 +56,23 @@ class UserSkillsReplace(BaseModel):
 class UserProjectCreate(BaseModel):
     """单项学生项目经历输入。"""
     name: str = Field(min_length=1, max_length=150)
-    role: str = Field(min_length=1, max_length=100)
-    description: str = Field(min_length=1, max_length=10000)
+    role: str = Field(default="主要负责人", max_length=100)
+    description: str = Field(default="", max_length=10000)
     tech_stack: list[str] = Field(default_factory=list, max_length=50)
     start_date: date | None = None
     end_date: date | None = None
+
+    @field_validator("role", mode="before")
+    @classmethod
+    def default_role(cls, value):
+        if value is None or (isinstance(value, str) and not value.strip()):
+            return "主要负责人"
+        return value
+
+    @field_validator("description", mode="before")
+    @classmethod
+    def optional_description(cls, value):
+        return "" if value is None else value
 
 
 class UserProjectsReplace(BaseModel):
@@ -73,10 +85,24 @@ class UserProjectsReplace(BaseModel):
 class UserCompetitionCreate(BaseModel):
     """单项竞赛经历输入。"""
     name: str = Field(min_length=1, max_length=200)
-    level: str = Field(default="校级", max_length=30)
-    award: str = Field(default="参与奖", max_length=100)
+    level: str = Field(default="", max_length=30)
+    award: str = Field(default="已参加", max_length=100)
     description: str = Field(default="", max_length=5000)
     competition_date: Optional[date] = Field(default=None)
+
+    @field_validator("level", mode="before")
+    @classmethod
+    def optional_level(cls, value):
+        if value is None or (isinstance(value, str) and not value.strip()):
+            return ""
+        return value
+
+    @field_validator("award", mode="before")
+    @classmethod
+    def default_participation(cls, value):
+        if value is None or (isinstance(value, str) and not value.strip()):
+            return "已参加"
+        return value
 
 
 class UserCompetitionsReplace(BaseModel):

@@ -1,9 +1,13 @@
 ---
-title: CCPC中国大学生程序设计竞赛
-category: competition
-tags: [CCPC, 程序设计竞赛, 算法竞赛, CCF, 团队竞赛]
-source: [CCF中国计算机学会官网, CCPC官方网站, 牛客网, CSDN, 知乎竞赛话题, 洛谷]
-last_update: 2026-07-28
+id: "competition-ccpc-3981d74d64"
+title: "CCPC中国大学生程序设计竞赛"
+category: "competition"
+tags: ["CCPC", "程序设计竞赛", "算法竞赛", "CCF", "团队竞赛"]
+keywords: ["CCPC中国大学生程序设计竞赛", "竞赛", "CCPC", "中国大学生程序设", "计竞赛", "竞赛简介", "竞赛价值", "参赛要求", "赛制说明", "含金量评级", "学习路线", "必刷OJ与题库"]
+summary: "CCPC（China Collegiate Programming Contest，中国大学生程序设计竞赛）是由中国计算机学会（CCF）主办的国内顶级大学生算法竞赛，与ACM-ICPC并列为国内两大算法赛事。CCPC的前身是CCF大学生计算机系统与程序设计竞赛，自2015年起正式更名为CCPC，至今已连续举办十。"
+source: ["CCF中国计算机学会官网", "CCPC官方网站", "牛客网", "CSDN", "知乎竞赛话题", "洛谷"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # CCPC中国大学生程序设计竞赛
@@ -187,3 +191,8 @@ CCPC的知识点体系与ACM-ICPC高度重合，可以共用一套训练体系�
 7. Codeforces - https://codeforces.com/
 8. AtCoder - https://atcoder.jp/
 9. 《算法竞赛进阶指南》李煜东著
+## Related Knowledge
+
+- [ACM-ICPC国际大学生程序设计竞赛](ACM-ICPC国际大学生程序设计竞赛.md)
+- [CCF CSP计算机软件能力认证](CCF CSP计算机软件能力认证.md)
+- [CTF网络安全竞赛](CTF网络安全竞赛.md)

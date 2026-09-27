@@ -19,5 +19,10 @@ export const api={
  chatConversation:(b:object)=>apiData<T.ChatConversationResponse>(request.post("/chat/conversation",b)),
  chatResume:(b:object)=>apiData<T.ResumeResponse>(request.post("/chat/generate-resume",b)),
  syncChatProfile:(b:object)=>apiData<T.ChatProfileSyncResponse>(request.post("/chat/sync-profile",b)),
+ applications:()=>apiData<T.JobApplication[]>(request.get("/applications")),
+ createApplication:(b:object)=>apiData<T.JobApplication>(request.post("/applications",b)),
+ updateApplication:(id:number,b:object)=>apiData<T.JobApplication>(request.patch(`/applications/${id}`,b)),
+ startApplicationAutomation:(id:number)=>apiData<T.ApplicationAutomationResponse>(request.post(`/applications/${id}/automation/start`)),
+ applicationAutomationStatus:(id:number)=>apiData<T.ApplicationAutomationResponse>(request.get(`/applications/${id}/automation/status`)),
  health:()=>apiData<{status:string;ai_mode:"mock"|"live";modules:string[]}>(request.get("/health"))
 };

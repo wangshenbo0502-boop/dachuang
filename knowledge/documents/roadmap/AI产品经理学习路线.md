@@ -1,9 +1,13 @@
 ---
-title: AI产品经理学习路线
-category: roadmap
-tags: [AI, 产品经理, 学习路线, 大模型产品, AIGC, 职业转型]
-source: [猎聘2026AI人才报告, 新浪AI新岗位大全, 人人都是产品经理AI专栏, 极客时间AI产品课, 量子位AI行业报告]
-last_update: 2026-07-28
+id: "roadmap-ai-2b149e5a79"
+title: "AI产品经理学习路线"
+category: "roadmap"
+tags: ["AI", "产品经理", "学习路线", "大模型产品", "AIGC", "职业转型"]
+keywords: ["AI产品经理学习路线", "成长路线", "AI", "产品经理学习路线", "路线概述", "分阶段成长路径", "学习资源推荐", "常见误区", "职业发展建议", "Reference"]
+summary: "2026年需求增长87.7%的热门岗位，连接AI技术与业务需求的桥梁。文科生/非技术背景也能进入，是传统产品、运营、行业专家转型AI的最佳路径。"
+source: ["猎聘2026AI人才报告", "新浪AI新岗位大全", "人人都是产品经理AI专栏", "极客时间AI产品课", "量子位AI行业报告"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # AI产品经理学习路线
@@ -177,3 +181,8 @@ AI产品经理（AI PM）是随着大模型爆发而快速崛起的新岗位，�
 - 极客时间《AI产品经理实战课》— 访问时间：2026-07-28
 - 量子位《2026中国AI产业发展报告》— 访问时间：2026-07-28
 - DeepLearning.AI《AI Product Manager Nanodegree》— 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用工程师学习路线](AI大模型应用工程师学习路线.md)
+- [career_paths](career_paths.md)
+- [learning_paths](learning_paths.md)

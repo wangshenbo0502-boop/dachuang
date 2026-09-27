@@ -1,9 +1,13 @@
 ---
-title: MySQL
-category: skills
-tags: [数据库, 关系型, 后端]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-mysql-0492695d83"
+title: "MySQL"
+category: "skills"
+tags: ["数据库", "关系型", "后端"]
+keywords: ["MySQL", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）"]
+summary: "最流行的开源关系型数据库，几乎所有后端岗位都要求掌握。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # MySQL
@@ -77,8 +81,13 @@ date: 2026-07-28
 - 设计高可用 MySQL 集群方案
 
 **评估方式：** 架构设计 — 提交完整的高可用集群设计方案，包含主从切换、故障转移、备份恢复策略
-# Reference
+## Reference
 
 1. Oracle. MySQL 8.x Reference Manual（官方手册）. dev.mysql.com/doc. 访问时间: 2026-09-13. https://dev.mysql.com/doc/
 2. Oracle. MySQL InnoDB 存储引擎官方文档. dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html. 访问时间: 2026-09-13.
 3. Percona. Percona Database Performance Blog（高质量数据库实践）. percona.com/blog. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

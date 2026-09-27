@@ -12,7 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat, auth
+from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat, auth, application
 from app.auth.dependencies import get_current_account
 from fastapi import Depends
 from app.config import get_settings
@@ -21,6 +21,7 @@ from app.utils.exceptions import AppException
 from app.utils.middleware import request_logging_middleware, configure_logging
 from app.utils.response import error, success, ErrorCode
 from app.ai.deepseek_client import DeepSeekClient
+from app.services.boss_automation_service import boss_automation_service
 
 load_dotenv()
 
@@ -33,7 +34,10 @@ configure_logging()
 async def lifespan(_: FastAPI):
     """Initialize persistent resources once for the application lifecycle."""
     initialize_database_schema()
-    yield
+    try:
+        yield
+    finally:
+        await boss_automation_service.close()
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -139,3 +143,4 @@ app.include_router(growth.router)
 app.include_router(streaming.router)  # 流式响应路由
 app.include_router(knowledge.router)
 app.include_router(chat.router)
+app.include_router(application.router)

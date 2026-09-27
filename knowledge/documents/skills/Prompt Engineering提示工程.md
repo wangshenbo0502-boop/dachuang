@@ -1,9 +1,13 @@
 ---
-title: Prompt Engineering提示工程
-category: skills
-tags: [AI, 大模型, 提示词, 交互设计]
-source: [OpenAI Prompt Engineering Guide, DeepLearning.AI, 腾讯云开发者社区, 猎聘AI岗位数据]
-last_update: 2026-07-28
+id: "skills-prompt-engineering-889fd08443"
+title: "Prompt Engineering提示工程"
+category: "skills"
+tags: ["AI", "大模型", "提示词", "交互设计"]
+keywords: ["Prompt Engineering提示工程", "技能", "Prompt", "Engineering", "提示工程", "阶段 1 — 目标：了解（预估 1 周）", "阶段 2 — 目标：熟悉（预估 2 周）", "阶段 3 — 目标：掌握（预估 3 周）", "学习建议与进阶路径"]
+summary: "Prompt Engineering提示工程。"
+source: ["OpenAI Prompt Engineering Guide", "DeepLearning.AI", "腾讯云开发者社区", "猎聘AI岗位数据"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # Prompt Engineering提示工程
@@ -120,8 +124,13 @@ last_update: 2026-07-28
 - **理解模型差异**：不同模型的特性差异显著，需针对性调整提示策略
 - **关注安全**：Prompt Injection 等安全问题是企业落地的重要挑战，需持续研究
 - **自动化思维**：逐步从手动写提示词转向利用工具实现自动化优化与评估
-# Reference
+## Reference
 
 1. Anthropic. Prompt Engineering 官方指南. docs.anthropic.com/en/docs/build-with-claude/prompt-engineering. 访问时间: 2026-09-13.
 2. OpenAI. Prompt Engineering Guide（官方最佳实践）. platform.openai.com/docs/guides/prompt-engineering. 访问时间: 2026-09-13.
 3. DeepSeek. DeepSeek API 官方文档（Prompt 工程）. api-docs.deepseek.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

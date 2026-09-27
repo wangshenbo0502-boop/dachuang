@@ -1,11 +1,13 @@
 ---
+id: "interview-spring-spring-boot-4b8a205635"
 title: "Spring/Spring Boot面试题（20题）"
-category: "面试题"
-type: "Java后端"
-difficulty: "中等"
+category: "interview"
 tags: ["Spring", "Spring Boot", "IOC", "AOP", "自动装配"]
+keywords: ["Spring/Spring Boot面试题（20题）", "面试", "Spring/Spring", "Boot", "面试题", "Q1: Spring的IOC和DI是什么", "Q2: Spring Bean的生命周期", "Q3: Spring Bean的作用域", "Q4: Spring AOP的实现原理", "Q5: Spring事务的传播行为", "Q6: Spring事务的隔离级别", "Q7: Spring事务失效的场景"]
+summary: "Spring/Spring Boot面试题（20题）。"
 source: ["Spring官方文档", "Spring Boot实战", "美团技术团队博客"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # Spring/Spring Boot面试题（20题）
@@ -2966,3 +2968,8 @@ Spring Cloud 组件是面试常考题，特别是微服务相关的岗位。
 3. 美团技术团队. *Spring事务实现原理*. https://tech.meituan.com, 访问时间：2026-07-28
 4. 牛客网. *Spring/Spring Boot面试题精选*. https://www.nowcoder.com, 访问时间：2026-07-28
 5. 阿里中间件团队. *Spring Cloud Alibaba官方文档*. https://sca.aliyun.com, 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

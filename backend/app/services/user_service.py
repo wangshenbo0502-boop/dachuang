@@ -126,8 +126,8 @@ class UserService:
     def sync_profile_draft(self, user_id: int, profile: dict[str, Any]) -> tuple[User, list[str]]:
         """Atomically merge a user-confirmed AI draft into the profile aggregate.
 
-        Existing records are patched by their natural identity. New records are
-        only created when all database-required facts were explicitly supplied.
+        Existing records are patched by their natural identity. Named projects
+        and competitions can be saved with optional details left unspecified.
         """
         user = self.get_user(user_id)
         skipped: list[str] = []
@@ -187,7 +187,7 @@ class UserService:
     def _merge_skills(self, user: User, values: Any, skipped: list[str]) -> None:
         if not isinstance(values, list):
             return
-        levels = {"了解", "熟悉", "掌握", "精通"}
+        levels = {"未知", "了解", "熟悉", "掌握", "精通"}
         for raw in values:
             if not isinstance(raw, dict):
                 continue
@@ -204,8 +204,7 @@ class UserService:
                     existing.description = description
                 continue
             if proficiency not in levels:
-                skipped.append(f"技能“{name}”缺少明确熟练程度")
-                continue
+                proficiency = "未知"
             user.skills.append(UserSkill(name=name, proficiency=proficiency, description=description))
 
     def _merge_projects(self, user: User, values: Any, skipped: list[str]) -> None:
@@ -235,12 +234,9 @@ class UserService:
                 if end_date:
                     existing.end_date = end_date
                 continue
-            if not role or not description:
-                skipped.append(f"项目“{name}”缺少明确角色或项目说明")
-                continue
             user.projects.append(UserProject(
                 name=name,
-                role=role,
+                role=role or "主要负责人",
                 description=description,
                 tech_stack=stack,
                 start_date=self._clean_date(raw.get("start_date")),
@@ -271,13 +267,10 @@ class UserService:
                 if competition_date:
                     existing.competition_date = competition_date
                 continue
-            if not level or not award:
-                skipped.append(f"竞赛“{name}”缺少明确级别或获奖情况")
-                continue
             user.competitions.append(UserCompetition(
                 name=name,
                 level=level,
-                award=award,
+                award=award or "已参加",
                 description=description,
                 competition_date=self._clean_date(raw.get("competition_date")),
             ))

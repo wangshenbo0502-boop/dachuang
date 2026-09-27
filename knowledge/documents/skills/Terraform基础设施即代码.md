@@ -1,9 +1,13 @@
 ---
-title: Terraform基础设施即代码
-category: skills
-tags: [IaC, 云原生, DevOps, 自动化]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-terraform-46801ea34f"
+title: "Terraform基础设施即代码"
+category: "skills"
+tags: ["IaC", "云原生", "DevOps", "自动化"]
+keywords: ["Terraform基础设施即代码", "技能", "Terraform", "基础设施即代码", "阶段 1 — 目标：了解（预估 1.5 周）", "阶段 2 — 目标：熟悉（预估 2 周）", "阶段 3 — 目标：掌握（预估 3 周）"]
+summary: "基础设施即代码（IaC）的事实标准，通过代码定义和管理云资源，实现自动化部署。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # Terraform基础设施即代码
@@ -81,8 +85,13 @@ date: 2026-07-28
 ---
 
 **来源：** HashiCorp 官方文档、CSDN 云原生专栏、猎聘云架构师 JD、阿里云最佳实践（访问时间：2026-07-28）
-# Reference
+## Reference
 
 1. HashiCorp. Terraform 官方文档. developer.hashicorp.com/terraform/docs. 访问时间: 2026-09-13.
 2. HashiCorp. Terraform Registry（Provider 市场）. registry.terraform.io. 访问时间: 2026-09-13.
 3. OpenTofu. OpenTofu 官方文档（开源分支）. opentofu.org/docs. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

@@ -233,15 +233,15 @@ class JobMatchService:
                 ]
                 ai_result = self._ai_client.chat_json(messages, temperature=0.3)
 
-                ai_match_score = ai_result.get("match_score", match.match_score)
-                match_reason = ai_result.get("match_reason", "")
+                ai_match_score = self._safe_score(ai_result.get("match_score"), match.match_score)
+                match_reason = self._safe_text(ai_result.get("match_reason"))
 
                 # 更新匹配结果
-                match.match_score = min(ai_match_score, match.match_score + 20)
+                match.match_score = round(min(ai_match_score, match.match_score + 20), 1)
                 match.match_reason = match_reason
-                match.missing_skills = ai_result.get("missing_skills", match.missing_skills)
-                match.learning_suggestions = ai_result.get("learning_suggestions", [])
-                match.interview_focus = ai_result.get("interview_focus", [])
+                match.missing_skills = self._safe_string_list(ai_result.get("missing_skills"), match.missing_skills)
+                match.learning_suggestions = self._safe_string_list(ai_result.get("learning_suggestions"), [])
+                match.interview_focus = self._safe_string_list(ai_result.get("interview_focus"), [])
             except Exception:
                 # AI增强失败，保持原始匹配结果
                 pass
@@ -288,6 +288,26 @@ class JobMatchService:
         text = re.sub(r"[#*\-\[\]|`]", "", content[: max_len * 2])
         text = re.sub(r"\s+", " ", text).strip()
         return text[:max_len] + ("…" if len(text) > max_len else "")
+
+    @staticmethod
+    def _safe_score(value: object, fallback: float) -> float:
+        try:
+            score = float(value)
+        except (TypeError, ValueError):
+            return float(fallback)
+        if score != score:
+            return float(fallback)
+        return max(0.0, min(100.0, score))
+
+    @staticmethod
+    def _safe_text(value: object, fallback: str = "") -> str:
+        return value.strip() if isinstance(value, str) else fallback
+
+    @classmethod
+    def _safe_string_list(cls, value: object, fallback: list[str]) -> list[str]:
+        if not isinstance(value, list):
+            return list(fallback)
+        return [item.strip() for item in value if isinstance(item, str) and item.strip()]
 
     @classmethod
     def _classify_job(cls, result: dict) -> str:

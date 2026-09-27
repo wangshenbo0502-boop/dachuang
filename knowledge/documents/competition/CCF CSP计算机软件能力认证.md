@@ -1,9 +1,13 @@
 ---
-title: CCF CSP计算机软件能力认证
-category: competition
-tags: [CCF, CSP, 能力认证, 算法, 计算机学会]
-source: [CCF中国计算机学会官网, CSP认证官网, 牛客网, CSDN, 知乎CSP话题]
-last_update: 2026-07-28
+id: "competition-ccf-csp-5a0c2ecf44"
+title: "CCF CSP计算机软件能力认证"
+category: "competition"
+tags: ["CCF", "CSP", "能力认证", "算法", "计算机学会"]
+keywords: ["CCF CSP计算机软件能力认证", "竞赛", "CCF", "CSP", "计算机软件能力认", "竞赛简介", "竞赛价值", "参赛要求", "赛制说明", "含金量评级", "学习路线", "必刷OJ与题库"]
+summary: "CCF CSP（Certified Software Professional，软件能力认证）是由中国计算机学会（CCF）主办的一项计算机软件能力测评考试。该认证旨在科学、客观地评价计算机专业人才的软件能力，为高校教学评估、企业人才选拔和个人能力提升提供权威参考。"
+source: ["CCF中国计算机学会官网", "CSP认证官网", "牛客网", "CSDN", "知乎CSP话题"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # CCF CSP计算机软件能力认证
@@ -213,3 +217,8 @@ CCF CSP认证的核心价值在于其权威性和实用性：
 6. 洛谷 - CSP真题题库
 7. CSDN - CSP认证社区
 8. 知乎 - CCF CSP话题
+## Related Knowledge
+
+- [ACM-ICPC国际大学生程序设计竞赛](ACM-ICPC国际大学生程序设计竞赛.md)
+- [CCPC中国大学生程序设计竞赛](CCPC中国大学生程序设计竞赛.md)
+- [CTF网络安全竞赛](CTF网络安全竞赛.md)

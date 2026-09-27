@@ -1,11 +1,13 @@
 ---
+id: "interview-python-fd827542c2"
 title: "Python面试题（20题）"
-category: "面试题"
-type: "Python后端"
-difficulty: "中等"
+category: "interview"
 tags: ["Python", "后端", "GIL", "装饰器", "垃圾回收"]
+keywords: ["Python面试题（20题）", "面试", "Python", "面试题", "Q1: Python的GIL（全局解释器锁）", "Q2: Python的垃圾回收机制（引用计数+标记清除+分代回收）", "Q3: Python的装饰器原理和实现", "Q4: Python的迭代器和生成器", "Q5: Python的列表推导式和字典推导式", "Q6: Python的 args和 kwargs", "Q7: Python的深拷贝和浅拷贝", "Q8: Python的is和==的区别"]
+summary: "Q1: Python的GIL（全局解释器锁）。"
 source: ["Python官方文档", "《流畅的Python》", "字节跳动面试题"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 ## Q1: Python的GIL（全局解释器锁）
@@ -250,8 +252,8 @@ class Decorator:
 @dec2
 def func():
     pass
-# 等价于 func = dec1(dec2(func))
-# 执行顺序：dec1前置 → dec2前置 → func → dec2后置 → dec1后置
+## 等价于 func = dec1(dec2(func))
+## 执行顺序：dec1前置 → dec2前置 → func → dec2后置 → dec1后置
 ```
 
 4. **常见装饰器应用场景**：
@@ -297,7 +299,7 @@ def func():
 实现了`__iter__()`方法的对象，可以用for循环遍历。list、dict、tuple、str等都是可迭代对象。
 
 ```python
-# 自定义迭代器
+## 自定义迭代器
 class MyIterator:
     def __init__(self, data):
         self.data = data
@@ -348,7 +350,7 @@ gen = (x * x for x in range(10))
 ```python
 for item in iterable:
     print(item)
-# 等价于：
+## 等价于：
 iterator = iter(iterable)  # 调用__iter__()
 while True:
     try:
@@ -405,17 +407,17 @@ def gen():
 用于快速创建列表的语法。
 
 ```python
-# 基本语法
+## 基本语法
 [expression for item in iterable if condition]
 
-# 示例
+## 示例
 squares = [x**2 for x in range(10)]          # [0, 1, 4, 9, ..., 81]
 evens = [x for x in range(20) if x % 2 == 0] # [0, 2, 4, ..., 18]
 
-# 多重循环
+## 多重循环
 pairs = [(x, y) for x in range(3) for y in range(3)]
 
-# 嵌套推导式
+## 嵌套推导式
 matrix = [[i*j for j in range(5)] for i in range(5)]
 ```
 
@@ -423,13 +425,13 @@ matrix = [[i*j for j in range(5)] for i in range(5)]
 用于快速创建字典的语法。
 
 ```python
-# 基本语法
+## 基本语法
 {key_expression: value_expression for item in iterable if condition}
 
-# 示例
+## 示例
 squares = {x: x**2 for x in range(5)}  # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
 
-# 字典翻转
+## 字典翻转
 flipped = {v: k for k, v in original_dict.items()}
 ```
 
@@ -804,12 +806,12 @@ print(a is b)  # 可能为False，包含空格
 
 **示例对比**：
 ```python
-# 不可变类型
+## 不可变类型
 s = "hello"
 s += " world"  # 创建了新字符串，s指向新对象
-# 原"hello"对象没有被修改
+## 原"hello"对象没有被修改
 
-# 可变类型
+## 可变类型
 lst = [1, 2, 3]
 lst.append(4)  # 原地修改，lst还是同一个对象
 ```
@@ -1044,7 +1046,7 @@ async def func():      # async定义协程函数
     await asyncio.sleep(1)  # await挂起当前协程
     return "done"
 
-# 运行协程
+## 运行协程
 async def main():
     result = await func()
     print(result)
@@ -1135,10 +1137,10 @@ async def main():
 2. 作为元类：所有类的默认元类
 
 ```python
-# 用type动态创建类
+## 用type动态创建类
 MyClass = type('MyClass', (object,), {'x': 1, 'foo': lambda self: self.x})
 
-# 等价于：
+## 等价于：
 class MyClass:
     x = 1
     def foo(self):
@@ -1390,14 +1392,14 @@ in_the_forest(Person())  # 也OK，Person有quack和walk方法
 
 **方式1：模块导入法**（推荐，最Pythonic）：
 ```python
-# singleton.py
+## singleton.py
 class Singleton:
     def __init__(self):
         self.value = None
 
 singleton = Singleton()
 
-# 使用时
+## 使用时
 from singleton import singleton
 ```
 - Python模块只导入一次，天然是单例
@@ -1613,19 +1615,19 @@ class Singleton(metaclass=SingletonMeta):
 
 **导入方式**：
 ```python
-# 导入整个模块
+## 导入整个模块
 import module
 import package.module
 
-# 导入模块中的成员
+## 导入模块中的成员
 from module import func, Class
 from package.module import func
 
-# 别名
+## 别名
 import module as m
 from module import func as f
 
-# 导入所有（不推荐）
+## 导入所有（不推荐）
 from module import *
 ```
 
@@ -1718,7 +1720,7 @@ finally:
 ```python
 raise ValueError("无效的值")
 
-# 重新抛出异常
+## 重新抛出异常
 try:
     ...
 except ValueError:
@@ -1892,3 +1894,8 @@ def greet(name: str) -> str:
 3. Python源码剖析 - 陈儒 (访问时间：2026-07-28)
 4. Real Python教程 - https://realpython.com/ (访问时间：2026-07-28)
 5. 字节跳动技术团队Python面试题集 (访问时间：2026-07-28)
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

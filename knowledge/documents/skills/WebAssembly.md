@@ -1,9 +1,13 @@
 ---
-title: WebAssembly
-category: skills
-tags: [WebAssembly, Wasm, 前端性能, 边缘计算, 云原生]
-source: [MDN Web Docs, WebAssembly官方网站, 掘金Wasm专栏, WasmEdge文档]
-last_update: 2026-07-28
+id: "skills-webassembly-a3c1eebea7"
+title: "WebAssembly"
+category: "skills"
+tags: ["WebAssembly", "Wasm", "前端性能", "边缘计算", "云原生"]
+keywords: ["WebAssembly", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）", "学习建议与进阶路径"]
+summary: "WebAssembly（Wasm）是一种可移植、体积小、加载快的二进制指令格式，旨在充分发挥硬件能力以实现接近原生的执行性能。2026年Wasm已从浏览器扩展到边缘计算、云原生、插件系统等领域，Wasm开发者岗位需求年增长120%，是前端性能优化与云原生基础设施的关键技术。"
+source: ["MDN Web Docs", "WebAssembly官方网站", "掘金Wasm专栏", "WasmEdge文档"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # WebAssembly
@@ -122,8 +126,13 @@ last_update: 2026-07-28
 - **关注标准化**：Wasm 生态快速演进，持续跟踪官方提案与 W3C Wasm 工作组动态
 - **性能思维**：始终以性能基准为导向，避免过早优化，用数据驱动优化决策
 - **生态融合**：结合 AI 推理、区块链、游戏等垂直领域，发掘 Wasm 的独特价值场景
-# Reference
+## Reference
 
 1. WebAssembly Community Group. WebAssembly 官方规范. webassembly.org/specs. 访问时间: 2026-09-13.
 2. MDN Web Docs. WebAssembly 中文文档. developer.mozilla.org/zh-CN/docs/WebAssembly. 访问时间: 2026-09-13.
 3. Bytecode Alliance. Wasmtime 官方文档（运行时）. wasmtime.dev. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

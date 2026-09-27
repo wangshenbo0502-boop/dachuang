@@ -1,8 +1,13 @@
 ---
-title: Python后端开发工程师面试题
-type: interview_questions
-role: Python后端开发工程师
-version: "2026.07"
+id: "interview-python-e3517d081a"
+title: "Python后端开发工程师面试题"
+category: "interview"
+tags: ["面试", "Python后端开发工程师面试题"]
+keywords: ["Python后端开发工程师面试题", "面试", "Python", "后端开发工程师面", "试题", "技术考察重点", "高频面试题", "Reference"]
+summary: "- Python 基础语法与数据结构 - 内存管理与垃圾回收机制 - 并发编程（多线程/多进程/协程/GIL） - 装饰器与闭包 - Django / FastAPI 框架原理 - ORM 与数据库优化 - 高级特性（迭代器/生成器/上下文管理器） - 常用设计模式与最佳实践。"
+source: ["待人工核验：原文未提供公开来源"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # Python后端开发工程师面试题
@@ -774,11 +779,11 @@ class Singleton:
 - 最简单、最 Pythonic
 
 ```python
-# singleton.py
+## singleton.py
 class Singleton:
     pass
 instance = Singleton()
-# 使用：from singleton import instance
+## 使用：from singleton import instance
 ```
 
 **2. 装饰器法**：
@@ -916,3 +921,8 @@ def my_context():
 - 掘金 - Python 八股文面试题精选（访问时间：2026-07-28）
 - 牛客网 - Python 后端面试题库（访问时间：2026-07-28）
 - 腾讯云开发者社区 - Python 高级面试题（访问时间：2026-07-28）
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

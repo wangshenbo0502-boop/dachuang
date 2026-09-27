@@ -1,9 +1,13 @@
 ---
-title: 技能分类总览
-category: skills
-tags: [技能分类, 知识库, 能力模型]
-source: skills.json
-date: 2026-07-28
+id: "skills-skill-categories-f2b04386bf"
+title: "技能分类总览"
+category: "skills"
+tags: ["技能分类", "知识库", "能力模型"]
+keywords: ["技能分类总览", "技能", "编程语言", "框架", "数据库", "工具", "熟练度等级说明"]
+summary: "本文档按技术领域分类列出所有收录的技能及其熟练度等级。"
+source: ["skills.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # 技能分类总览
@@ -77,13 +81,18 @@ date: 2026-07-28
 | 掌握 | 能独立设计解决方案，深入理解原理 |
 | 精通 | 能指导他人，能解决疑难问题，有深度理解 |
 
-# 使用说明
+## 使用说明
 
 本索引是 skills 目录的导航中枢：42 个技能文档按 10 大类组织，每篇技能文档均采用三阶段（入门-进阶-高级）学习路线结构，包含学习资源、练习项目与评估方式。检索时建议：① 按 category 关键词定位分类；② 按"技能名 + 学习路线/面试/项目"组合检索；③ 结合 roadmap/ 目录的方向路线图交叉使用。
 
 技能优先级建议（面向校招）：第一梯队为 Java/Python/JavaScript/SQL/Git/Linux（岗位覆盖面最广）；第二梯队为 Spring Boot/React/Vue/Docker/MySQL/Redis（后端与前端主栈）；第三梯队按方向补充——后端补微服务与消息队列、前端补工程化与 TypeScript、AI 方向补 PyTorch/LangChain/RAG/向量数据库。所有文档持续维护中，欢迎按需扩展。
 
-# Reference
+## Reference
 
 1. 中华人民共和国人力资源和社会保障部. 中华人民共和国职业分类大典（2022年版）. mohrss.gov.cn. 访问时间: 2026-09-13.
 2. 工业与信息化部. 相关职业技能标准公开文件. miit.gov.cn. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

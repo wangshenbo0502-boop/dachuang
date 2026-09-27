@@ -1,9 +1,13 @@
 ---
-title: CTF网络安全竞赛
-category: competition
-tags: [网络安全, CTF, 信息安全, 夺旗赛, 渗透测试, 网络攻防]
-source: [CTFtime官网, 攻防世界, BUUCTF, 知乎-CTF入门指南, FreeBuf-CTF竞赛解析]
-last_update: 2026-07-28
+id: "competition-ctf-a9c8aff5ec"
+title: "CTF网络安全竞赛"
+category: "competition"
+tags: ["网络安全", "CTF", "信息安全", "夺旗赛", "渗透测试", "网络攻防"]
+keywords: ["CTF网络安全竞赛", "竞赛", "CTF", "网络安全竞赛", "竞赛简介", "竞赛价值", "参赛要求", "赛制说明", "含金量评级", "学习路线", "常用工具与框架", "高频考点"]
+summary: "CTF（Capture The Flag，夺旗赛）是网络安全领域的核心竞赛形式，起源于1996年的DEFCON全球黑客大会。参赛者需要通过信息搜集、漏洞挖掘、密码破解、逆向分析等技术手段，找到题目中隐藏的\\"Flag\\"（通常为特定格式的字符串）并提交得分。"
+source: ["CTFtime官网", "攻防世界", "BUUCTF", "知乎-CTF入门指南", "FreeBuf-CTF竞赛解析"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # CTF网络安全竞赛
@@ -198,3 +202,8 @@ CTF竞赛成绩在网络安全行业具有极高的就业价值：
 5. 知乎 - CTF入门完全指南与学习路线
 6. FreeBuf - CTF竞赛解析与安全人才培养
 7. 访问时间：2026-07-28
+## Related Knowledge
+
+- [ACM-ICPC国际大学生程序设计竞赛](ACM-ICPC国际大学生程序设计竞赛.md)
+- [CCF CSP计算机软件能力认证](CCF CSP计算机软件能力认证.md)
+- [CCPC中国大学生程序设计竞赛](CCPC中国大学生程序设计竞赛.md)

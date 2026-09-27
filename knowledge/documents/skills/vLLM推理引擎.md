@@ -1,9 +1,13 @@
 ---
-title: vLLM推理引擎
-category: skills
-tags: [AI, 大模型, 推理优化, 模型部署]
-source: [vLLM官方文档, CSDN 2026 AI工程师技能, 腾讯云开发者社区, 阿里云模型服务]
-last_update: 2026-07-28
+id: "skills-vllm-d28ce866d2"
+title: "vLLM推理引擎"
+category: "skills"
+tags: ["AI", "大模型", "推理优化", "模型部署"]
+keywords: ["vLLM推理引擎", "技能", "vLLM", "推理引擎", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）", "学习建议与进阶路径"]
+summary: "高吞吐大模型推理框架，通过PagedAttention实现高效显存管理，是模型服务化部署的主流选择。vLLM 显著提升推理吞吐量、降低部署成本，是 AI 模型部署与推理优化的核心技能，在大模型应用工程化中扮演关键角色。"
+source: ["vLLM官方文档", "CSDN 2026 AI工程师技能", "腾讯云开发者社区", "阿里云模型服务"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # vLLM推理引擎
@@ -122,8 +126,13 @@ last_update: 2026-07-28
 - **关注生态**：跟踪 vLLM、TensorRT-LLM、SGLang 等推理框架的发展动态
 - **工程能力**：强化 Kubernetes、监控、运维等工程能力，向 MLOps 方向拓展
 - **前沿探索**：关注 FP8 推理、投机采样、MLA 等前沿技术，保持技术敏锐度
-# Reference
+## Reference
 
 1. vLLM Project. vLLM 官方文档. docs.vllm.ai. 访问时间: 2026-09-13. https://docs.vllm.ai/
 2. Kwon et al. Efficient Memory Management for LLM Serving with PagedAttention (SOSP 2023). arxiv.org/abs/2309.06180. 访问时间: 2026-09-13.
 3. vLLM Project. vLLM GitHub 仓库. github.com/vllm-project/vllm. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

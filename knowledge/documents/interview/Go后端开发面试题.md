@@ -1,8 +1,13 @@
 ---
-title: Go后端开发工程师面试题
-type: interview_questions
-role: Go后端开发工程师
-version: "2026.07"
+id: "interview-go-1ff87935ba"
+title: "Go后端开发工程师面试题"
+category: "interview"
+tags: ["面试", "Go后端开发工程师面试题"]
+keywords: ["Go后端开发工程师面试题", "面试", "Go", "后端开发工程师面", "试题", "技术考察重点", "高频面试题", "Reference"]
+summary: "- Go 基础语法（数据类型、切片、Map、make/new） - GMP 调度模型与并发机制 - Channel 底层原理与并发模式 - 内存管理与 GC（三色标记、写屏障） - Context 上下文控制 - 锁与同步原语（sync 包） - 接口（interface）底层结构 - 错误处理与 defer/。"
+source: ["待人工核验：原文未提供公开来源"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # Go后端开发工程师面试题
@@ -528,3 +533,8 @@ fmt.Println(i == nil) // false！因为 _type 不为空
 - CSDN 2026 大厂 Go 后端通关手册（访问时间：2026-07-28）
 - 51CTO - Go 八股文面试题精选（访问时间：2026-07-28）
 - 掘金 - Go 语言后端面试题合集（访问时间：2026-07-28）
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

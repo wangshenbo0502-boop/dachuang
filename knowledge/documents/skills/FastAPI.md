@@ -1,9 +1,13 @@
 ---
-title: FastAPI
-category: skills
-tags: [FastAPI, Python, 后端开发, API, Web框架]
-source: [FastAPI官方文档, 掘金FastAPI专栏, B站实战教程, 知乎技术专栏]
-last_update: 2026-07-28
+id: "skills-fastapi-f6b34197f9"
+title: "FastAPI"
+category: "skills"
+tags: ["FastAPI", "Python", "后端开发", "API", "Web框架"]
+keywords: ["FastAPI", "技能", "阶段 1 — 目标：了解（预估 1.5 周）", "阶段 2 — 目标：熟悉（预估 2.5 周）", "阶段 3 — 目标：掌握（预估 3 周）", "学习建议与进阶路径"]
+summary: "现代、高性能的 Python Web 框架，基于标准 Python 类型提示，自动生成 OpenAPI 文档，异步原生支持，性能比肩 Node.js 和 Go。2026 年 FastAPI 已成为 Python 后端首选框架，广泛应用于 AI 模型服务化、微服务架构与企业级 API 开发，相关岗位需求年增长超 。"
+source: ["FastAPI官方文档", "掘金FastAPI专栏", "B站实战教程", "知乎技术专栏"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # FastAPI
@@ -123,8 +127,13 @@ last_update: 2026-07-28
 - **AI 服务化**：2026 年 FastAPI 最热门的方向是 LLM 推理 API，重点掌握流式输出与模型并发
 - **生态融合**：结合 SQLAlchemy、Redis、Kafka、Docker 等技术栈，构建完整的后端技术体系
 - **性能意识**：学会使用压测工具定位瓶颈，从数据库、缓存、并发模型多维度优化性能
-# Reference
+## Reference
 
 1. FastAPI. FastAPI 官方文档（中文版）. fastapi.tiangolo.com/zh. 访问时间: 2026-09-13. https://fastapi.tiangolo.com/zh/
 2. Pydantic. Pydantic V2 官方文档. docs.pydantic.dev. 访问时间: 2026-09-13.
 3. OpenAPI Initiative. OpenAPI Specification 3.1. spec.openapis.org. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

@@ -1,11 +1,13 @@
 ---
+id: "interview-java-20d6643b53"
 title: "Java基础面试题（20题）"
-category: "面试题"
-type: "Java后端"
-difficulty: "中等"
+category: "interview"
 tags: ["Java基础", "面向对象", "异常处理", "反射", "注解"]
+keywords: ["Java基础面试题（20题）", "面试", "Java", "基础面试题", "Q1: == 和 equals 的区别", "Q2: hashCode 和 equals 的关系", "Q3: String、StringBuffer、StringBuilder 的区别", "Q4: final 关键字的用法", "Q5: static 关键字的作用", "Q6: 接口和抽象类的区别", "Q7: Java 的四大引用类型", "Q8: 重载和重写的区别"]
+summary: "本文档涵盖Java后端开发中最核心的基础知识，包括面向对象、核心API、异常处理、反射、注解等核心知识点，适合初中级Java工程师面试必备。"
 source: ["Java核心技术卷I", "阿里巴巴Java开发手册", "牛客网Java面试题库"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # Java基础面试题（20题）
@@ -2004,3 +2006,8 @@ Spring 中大量使用了注解，比如 @Component、@Autowired、@RequestMappi
 3. 牛客网. *Java面试题精选*. https://www.nowcoder.com, 访问时间：2026-07-28
 4. 阿里巴巴. *阿里巴巴Java开发手册（嵩山版）*. 电子工业出版社, 2020
 5. Cay S. Horstmann. *Java核心技术卷I：基础知识（原书第11版）*. 机械工业出版社, 2020
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

@@ -1,9 +1,13 @@
 ---
-title: 技术学习路线总览
-category: roadmap
-tags: [职业发展, 学习路线, 技能规划]
-source: career.json
-date: 2026-07-28
+id: "roadmap-learning-paths-6d0f93c516"
+title: "技术学习路线总览"
+category: "roadmap"
+tags: ["职业发展", "学习路线", "技能规划"]
+keywords: ["技术学习路线总览", "成长路线", "前端开发", "Java后端开发", "Python数据分析", "AI算法工程师", "全栈开发工程师", "通用建议"]
+summary: "本文档汇总了各主要技术岗位从初级到专家的完整职业成长路径和核心技能要求。"
+source: ["career.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # 技术学习路线总览
@@ -232,8 +236,13 @@ date: 2026-07-28
 - **跳槽节奏：** 校招入职后建议至少待 2 年再跳
 - **技术保鲜：** 技术的半衰期约 3-5 年，保持学习习惯比任何单一技能都重要
 - **软技能：** 3年后决定天花板的是沟通、项目管理和业务理解能力，而非纯技术
-# Reference
+## Reference
 
 1. 教育部. 普通高等学校本科专业目录（2024年）. moe.gov.cn. 访问时间: 2026-09-13.
 2. freeCodeCamp. freeCodeCamp 开源课程体系. freecodecamp.org. 访问时间: 2026-09-13.
 3. The Odin Project. 开源全栈学习路径. theodinproject.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [AI产品经理学习路线](AI产品经理学习路线.md)
+- [AI大模型应用工程师学习路线](AI大模型应用工程师学习路线.md)
+- [career_paths](career_paths.md)

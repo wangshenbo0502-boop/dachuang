@@ -1,11 +1,13 @@
 ---
+id: "interview-java-edd264a342"
 title: "Java集合框架面试题（20题）"
-category: "面试题"
-type: "Java后端"
-difficulty: "中等"
+category: "interview"
 tags: ["Java集合", "HashMap", "ArrayList", "ConcurrentHashMap", "红黑树"]
+keywords: ["Java集合框架面试题（20题）", "面试", "Java", "集合框架面试题", "Q1: ArrayList 和 LinkedList 的区别", "Q2: HashMap 的底层原理和实现", "Q3: HashMap 和 HashTable 的区别", "Q4: ConcurrentHashMap 的实现原理", "Q5: HashMap 的扩容机制", "Q6: HashMap 为什么线程不安全", "Q7: ConcurrentHashMap 和 Hashtable 的区别", "Q8: HashSet 的底层实现"]
+summary: "本文档涵盖Java集合框架的核心知识点，包括List、Set、Map三大体系的实现原理、源码分析、线程安全等重点内容，是Java后端面试的重中之重。"
 source: ["Java集合框架源码分析", "美团技术团队博客", "牛客网Java面试题库"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # Java集合框架面试题（20题）
@@ -2009,3 +2011,8 @@ Comparator 是独立的比较器，是"外部比较器"。它不需要修改类�
 3. 牛客网. *Java集合面试题精选*. https://www.nowcoder.com, 访问时间：2026-07-28
 4. 方腾飞. *Java并发编程的艺术*. 机械工业出版社, 2015
 5. Oracle. *Java Collections Framework Documentation*. https://docs.oracle.com/javase/8/docs/technotes/guides/collections/, 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

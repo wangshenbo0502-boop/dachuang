@@ -1,11 +1,13 @@
 ---
+id: "interview-java-bcd1ef65c5"
 title: "Java并发编程面试题（20题）"
-category: "面试题"
-type: "Java后端"
-difficulty: "中等"
+category: "interview"
 tags: ["并发编程", "多线程", "synchronized", "线程池", "AQS"]
+keywords: ["Java并发编程面试题（20题）", "面试", "Java", "并发编程面试题", "Q1: 什么是线程安全", "Q2: synchronized 的底层原理", "Q3: synchronized 和 ReentrantLock 的区别", "Q4: volatile 关键字的作用和原理", "Q5: 什么是 CAS，有什么问题", "Q6: ThreadLocal 的原理和内存泄漏问题", "Q7: 线程池的核心参数和工作原理", "Q8: 常见的线程池类型和适用场景"]
+summary: "本文档涵盖Java并发编程的核心知识点，包括线程安全、锁机制、线程池、并发容器、JUC工具类等重点内容，是中高级Java工程师面试的重中之重。"
 source: ["Java并发编程的艺术", "JUC源码分析", "美团技术团队博客"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # Java并发编程面试题（20题）
@@ -2677,3 +2679,8 @@ interrupt 的三个方法要分清：
 3. OpenJDK. *java.util.concurrent 包源码*. http://openjdk.java.net, 访问时间：2026-07-28
 4. 牛客网. *Java并发编程面试题精选*. https://www.nowcoder.com, 访问时间：2026-07-28
 5. Oracle. *Java Concurrency Tutorial*. https://docs.oracle.com/javase/tutorial/essential/concurrency/, 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI大模型应用面试题](AI大模型应用面试题.md)
+- [AI算法面试题](AI算法面试题.md)

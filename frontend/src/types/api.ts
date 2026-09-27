@@ -1,5 +1,5 @@
 export interface ApiEnvelope<T> { code: number; message: string; data: T }
-export type Proficiency = "了解" | "熟悉" | "掌握" | "精通";
+export type Proficiency = "未知" | "了解" | "熟悉" | "掌握" | "精通";
 export interface Skill { id?: number; user_id?: number; name: string; proficiency: Proficiency; description: string }
 export interface Project { id?: number; user_id?: number; name: string; role: string; description: string; tech_stack: string[]; start_date: string | null; end_date: string | null }
 export interface Competition { id?: number; user_id?: number; name: string; level: string; award: string; description: string; competition_date: string | null }
@@ -25,3 +25,6 @@ export interface ChatMessage { role:"user"|"assistant"; content:string }
 export interface ChatTurnResponse { reply:string; question_number:number; finished:boolean; extracted:Record<string,unknown>; missing:string[] }
 export interface ChatConversationResponse { reply:string; suggested_action?:"profile"|"resume"|"analysis"|"growth"|"jobs"|null; extracted?:Record<string,unknown> }
 export interface ChatProfileSyncResponse { profile:StudentProfile; skipped:string[] }
+export type ApplicationStatus = "prepared"|"opened"|"applied"|"replied"|"interview"|"closed";
+export interface JobApplication { id:number; user_id:number; job_id:string; job_title:string; platform:string; boss_url:string; status:ApplicationStatus; greeting:string; resume_version_id:number|null; note:string; applied_at?:string|null; created_at?:string|null; updated_at?:string|null; automation_status:string; automation_error:string }
+export interface ApplicationAutomationResponse { status:string; message:string; url:string; greeting_filled:boolean }

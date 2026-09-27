@@ -78,11 +78,12 @@ class UserApiTestCase(unittest.TestCase):
                 "skills": [
                     {"name": "Python", "proficiency": "\u638c\u63e1"},
                     {"name": "SQL", "proficiency": "\u719f\u6089"},
+                    {"name": "Rust", "proficiency": "\u672a\u77e5"},
                 ]
             },
         )
         self.assertEqual(first_skills_response.status_code, 200)
-        self.assertEqual(len(first_skills_response.json()["data"]), 2)
+        self.assertEqual(len(first_skills_response.json()["data"]), 3)
 
         second_skills_response = self.client.put(
             f"/api/users/{user_id}/skills",
@@ -113,6 +114,42 @@ class UserApiTestCase(unittest.TestCase):
         profile_data = profile_response.json()["data"]
         self.assertEqual([skill["name"] for skill in profile_data["skills"]], ["Java"])
         self.assertEqual(len(profile_data["projects"]), 1)
+
+    def test_project_and_competition_optional_details(self) -> None:
+        user_id = self.create_user()
+        for value in ("omitted", "", "  ", None):
+            with self.subTest(value=value):
+                project = {"name": "求职助手"}
+                competition = {"name": "中国软件杯"}
+                if value != "omitted":
+                    project.update(role=value, description=value)
+                    competition.update(level=value, award=value)
+                response = self.client.put(
+                    f"/api/users/{user_id}/projects", json={"projects": [project]}
+                )
+                self.assertEqual(response.status_code, 200, response.text)
+                self.assertEqual(response.json()["data"][0]["role"], "主要负责人")
+                response = self.client.put(
+                    f"/api/users/{user_id}/competitions", json={"competitions": [competition]}
+                )
+                self.assertEqual(response.status_code, 200, response.text)
+                self.assertEqual(response.json()["data"][0]["award"], "已参加")
+                self.assertEqual(response.json()["data"][0]["level"], "")
+                profile = self.client.get(f"/api/users/{user_id}").json()["data"]
+                self.assertEqual(profile["projects"][0]["role"], "主要负责人")
+                self.assertEqual(profile["competitions"][0]["award"], "已参加")
+
+        response = self.client.put(f"/api/users/{user_id}/projects", json={
+            "projects": [{"name": "求职助手", "role": "后端开发"}],
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["data"][0]["role"], "后端开发")
+        response = self.client.put(f"/api/users/{user_id}/competitions", json={
+            "competitions": [{"name": "中国软件杯", "level": "省级", "award": "一等奖"}],
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["data"][0]["award"], "一等奖")
+        self.assertEqual(response.json()["data"][0]["level"], "省级")
 
     def test_validation_error_and_missing_user(self) -> None:
         user_id = self.create_user()

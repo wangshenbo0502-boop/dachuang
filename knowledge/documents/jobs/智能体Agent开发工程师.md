@@ -1,13 +1,13 @@
 ---
-title: 智能体Agent开发工程师
-category: jobs
-tags: [AI, Agent, 智能体, ReAct, Plan-and-Execute, Multi-Agent, Tool Use, Function Call, AutoGPT, CrewAI, AutoGen, LangChain, 工作流编排, LLM]
-source:
-  - LangChain官方博客与Agent开发文档
-  - BOSS直聘《2026年AI Agent岗位招聘趋势报告》
-  - 猎聘大数据研究院《2026年AI新兴岗位就业分析》
-  - OpenAI官方开发者文档与Function Calling/Agent指南
-last_update: 2026-07-28
+id: "jobs-agent-e2ac5db829"
+title: "智能体Agent开发工程师"
+category: "jobs"
+tags: ["AI", "Agent", "智能体", "ReAct", "Plan-and-Execute", "Multi-Agent", "Tool Use", "Function Call", "AutoGPT", "CrewAI", "AutoGen", "LangChain", "工作流编排", "LLM"]
+keywords: ["智能体Agent开发工程师", "岗位", "智能体", "Agent", "开发工程师", "理论基础", "技术栈", "工程能力", "学历要求", "经验要求", "典型JD要求", "阶段一：Python与LLM应用开发基础（2-3个月）"]
+summary: "智能体Agent开发工程师（AI Agent Developer/Engineer）是2025-2026年AI领域最热门的新兴岗位之一，负责设计、开发和部署基于大语言模型的AI Agent系统。AI Agent是指能够自主感知环境、进行推理规划、调用工具并执行任务以达成目标的智能系统，被认为是大模型落地的下一代。"
+source: ["https://blog.langchain.dev", "https://www.zhipin.com", "https://www.liepin.com", "https://platform.openai.com/docs", "https://docs.anthropic.com/research/building-effective-agents", "https://langchain-ai.github.io/langgraph"]
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # 简介
@@ -16,13 +16,13 @@ last_update: 2026-07-28
 
 与传统的大模型应用工程师侧重单次对话和RAG问答不同，Agent开发工程师聚焦于构建具备自主决策能力的AI系统，核心技术包括ReAct推理框架、Plan-and-Execute规划执行、Multi-Agent多智能体协作、Tool Use/Function Calling工具调用、记忆管理、工作流编排等。该岗位在字节跳动（扣子/Coze）、阿里（通义千问Agent）、百度（文心智能体）、腾讯（混元Agent）以及各类AI创业公司中需求爆发式增长。
 
-# 最新数据
+## 最新数据
 
 根据猎聘2026年7月数据，AI Agent开发工程师是2026年上半年招聘量增长最快的AI岗位之一，同比增长超过200%。字节跳动Coze平台Agent开发工程师开出25K-50K·15薪；百度文心智能体开发岗位社招薪资30K-55K；AI独角兽公司Agent架构师岗位月薪可达60K-100K。BOSS直聘数据显示，2026年Q2明确提及"Agent"或"智能体"的岗位发布量是2025年同期的3.5倍，岗位覆盖互联网大厂、AI创业公司、金融科技、企业服务等多个领域。
 
 LangChain官方博客2026年初发布的Agent开发生态报告指出，Agent开发正从早期的AutoGPT式自主Agent向可控、可观测、可评估的生产级Agent系统演进，LangGraph/LlamaIndex Workflows/CrewAI/AutoGen等框架快速成熟，企业级Agent开发需求进入爆发期。OpenAI在2025-2026年持续强化Function Calling和Assistants API能力，Agent开发技术栈日趋标准化。
 
-# 当前就业趋势
+## 当前就业趋势
 
 **Agent是大模型落地的核心方向**：从2023年的ChatGPT/RAG到2024-2025年的Copilot，再到2025-2026年的Agent，大模型应用范式持续演进。Agent被认为是大模型从"工具"走向"助手"再到"自主执行者"的关键一步，各大厂纷纷布局Agent平台和生态。
 
@@ -36,7 +36,7 @@ LangChain官方博客2026年初发布的Agent开发生态报告指出，Agent开
 
 **Agent+RAG+工具生态深度融合**：现代Agent系统通常融合RAG知识库检索、Function Calling工具调用、API集成、工作流编排等多种技术，全栈式Agent开发能力最受青睐。
 
-# 核心技能
+## 核心技能
 
 ## 理论基础
 
@@ -68,7 +68,7 @@ LangChain官方博客2026年初发布的Agent开发生态报告指出，Agent开
 - **评估与迭代**：能构建Agent评估数据集和评估pipeline，通过数据分析持续迭代Agent效果
 - **安全与护栏**：理解Agent安全风险（Prompt注入/工具滥用/数据泄露），能设计安全护栏和防护机制
 
-# 企业要求
+## 企业要求
 
 ## 学历要求
 
@@ -93,7 +93,7 @@ LangChain官方博客2026年初发布的Agent开发生态报告指出，Agent开
 6. 熟悉FastAPI/Docker等工程化工具，有生产级AI应用部署经验
 7. 有Agent开源项目贡献、技术博客、或线上Agent产品经验者优先
 
-# 薪资区间
+## 薪资区间
 
 | 经验层级 | 月薪范围（一线城市） | 年薪范围 | 备注 |
 |---------|-------------------|---------|------|
@@ -122,7 +122,7 @@ LangChain官方博客2026年初发布的Agent开发生态报告指出，Agent开
 - 低代码Agent平台开发：产品化方向，薪资较高
 - 垂直领域Agent开发：需要行业知识，差异化竞争
 
-# 学习建议
+## 学习建议
 
 ## 阶段一：Python与LLM应用开发基础（2-3个月）
 
@@ -158,11 +158,11 @@ LangChain官方博客2026年初发布的Agent开发生态报告指出，Agent开
 - **书籍**：《Building LLM Apps》、《LLM应用开发实战》、LangChain官方教程
 - **社区**：LangChain Blog、LangChain Discord、GitHub Trending（AI Agents）、Papers with Code、机器之心、量子位、AI Agent相关Substack
 
-# AI总结
+## AI总结
 
 智能体Agent开发工程师是2025-2026年AI领域最炙手可热的新兴岗位，招聘量同比增长超过200%。应届起薪20K-35K，3-5年经验可达35K-60K，资深Agent架构师月薪可达60K-100K。该岗位处于大模型应用开发的最前沿，融合了LLM推理、工具调用、RAG检索、多智能体协作、工作流编排等多种技术。与传统算法岗不同，Agent开发更看重工程实现能力和系统设计能力，学历门槛相对灵活，但要求候选人有扎实的Python编程能力、丰富的LLM开发经验和完整的Agent项目实践。当前Agent技术正从概念验证快速走向生产级应用，掌握LangGraph工作流编排、Multi-Agent协作、Agent评估和可观测性的工程师最为稀缺。建议学习者从LangChain/LangGraph入手，通过大量项目实践积累经验，积极参与开源社区和技术输出，建立个人作品集。
 
-# Reference
+## Reference
 
 1. LangChain. LangChain Official Documentation & Blog: Agent Patterns and LangGraph. 2026年7月访问. 访问时间：2026-07-28. https://blog.langchain.dev
 2. BOSS直聘. 《2026年AI Agent岗位招聘趋势报告》. 2026年6月发布. 访问时间：2026-07-28. https://www.zhipin.com
@@ -170,3 +170,8 @@ LangChain官方博客2026年初发布的Agent开发生态报告指出，Agent开
 4. OpenAI. OpenAI Developer Documentation: Function Calling and Assistants API. 2026年7月访问. 访问时间：2026-07-28. https://platform.openai.com/docs
 5. Anthropic. Building Effective Agents - Engineering Guide. 2025年发布. 访问时间：2026-07-28. https://docs.anthropic.com/research/building-effective-agents
 6. LangChain. LangGraph Documentation: Building Stateful, Multi-Actor Applications. 2026年7月访问. 访问时间：2026-07-28. https://langchain-ai.github.io/langgraph
+## Related Knowledge
+
+- [AI产品经理](AI产品经理.md)
+- [AI产品运营](AI产品运营.md)
+- [AI伦理与合规专员](AI伦理与合规专员.md)

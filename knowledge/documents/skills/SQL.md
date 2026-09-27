@@ -1,9 +1,13 @@
 ---
-title: SQL
-category: skills
-tags: [数据库, 查询语言, 通用]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-sql-6f97da9732"
+title: "SQL"
+category: "skills"
+tags: ["数据库", "查询语言", "通用"]
+keywords: ["SQL", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 2 周）", "阶段 3 — 目标：掌握（预估 2 周）"]
+summary: "结构化查询语言，所有涉及数据存储的岗位都需要的通用技能。MySQL 是最流行的关系型数据库。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # SQL
@@ -75,7 +79,7 @@ date: 2026-07-28
 
 **评估方式：** 环境搭建 — 主从复制正常运行，延迟 < 1s
 
-# 进阶要点与面试高频
+## 进阶要点与面试高频
 
 SQL 的进阶分水岭是**窗口函数与 CTE**。窗口函数（ROW_NUMBER/RANK/DENSE_RANK、LAG/LEAD、SUM() OVER）在不折叠行的情况下做组内计算——"每组取前 N""连续登录天数""环比同比"这类经典题都是窗口函数的标准应用场景；CTE（WITH 子句）让复杂查询可读可维护，递归 CTE 可处理树形数据（组织架构、分类树）。
 
@@ -83,8 +87,13 @@ SQL 的进阶分水岭是**窗口函数与 CTE**。窗口函数（ROW_NUMBER/RAN
 
 方言差异在实际工作高频出现：MySQL 与 PostgreSQL 的 JSON 支持、分页写法（LIMIT/OFFSET vs 游标分页——深分页优化的标准答案是游标/延迟关联）、时间函数差异。手写 SQL 是数据岗与后端岗的共同必考题，重点练习：多表 JOIN 的去重计数、留存率计算、Top N per group、累计指标——四类题型覆盖了绝大多数面试 SQL。
 
-# Reference
+## Reference
 
 1. Oracle. MySQL 8.x Reference Manual（SQL 语法与执行计划）. dev.mysql.com/doc. 访问时间: 2026-09-13.
 2. The PostgreSQL Global Development Group. PostgreSQL 官方文档（窗口函数/CTE）. postgresql.org/docs. 访问时间: 2026-09-13.
 3. SQLBolt. Interactive SQL Tutorial（交互式入门）. sqlbolt.com. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

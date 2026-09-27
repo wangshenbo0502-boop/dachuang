@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { Check, CopyDocument, Edit, MagicStick, Plus, Printer, Refresh, Select } from "@element-plus/icons-vue";
+import { Check, CopyDocument, Edit, MagicStick, Plus, Printer, Promotion, Refresh, Select } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useUserStore } from "@/stores/user";
 import type { ResumeVersion, StudentProfile } from "@/types/api";
@@ -10,6 +11,7 @@ import SectionPanel from "@/components/common/SectionPanel.vue";
 import StateView from "@/components/common/StateView.vue";
 
 const user = useUserStore();
+const router = useRouter();
 const profile = ref<StudentProfile | null>(null);
 const versions = ref<ResumeVersion[]>([]);
 const selected = ref<ResumeVersion | null>(null);
@@ -54,6 +56,10 @@ function formatDateRange(start?: string | null, end?: string | null) {
 }
 function printResume() {
   window.print();
+}
+function startApplication() {
+  if (!selected.value) return;
+  router.push({ path: "/jobs", query: { resume_version_id: String(selected.value.id) } });
 }
 function formatVersionTime(value?: string) {
   if (!value) return "刚刚";
@@ -153,7 +159,7 @@ onMounted(load);
           <div v-for="item in versions" :key="item.id" class="version-item" :class="{ active: selected?.id === item.id }" @click="selected = item; pending = null"><b>{{ item.name }}</b><span>{{ item.target_job }}</span><small>更新于 {{ formatVersionTime(item.updated_at || item.created_at) }}</small></div>
         </aside>
         <main v-if="selected" class="version-editor">
-          <section class="version-heading"><div><span class="resume-kicker">岗位简历</span><h2>{{ selected.name }}</h2><p>目标岗位：{{ selected.target_job }}</p></div><div class="version-actions"><el-button :icon="CopyDocument" @click="openCreate(selected)">复制一份</el-button><el-button :icon="Printer" @click="printResume">打印 / 导出 PDF</el-button><el-button :icon="MagicStick" type="primary" :loading="optimizing" @click="optimize">AI 优化</el-button><el-button :icon="Select" :loading="saving" @click="saveSelection">保存选择</el-button></div></section>
+          <section class="version-heading"><div><span class="resume-kicker">岗位简历</span><h2>{{ selected.name }}</h2><p>目标岗位：{{ selected.target_job }}</p></div><div class="version-actions"><el-button type="primary" :icon="Promotion" @click="startApplication">一键投递</el-button><el-button :icon="CopyDocument" @click="openCreate(selected)">复制一份</el-button><el-button :icon="Printer" @click="printResume">打印 / 导出 PDF</el-button><el-button :icon="MagicStick" type="primary" :loading="optimizing" @click="optimize">AI 优化</el-button><el-button :icon="Select" :loading="saving" @click="saveSelection">保存选择</el-button></div></section>
           <div class="resume-editor-grid">
             <div class="resume-selection-column">
               <div class="selection-caption"><b>选择要展示的内容</b><span>调整左侧内容，右侧会即时更新预览。</span></div>

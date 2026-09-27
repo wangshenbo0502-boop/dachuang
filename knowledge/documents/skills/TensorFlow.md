@@ -1,9 +1,13 @@
 ---
-title: TensorFlow
-category: skills
-tags: [AI, 深度学习, Python, 框架]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-tensorflow-1270bae8f7"
+title: "TensorFlow"
+category: "skills"
+tags: ["AI", "深度学习", "Python", "框架"]
+keywords: ["TensorFlow", "技能", "阶段 1 — 目标：了解（预估 2 周）", "阶段 2 — 目标：熟悉（预估 3 周）", "阶段 3 — 目标：掌握（预估 4 周）"]
+summary: "Google 开源的深度学习框架，工业界部署广泛（TF Serving、TF Lite）。与 PyTorch 二选一掌握即可，工业界岗位有时特别要求。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "migrated_pending_review"
 ---
 
 # TensorFlow
@@ -76,8 +80,13 @@ date: 2026-07-28
 - 部署模型到移动端并优化推理速度
 
 **评估方式：** 部署验证 — 模型成功部署到移动端，推理速度提升3倍以上，精度损失控制在可接受范围内
-# Reference
+## Reference
 
 1. Google. TensorFlow 官方文档与教程. tensorflow.org. 访问时间: 2026-09-13. https://www.tensorflow.org/?hl=zh-cn
 2. Google. Keras 官方文档（TF 高层 API）. keras.io. 访问时间: 2026-09-13.
 3. Google. TensorFlow Model Optimization 官方指南（端侧部署）. tensorflow.org/model_optimization. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

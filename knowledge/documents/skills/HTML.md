@@ -1,9 +1,13 @@
 ---
-title: HTML
-category: skills
-tags: [前端, 基础, Web开发]
-source: skill_improvement.json
-date: 2026-07-28
+id: "skills-html-c3cc07a464"
+title: "HTML"
+category: "skills"
+tags: ["前端", "基础", "Web开发"]
+keywords: ["HTML", "技能", "阶段 1 — 目标：了解（预估 1 周）", "阶段 2 — 目标：熟悉（预估 1 周）", "阶段 3 — 目标：掌握（预估 1 周）"]
+summary: "网页结构和内容标记语言，所有 Web 开发的基础，门槛低但精通需要深入理解语义化和可访问性。"
+source: ["skill_improvement.json"]
+updated_at: "2026-09-27"
+status: "needs_source_review"
 ---
 
 # HTML
@@ -71,7 +75,7 @@ date: 2026-07-28
 
 **评估方式：** 工具检测 — 通过 W3C 验证器检测，Lighthouse Accessibility 评分 > 90
 
-# 进阶要点与面试高频
+## 进阶要点与面试高频
 
 HTML 的进阶价值在于**语义化、可访问性与平台能力**三个方向。语义化是用对标签而非堆 div：header/nav/main/article/section/aside/footer 表达文档结构，figure/figcaption、time、details/summary 各司其职。语义化的收益是实打实的：屏幕阅读器可正确导航（可访问性 a11y）、搜索引擎更好理解页面（SEO）、代码可维护性更高。可访问性还包括 alt 文本、label 关联表单控件、ARIA 属性的规范使用、键盘可达性（tabindex 与焦点管理）。
 
@@ -79,8 +83,13 @@ HTML 的进阶价值在于**语义化、可访问性与平台能力**三个方�
 
 加载行为是性能话题的入口：script 的 defer 与 async 区别（defer 保序延后执行、async 下载完即执行）、预加载提示（preload/prefetch/preconnect）、图片的 srcset/lazy loading。面试高频：语义化标签的意义、defer 与 async 区别、localStorage 与 Cookie 区别、浏览器渲染流程中 HTML 的解析与 DOM 构建、跨标签页通信（BroadcastChannel/storage 事件）。
 
-# Reference
+## Reference
 
 1. WHATWG. HTML Living Standard（唯一现行标准）. html.spec.whatwg.org. 访问时间: 2026-09-13.
 2. MDN Web Docs. HTML：超文本标记语言. developer.mozilla.org/zh-CN/docs/Web/HTML. 访问时间: 2026-09-13.
 3. web.dev. Learn HTML（Google 官方课程）. web.dev/learn/html. 访问时间: 2026-09-13.
+## Related Knowledge
+
+- [Agent智能体开发](Agent智能体开发.md)
+- [Burp Suite渗透测试工具](Burp Suite渗透测试工具.md)
+- [CSS](CSS.md)

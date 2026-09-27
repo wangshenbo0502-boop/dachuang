@@ -1,9 +1,13 @@
 ---
-title: Kaggle数据科学竞赛
-category: competition
-tags: [数据科学, 机器学习, 深度学习, 数据竞赛, Kaggle, 国际竞赛]
-source: [Kaggle官网, Kaggle Competitions Documentation, 知乎-Kaggle竞赛指南, CSDN-Kaggle入门教程, Medium-Kaggle Master访谈]
-last_update: 2026-07-28
+id: "competition-kaggle-396d0ca851"
+title: "Kaggle数据科学竞赛"
+category: "competition"
+tags: ["数据科学", "机器学习", "深度学习", "数据竞赛", "Kaggle", "国际竞赛"]
+keywords: ["Kaggle数据科学竞赛", "竞赛", "Kaggle", "数据科学竞赛", "竞赛简介", "竞赛价值", "参赛要求", "赛制说明", "含金量评级", "学习路线", "常用工具与框架", "高频考点"]
+summary: "Kaggle是全球最大的数据科学与机器学习竞赛平台，成立于2010年，2017年被Google收购，现为Google Cloud旗下重要的AI生态产品。截至2026年，Kaggle拥有超过1500万注册用户，覆盖全球190多个国家和地区，是数据科学家、机器学习工程师和AI研究者的核心社区。"
+source: ["Kaggle官网", "Kaggle Competitions Documentation", "知乎-Kaggle竞赛指南", "CSDN-Kaggle入门教程", "Medium-Kaggle Master访谈"]
+updated_at: "2026-07-28"
+status: "needs_source_review"
 ---
 
 # Kaggle数据科学竞赛
@@ -181,3 +185,8 @@ Kaggle竞赛成绩在数据科学和AI领域的求职中具有显著优势：
 5. CSDN - Kaggle入门教程与实战经验总结
 6. Medium - Kaggle Master Interviews and Insights
 7. 访问时间：2026-07-28
+## Related Knowledge
+
+- [ACM-ICPC国际大学生程序设计竞赛](ACM-ICPC国际大学生程序设计竞赛.md)
+- [CCF CSP计算机软件能力认证](CCF CSP计算机软件能力认证.md)
+- [CCPC中国大学生程序设计竞赛](CCPC中国大学生程序设计竞赛.md)

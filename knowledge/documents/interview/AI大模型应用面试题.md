@@ -1,11 +1,13 @@
 ---
+id: "interview-ai-9f86161064"
 title: "AI大模型应用面试题（20题）"
-category: "面试题"
-type: "AI大模型"
-difficulty: "中等"
+category: "interview"
 tags: ["RAG", "Agent", "LangChain", "Prompt工程", "大模型", "微调"]
+keywords: ["AI大模型应用面试题（20题）", "面试", "AI", "大模型应用面试题", "Q1: 什么是RAG，RAG的原理和流程", "Q2: RAG和微调（Fine-tuning）的区别和选型", "Q3: 什么是向量数据库，常用的向量数据库有哪些", "Q4: 什么是Embedding，常用的Embedding模型", "Q5: 什么是LangChain，核心组件有哪些", "Q6: 什么是Agent，Agent的核心能力", "Q7: ReAct范式是什么", "Q8: 什么是Function Calling/工具调用"]
+summary: "本文档涵盖AI大模型应用开发的核心知识点，包括RAG、Agent、Prompt工程、微调、推理加速等内容，是AI大模型应用工程师面试的高频考点。"
 source: ["LangChain官方文档", "OpenAI官方文档", "Hugging Face", "吴恩达DeepLearning.AI课程", "斯坦福CS224N"]
-last_update: "2026-07-28"
+updated_at: "2026-07-28"
+status: "migrated_pending_review"
 ---
 
 # AI大模型应用面试题（20题）
@@ -613,7 +615,7 @@ Function Calling（函数调用/工具调用）是大语言模型的一项重要
 以OpenAI API为例：
 
 ```python
-# 1. 定义函数
+## 1. 定义函数
 functions = [
     {
         "name": "get_weather",
@@ -635,10 +637,10 @@ functions = [
     }
 ]
 
-# 2. 用户提问后，模型返回函数调用
-# model_response: {"name": "get_weather", "arguments": '{"city": "北京", "date": "2026-07-28"}'}
+## 2. 用户提问后，模型返回函数调用
+## model_response: {"name": "get_weather", "arguments": '{"city": "北京", "date": "2026-07-28"}'}
 
-# 3. 执行函数并将结果返回给模型继续生成
+## 3. 执行函数并将结果返回给模型继续生成
 ```
 
 ### Function Calling的应用场景
@@ -1231,7 +1233,7 @@ Token不一定是完整的单词，它可以是：
 - **Hugging Face Tokenizers**：通用分词库
 
 ```python
-# 使用tiktoken计算
+## 使用tiktoken计算
 import tiktoken
 encoding = tiktoken.encoding_for_model("gpt-4o")
 text = "你好，世界！Hello, World!"
@@ -2166,3 +2168,8 @@ RLHF是理解现代大语言模型训练流程的关键概念。回答时要讲�
 3. **Hugging Face文档** - https://huggingface.co/docs - 访问时间：2026-07-28
 4. **吴恩达DeepLearning.AI - 大模型应用开发课程** - https://www.deeplearning.ai/ - 访问时间：2026-07-28
 5. **斯坦福CS224N - 自然语言处理与深度学习** - https://web.stanford.edu/class/cs224n/ - 访问时间：2026-07-28
+## Related Knowledge
+
+- [AI大模型应用开发面试题](AI大模型应用开发面试题.md)
+- [AI算法面试题](AI算法面试题.md)
+- [Go后端开发面试题](Go后端开发面试题.md)
