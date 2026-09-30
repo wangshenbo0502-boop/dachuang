@@ -48,6 +48,7 @@ class SqliteUserMigrationTestCase(unittest.TestCase):
                 [
                     "users.email",
                     "users.phone",
+                    "users.birth_date",
                     "users.target_city",
                     "users.target_salary",
                     "user_competitions.competition_date",
@@ -55,7 +56,7 @@ class SqliteUserMigrationTestCase(unittest.TestCase):
             )
             self.assertEqual(ensure_sqlite_compatibility_columns(engine), [])
             self.assertTrue(
-                {"email", "phone", "target_city", "target_salary"}.issubset(
+                {"email", "phone", "birth_date", "target_city", "target_salary"}.issubset(
                     {column["name"] for column in inspect(engine).get_columns("users")}
                 )
             )

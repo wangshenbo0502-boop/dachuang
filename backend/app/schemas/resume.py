@@ -23,6 +23,7 @@ class ResumeOptimizationRequest(BaseModel):
     original_resume: Optional[str] = Field(default="", max_length=10000, description="原始简历文本（可选）")
     selected_project_ids: Optional[list[int]] = Field(default=None, description="当前简历选择的档案项目ID")
     selected_skill_ids: Optional[list[int]] = Field(default=None, description="当前简历选择的档案技能ID")
+    job_id: str | None = Field(default=None, max_length=200)
 
     @model_validator(mode="after")
     def require_user_or_name(self) -> "ResumeOptimizationRequest":
@@ -39,6 +40,9 @@ class OptimizedProject(BaseModel):
     original: str = Field(description="原始描述")
     optimized: str = Field(description="优化后的描述")
     highlight_tags: list[str] = Field(default_factory=list, description="亮点标签")
+    source_experience_id: int | None = None
+    fact_warnings: list[str] = Field(default_factory=list)
+    review_status: str = "pending_review"
 
 
 class OptimizedSkill(BaseModel):

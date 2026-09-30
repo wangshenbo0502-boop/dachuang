@@ -11,7 +11,7 @@ const app = useAppStore();
   <header class="top-header">
     <div class="header-left">
       <el-button class="mobile-menu" :icon="Menu" circle aria-label="打开导航" aria-controls="app-sidebar" :aria-expanded="app.mobileSidebarOpen" @click="app.toggleMobile" />
-      <div><span class="header-eyebrow">CAREER WORKSPACE</span><h1>就业工作台</h1></div>
+      <div><span class="header-eyebrow">IT CAREER WORKSPACE</span><h1>IT 求职工作台</h1></div>
     </div>
     <div class="header-actions">
       <el-tooltip content="检索就业资源"><el-button :icon="Search" circle aria-label="检索就业资源" @click="router.push('/resources')" /></el-tooltip>

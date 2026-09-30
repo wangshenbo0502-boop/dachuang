@@ -9,6 +9,9 @@ import { err } from "@/utils/format";
 import type { Competition, Internship, Project, Skill } from "@/types/api";
 import PageHeader from "@/components/common/PageHeader.vue";
 import StateView from "@/components/common/StateView.vue";
+import RadarChart from "@/components/charts/RadarChart.vue";
+import BarChart from "@/components/charts/BarChart.vue";
+import SectionPanel from "@/components/common/SectionPanel.vue";
 const user = useUserStore(),
   store = useProfileStore(),
   tab = ref("basic"),
@@ -18,6 +21,25 @@ const user = useUserStore(),
   kind = ref<"skill" | "project" | "competition" | "internship">("skill"),
   editing = ref(-1);
 const p = computed(() => store.profile);
+const insightLabels = ["技能描述", "项目职责", "项目成果", "实习描述", "竞赛描述", "基本信息"];
+const insightValues = computed(() => {
+  const profile = p.value;
+  if (!profile) return [0, 0, 0, 0, 0, 0];
+  const ratio = (items: unknown[], count: number) => items.length ? Math.round(count / items.length * 100) : 0;
+  return [
+    ratio(profile.skills, profile.skills.filter(item => item.description.trim()).length),
+    ratio(profile.projects, profile.projects.filter(item => item.role.trim()).length),
+    ratio(profile.projects, profile.projects.filter(item => item.description.trim()).length),
+    ratio(profile.internships, profile.internships.filter(item => item.description.trim()).length),
+    ratio(profile.competitions, profile.competitions.filter(item => item.description.trim()).length),
+    Math.round([profile.name, profile.school, profile.major, profile.grade, profile.bio, profile.email, profile.phone].filter(Boolean).length / 7 * 100),
+  ];
+});
+const evidenceLabels = computed(() => ["技能", "项目", "实习", "竞赛"]);
+const evidenceValues = computed(() => {
+  const profile = p.value;
+  return profile ? [profile.skills.length, profile.projects.length, profile.internships.length, profile.competitions.length] : [0, 0, 0, 0];
+});
 const base = reactive({
   name: "",
   school: "",
@@ -26,6 +48,7 @@ const base = reactive({
   bio: "",
   email: "",
   phone: "",
+  birth_date: null as string | null,
   target_city: "",
   target_salary: "",
 });
@@ -153,15 +176,34 @@ onMounted(load);
 <template>
   <div>
     <PageHeader
-      title="我的就业档案"
-      description="完善个人经历，为AI就业分析提供准确、持续更新的数据基础。"
+      title="我的 IT 求职档案"
       ><el-progress
         :percentage="store.completeness || 0"
         :stroke-width="8"
         style="width: 180px" /></PageHeader
     ><StateView :loading="store.loading && !p" :error="error" @retry="load"
       ><template #content
-        ><div class="profile-layout">
+        ><div class="profile-insights">
+          <div class="profile-insight-heading">
+            <div><span>IT 能力证据概览</span><h3>档案完整度与经历构成</h3><p>记录完整度不等于技术能力评分；内容来自你的个人档案。</p></div>
+            <el-tag type="success" effect="plain">档案完整度 {{ store.completeness || 0 }}%</el-tag>
+          </div>
+          <div class="profile-insight-grid">
+            <SectionPanel title="能力证据雷达" subtitle="各类记录中已填写说明的比例">
+              <RadarChart :labels="insightLabels" :values="insightValues" @select="index => tab = ['skill', 'project', 'project', 'internship', 'competition', 'basic'][index] || 'basic'" />
+            </SectionPanel>
+            <SectionPanel title="经历构成" subtitle="数量越多不代表质量越高，重点是补充成果证据">
+              <BarChart :labels="evidenceLabels" :values="evidenceValues" unit="项" @select="index => tab = ['skill', 'project', 'internship', 'competition'][index] || 'basic'" />
+            </SectionPanel>
+            <section class="profile-insight-summary">
+              <span>下一步建议</span>
+              <h4>{{ !p?.projects.length ? "先补充一个技术项目" : !p?.skills.length ? "先添加你的核心技术栈" : !p?.bio ? "补充一段开发方向简介" : "为项目补充可验证成果" }}</h4>
+              <p>完整的技术事实会直接影响岗位匹配、简历表达和成长规划质量。</p>
+              <el-button type="primary" plain @click="tab = !p?.projects.length ? 'project' : !p?.skills.length ? 'skill' : 'basic'">去补充档案</el-button>
+            </section>
+          </div>
+        </div>
+        <div class="profile-layout">
           <aside class="profile-summary">
             <el-avatar :size="72">{{ p?.name.slice(0, 1) }}</el-avatar>
             <h3>{{ p?.name }}</h3>
@@ -202,6 +244,13 @@ onMounted(load);
                     ><el-input v-model="base.email" /></el-form-item
                   ><el-form-item label="手机号"
                     ><el-input v-model="base.phone" /></el-form-item
+                  ><el-form-item label="出生日期"
+                    ><el-date-picker
+                      v-model="base.birth_date"
+                      type="date"
+                      value-format="YYYY-MM-DD"
+                      placeholder="选择出生日期"
+                      style="width: 100%" /></el-form-item
                   ><el-form-item label="目标城市"
                     ><el-input v-model="base.target_city" /></el-form-item
                   ><el-form-item label="期望薪资"

@@ -1,0 +1,13 @@
+22:10:04 [vite] Internal server error: Codegen node is missing for element/if/for node. Apply appropriate transforms first.
+  Plugin: vite:vue
+  File: D:/dachuangxiangmu/frontend/src/views/jobs/JobsView.vue
+      at assert (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:2098:11)
+      at genNode (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4088:7)
+      at genNodeList (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4063:7)
+      at genNodeListAsArray (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4050:3)
+      at genNodeList (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4061:7)
+      at genVNodeCall (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4250:3)
+      at genNode (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4113:7)
+      at genFunctionExpression (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4331:7)
+      at genNode (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4125:7)
+      at genNodeList (D:\dachuangxiangmu\frontend\node_modules\@vue\compiler-core\dist\compiler-core.cjs.js:4063:7)

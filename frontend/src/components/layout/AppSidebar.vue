@@ -43,7 +43,7 @@ const workflowItems = [
   ["/profile", "个人档案", User],
   ["/analysis", "就业画像", DataAnalysis],
   ["/jobs", "岗位匹配", Briefcase],
-  ["/applications", "投递助手", Promotion],
+  ["/applications", "投递记录", Promotion],
   ["/resume", "我的简历", Document],
   ["/growth", "成长规划", TrendCharts],
   ["/resources", "就业资源", Collection],
@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
   <aside id="app-sidebar" class="sidebar" :class="{ open: app.mobileSidebarOpen, 'is-compact': isCompact }" :inert="isMobile && !app.mobileSidebarOpen" aria-label="工作台导航" @keydown.esc="closeMobile">
     <div class="brand">
       <div class="brand-mark"><el-icon><Opportunity /></el-icon></div>
-      <div class="brand-text"><b>AI 求职助手</b><span>你的求职成长工作台</span></div>
+      <div class="brand-text"><b>IT 求职成长系统</b><span>技术岗位求职工作台</span></div>
       <el-tooltip :content="isCompact ? '展开侧栏' : '收起侧栏'" placement="right" :disabled="isMobile">
         <button class="sidebar-toggle" :aria-label="isMobile ? '关闭导航' : isCompact ? '展开侧栏' : '收起侧栏'" :aria-expanded="!isCompact" aria-controls="sidebar-content" @click="isMobile ? closeMobile() : app.toggleSidebar()">
           <el-icon><component :is="isMobile ? Close : isCompact ? ArrowRight : ArrowLeft" /></el-icon>
@@ -173,8 +173,8 @@ onBeforeUnmount(() => {
       </el-tooltip>
     </div>
     <div id="sidebar-content" class="sidebar-content">
-      <nav class="nav-list" aria-label="求职工作台">
-        <div class="nav-section-label">求职工作台</div>
+      <nav class="nav-list" aria-label="IT 求职工作台">
+        <div class="nav-section-label">IT 求职工作台</div>
         <el-tooltip v-for="[path, label, icon] in workflowItems" :key="path" :content="label" placement="right" :disabled="!isCompact">
           <router-link :to="path" :aria-label="label" :class="{ active: route.path === path || route.path.startsWith(`${path}/`) }" :aria-current="route.path === path || route.path.startsWith(`${path}/`) ? 'page' : undefined" @click="closeMobile">
             <el-icon><component :is="icon" /></el-icon><span>{{ label }}</span>

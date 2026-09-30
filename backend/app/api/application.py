@@ -12,6 +12,7 @@ from app.auth.dependencies import get_current_user
 from app.database.session import get_db
 from app.models.application import JobApplication
 from app.models.user import User
+from app.models.resume import Resume
 from app.schemas.application import (
     ApplicationAutomationResponse,
     JobApplicationCreate,
@@ -68,6 +69,21 @@ def create_application(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
+    if request.resume_version_id is not None:
+        version = db.get(Resume, request.resume_version_id)
+        if not version or version.user_id != current_user.id:
+            raise ResourceNotFoundError("简历版本不存在")
+    try:
+        boss_automation_service._validate_url(str(request.boss_url))
+    except BossAutomationError as exc:
+        raise AppException(str(exc), code=4221, status_code=422) from exc
+    existing = db.scalar(select(JobApplication).where(
+        JobApplication.user_id == current_user.id,
+        JobApplication.boss_url == str(request.boss_url),
+        JobApplication.resume_version_id == request.resume_version_id,
+    ).order_by(JobApplication.id.desc()))
+    if existing:
+        return success(serialize(existing), message="该简历已有此岗位的投递记录")
     record = JobApplication(
         user_id=current_user.id,
         job_id=request.job_id,
@@ -112,6 +128,8 @@ async def start_automation(
     record = db.get(JobApplication, application_id)
     if not record or record.user_id != current_user.id:
         raise ResourceNotFoundError(message="投递记录不存在")
+    if record.status not in ("prepared", "opened"):
+        raise AppException("该岗位已有投递结果，请继续跟进已有记录", code=4091, status_code=409)
     try:
         result = await boss_automation_service.start(record)
         record.automation_status = result["status"]

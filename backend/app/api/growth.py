@@ -75,6 +75,7 @@ def get_user_growth_plans(
 ) -> dict[str, Any]:
     """GET /api/growth/user/{user_id} - 获取用户的历史规划记录列表"""
     service = GrowthService(db)
+    require_owner(user_id, current_user)
     results = service.get_user_plans(user_id)
     return success(
         [serialize_model(r) for r in results],

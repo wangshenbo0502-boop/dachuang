@@ -9,6 +9,7 @@ from app.models.analysis import ProfileAnalysis
 from app.models.resume import Resume, ResumeOptimization
 from app.models.growth import GrowthPlan
 from app.models.application import JobApplication
+from app.models.activity import GrowthTask, ResourceEvent
 
 __all__ = [
     "User",

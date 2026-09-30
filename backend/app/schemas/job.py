@@ -15,6 +15,11 @@ class JobBase(BaseModel):
     title: str = Field(description="岗位名称")
     category: Optional[str] = Field(default=None, description="岗位分类")
     tags: list[str] = Field(default_factory=list, description="技能标签")
+    required_skills: list[str] = Field(default_factory=list)
+    preferred_skills: list[str] = Field(default_factory=list)
+    hard_requirements: dict = Field(default_factory=dict)
+    published_at: str | None = None
+    source: str = ""
 
 
 class JobBrief(JobBase):
@@ -43,11 +48,7 @@ class JobMatchRequest(BaseModel):
     user_id: Optional[int] = Field(default=None, description="用户ID（可选，用于保存匹配历史）")
 
 
-class MatchedJob(BaseModel):
-    job_id: str
-    title: str
-    category: Optional[str] = None
-    tags: list[str] = Field(default_factory=list)
+class MatchedJob(JobBrief):
     match_score: float = Field(description="匹配得分（0-100）")
     matched_skills: list[str] = Field(default_factory=list, description="命中的技能")
     missing_skills: list[str] = Field(default_factory=list, description="缺失的技能")

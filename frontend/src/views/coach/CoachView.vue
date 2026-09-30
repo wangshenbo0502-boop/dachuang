@@ -533,7 +533,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="assistant-page">
-    <PageHeader title="AI求职助手" description="求职问题和档案整理，都可以在这里完成。">
+    <PageHeader title="IT 求职教练">
       <div class="assistant-page-actions">
         <el-button class="assistant-header-new" :icon="Plus" @click="startNewConversation">新对话</el-button>
         <el-segmented v-model="mode" :options="modeOptions" :disabled="loading" />

@@ -43,13 +43,23 @@ class BossAutomationService:
 
     @staticmethod
     def _validate_url(url: str) -> None:
-        parsed = urlparse(url)
-        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
-            raise BossAutomationError("请填写有效的 BOSS 直聘岗位链接")
+        try:
+            parsed = urlparse(url)
+            port = parsed.port
+        except ValueError as exc:
+            raise BossAutomationError("请填写有效的 BOSS 直聘岗位链接") from exc
+        if (
+            parsed.scheme != "https"
+            or not parsed.netloc
+            or parsed.username is not None
+            or parsed.password is not None
+            or port not in (None, 443)
+        ):
+            raise BossAutomationError("请填写 HTTPS 的 BOSS 直聘岗位链接，不要包含账号或自定义端口")
         host = parsed.hostname or ""
         if not (host == "zhipin.com" or host.endswith(".zhipin.com")):
-            raise BossAutomationError("为保护账号安全，自动投递只支持 zhipin.com 岗位链接")
-        if url.rstrip("/") in {"https://www.zhipin.com", "https://www.zhipin.com/"}:
+            raise BossAutomationError("为保护账号安全，岗位预填只支持 zhipin.com 岗位链接")
+        if not parsed.path.strip("/"):
             raise BossAutomationError("请填写具体岗位链接，不要使用 BOSS 首页")
 
     async def _context_for(self, user_id: int) -> BrowserContext:
@@ -83,8 +93,8 @@ class BossAutomationService:
             "textarea[placeholder*='沟通']",
             "textarea[placeholder*='留言']",
             "textarea[placeholder*='自我介绍']",
-            "textarea",
-            "[contenteditable='true']",
+            "[contenteditable='true'][data-placeholder*='沟通']",
+            "[contenteditable='true'][data-placeholder*='消息']",
         ]
         for selector in selectors:
             try:
@@ -120,14 +130,19 @@ class BossAutomationService:
             if await self._looks_like_login_page(page):
                 return {
                     "status": "needs_login",
-                    "message": "请在打开的 BOSS 页面完成登录或验证码，完成后再次点击一键投递",
+                    "message": "请在打开的 BOSS 页面完成登录或验证码，完成后再次点击“打开页面并预填”",
                     "url": page.url,
                     "greeting_filled": False,
                 }
+            self._validate_url(page.url)
             greeting_filled = await self._fill_greeting(page, application.greeting)
             return {
                 "status": "ready_for_user_confirm",
-                "message": "岗位页面已打开，请检查简历和开场白，并在 BOSS 页面点击最终发送",
+                "message": (
+                    "开场白已预填，请检查简历和内容，并在 BOSS 页面确认最终发送"
+                    if greeting_filled else
+                    "岗位页面已打开，但未找到可安全预填的开场白输入框；请手动填写并确认发送"
+                ),
                 "url": page.url,
                 "greeting_filled": greeting_filled,
             }

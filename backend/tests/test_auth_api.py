@@ -26,11 +26,11 @@ def auth_api():
     app.dependency_overrides.clear()
     db.close()
 
-def register(client, codes, email, name="测试同学"):
+def register(client, codes, email, name="测试同学", **fields):
     assert client.post("/api/auth/email/send-code", json={"email": email}).status_code == 200
     response = client.post("/api/auth/register", json={
         "email": email, "code": codes[(email, "REGISTER")], "password": "correct-password",
-        "confirm_password": "correct-password", "name": name,
+        "confirm_password": "correct-password", "name": name, **fields,
     })
     assert response.status_code == 201, response.json()
     return response.json()["data"]
@@ -41,7 +41,10 @@ def headers(payload):
 def test_registration_login_me_logout_and_hash(auth_api):
     client, db, codes = auth_api
     assert client.post("/api/auth/email/send-code", json={"email": "not-qq@example.com"}).status_code == 422
-    account = register(client, codes, "123456789@qq.com")
+    account = register(client, codes, "123456789@qq.com", phone="13800138000", birth_date="2003-06-15")
+    profile = client.get("/api/users/me", headers=headers(account)).json()["data"]
+    assert profile["phone"] == "13800138000"
+    assert profile["birth_date"] == "2003-06-15"
     stored = db.get(Account, account["user"]["id"])
     assert stored.password_hash != "correct-password"
     assert stored.password_hash.startswith("$argon2id$")

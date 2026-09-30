@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Check, CopyDocument, Link, Promotion, Refresh, Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
@@ -15,6 +15,10 @@ const loading = ref(true);
 const error = ref("");
 const query = ref("");
 const activeStatus = ref<"all" | ApplicationStatus>("all");
+const feedbackOpen = ref(false);
+const editing = ref<JobApplication | null>(null);
+const saving = ref(false);
+const feedback = reactive({ status: "applied" as ApplicationStatus, note: "", task: "" });
 const statusOptions: Array<{ value: "all" | ApplicationStatus; label: string }> = [
   { value: "all", label: "全部" }, { value: "prepared", label: "待投递" },
   { value: "opened", label: "已打开" }, { value: "applied", label: "已投递" },
@@ -50,7 +54,7 @@ async function load() {
 }
 function openBoss(item: JobApplication) {
   window.open(item.boss_url, "_blank", "noopener,noreferrer");
-  updateStatus(item, "opened");
+  if (item.status === "prepared") updateStatus(item, "opened");
 }
 async function updateStatus(item: JobApplication, status: ApplicationStatus) {
   try {
@@ -61,8 +65,8 @@ async function updateStatus(item: JobApplication, status: ApplicationStatus) {
   } catch (e) { ElMessage.error(err(e)); }
 }
 async function copyGreeting(item: JobApplication) {
-  await navigator.clipboard.writeText(item.greeting);
-  ElMessage.success("开场白已复制");
+  try { await navigator.clipboard.writeText(item.greeting); ElMessage.success("开场白已复制"); }
+  catch { ElMessage.warning("无法访问剪贴板，请在简历工作台查看开场白"); }
 }
 async function startAutomation(item: JobApplication) {
   try {
@@ -82,15 +86,32 @@ async function confirmApplied(item: JobApplication) {
 }
 onMounted(load);
 function goToJobs() {
-  router.push("/jobs");
+  router.push("/resume");
+}
+function openFeedback(item: JobApplication) {
+  editing.value = item;
+  Object.assign(feedback, { status: item.status, note: item.note || "", task: "" });
+  feedbackOpen.value = true;
+}
+async function saveFeedback() {
+  if (!editing.value) return;
+  saving.value = true;
+  try {
+    const updated = await api.updateApplication(editing.value.id, { status: feedback.status, note: feedback.note });
+    applications.value = applications.value.map(item => item.id === updated.id ? updated : item);
+    if (feedback.task.trim()) await api.addGrowthTask({ title: feedback.task.trim(), target_job: updated.job_title, source_key: `application:${updated.id}:${feedback.task.trim()}`, resource_query: feedback.task.trim() });
+    feedbackOpen.value = false;
+    ElMessage.success("投递反馈已保存");
+  } catch (e) { ElMessage.error(err(e)); }
+  finally { saving.value = false; }
 }
 </script>
 
 <template>
   <div class="applications-page">
-    <PageHeader title="投递中心" description="准备好简历和开场白，在 BOSS 直聘完成最终确认后回来记录进度。">
+    <PageHeader title="IT 投递记录">
       <el-button :icon="Refresh" :loading="loading" @click="load">刷新</el-button>
-      <el-button type="primary" :icon="Promotion" @click="goToJobs">选择岗位并一键投递</el-button>
+      <el-button type="primary" :icon="Promotion" @click="goToJobs">从简历准备投递</el-button>
     </PageHeader>
     <div class="application-stats">
       <button class="application-stat" :class="{ active: activeStatus === 'all' }" @click="activeStatus = 'all'"><span>全部记录</span><strong>{{ counts.all }}</strong></button>
@@ -105,8 +126,7 @@ function goToJobs() {
       </el-radio-group>
     </div>
     <StateView :loading="loading" :error="error" :empty="!filtered.length" empty-text="还没有投递记录" @retry="load">
-      <template #hint>先选择一个岗位并粘贴 BOSS 岗位链接，系统会打开 BOSS 页面并自动准备开场白。</template>
-      <el-button type="primary" :icon="Promotion" @click="goToJobs">选择岗位并一键投递</el-button>
+      <el-button type="primary" :icon="Promotion" @click="goToJobs">从简历准备投递</el-button>
       <template #content>
         <div class="application-list">
           <article v-for="item in filtered" :key="item.id" class="application-row">
@@ -117,14 +137,19 @@ function goToJobs() {
             </div>
             <div class="application-actions">
               <el-button text :icon="CopyDocument" @click="copyGreeting(item)">复制开场白</el-button>
-              <el-button v-if="item.status === 'prepared' || item.status === 'opened'" type="primary" :icon="Promotion" :loading="item.automation_status === 'starting'" @click="startAutomation(item)">一键投递</el-button>
+              <el-button v-if="item.status === 'prepared' || item.status === 'opened'" type="primary" :icon="Promotion" :loading="item.automation_status === 'starting'" @click="startAutomation(item)">打开并预填</el-button>
               <el-button v-if="item.status === 'opened'" type="success" plain :icon="Check" @click="confirmApplied(item)">已确认发送</el-button>
               <el-button v-if="item.status !== 'prepared' && item.status !== 'opened'" type="primary" plain :icon="Link" @click="openBoss(item)">继续跟进</el-button>
+              <el-button text @click="openFeedback(item)">记录反馈</el-button>
             </div>
             <p v-if="item.automation_error" class="application-note application-error">{{ item.automation_error }}</p>
           </article>
         </div>
       </template>
     </StateView>
+    <el-dialog v-model="feedbackOpen" title="投递反馈" width="min(600px, 94vw)">
+      <el-form label-position="top"><el-form-item label="当前阶段"><el-select v-model="feedback.status"><el-option v-for="option in statusOptions.filter(item => item.value !== 'all')" :key="option.value" :value="option.value" :label="option.label" /></el-select></el-form-item><el-form-item label="面试或招聘反馈"><el-input v-model="feedback.note" type="textarea" :rows="4" maxlength="3000" /></el-form-item><el-form-item label="待补强任务（选填）"><el-input v-model="feedback.task" maxlength="300" placeholder="例如：补充 SQL 索引优化实践" /></el-form-item></el-form>
+      <template #footer><el-button @click="feedbackOpen = false">取消</el-button><el-button type="primary" :loading="saving" @click="saveFeedback">保存反馈</el-button></template>
+    </el-dialog>
   </div>
 </template>

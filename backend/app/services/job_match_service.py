@@ -100,6 +100,7 @@ class JobMatchService:
             tags=list(metadata.get("tags", [])),
             content=doc["content"],
             metadata=metadata,
+            **self._requirements(doc),
         )
 
     # ── 岗位匹配（AI增强版） ──
@@ -132,9 +133,10 @@ class JobMatchService:
             content = doc.get("content", "")
             tags = list(metadata.get("tags", []))
 
-            required_skills = self._knowledge.get_skill_requirements(doc_id) or [
-                t.lower() if isinstance(t, str) else "" for t in tags if t
-            ]
+            requirements = self._requirements(doc)
+            required_skills = requirements["required_skills"] or self._knowledge.get_skill_requirements(doc_id)
+            required_skills = list({normalize_skill(skill): skill for skill in required_skills if isinstance(skill, str) and skill.strip()}.values())
+            requirements["required_skills"] = required_skills
 
             matched, missing = [], []
             for skill in required_skills:
@@ -143,14 +145,7 @@ class JobMatchService:
                 if skill_normalized in user_skills_normalized:
                     matched.append(skill)
                 else:
-                    # 回退：模糊匹配（子串匹配）
-                    if any(
-                        skill_normalized in us or us in skill_normalized
-                        for us in user_skills_normalized
-                    ):
-                        matched.append(skill)
-                    else:
-                        missing.append(skill)
+                    missing.append(skill)
             if not required_skills:
                 continue
             score = round(len(matched) / len(required_skills) * 100, 1)
@@ -169,6 +164,7 @@ class JobMatchService:
                     matched_skills=matched,
                     missing_skills=missing,
                     snippet=self._make_snippet(content),
+                    **requirements,
                 )
             )
 
@@ -233,13 +229,10 @@ class JobMatchService:
                 ]
                 ai_result = self._ai_client.chat_json(messages, temperature=0.3)
 
-                ai_match_score = self._safe_score(ai_result.get("match_score"), match.match_score)
                 match_reason = self._safe_text(ai_result.get("match_reason"))
 
-                # 更新匹配结果
-                match.match_score = round(min(ai_match_score, match.match_score + 20), 1)
+                # AI explains the comparison but cannot rewrite the source-based coverage.
                 match.match_reason = match_reason
-                match.missing_skills = self._safe_string_list(ai_result.get("missing_skills"), match.missing_skills)
                 match.learning_suggestions = self._safe_string_list(ai_result.get("learning_suggestions"), [])
                 match.interview_focus = self._safe_string_list(ai_result.get("interview_focus"), [])
             except Exception:
@@ -281,7 +274,19 @@ class JobMatchService:
             category=self._classify_job(result),
             tags=list(metadata.get("tags", [])),
             snippet=self._make_snippet(result.get("content", "")),
+            **self._requirements(result),
         )
+
+    @staticmethod
+    def _requirements(doc: dict) -> dict:
+        metadata = doc.get("metadata", {})
+        return {
+            "required_skills": metadata.get("required_skills") or metadata.get("tags") or [],
+            "preferred_skills": metadata.get("preferred_skills") or [],
+            "hard_requirements": metadata.get("hard_requirements") or {},
+            "published_at": metadata.get("published_at"),
+            "source": metadata.get("source_url") or doc.get("source", ""),
+        }
 
     @staticmethod
     def _make_snippet(content: str, max_len: int = 200) -> str:

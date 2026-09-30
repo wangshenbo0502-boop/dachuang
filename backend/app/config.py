@@ -22,7 +22,7 @@ class Settings:
         # ── 应用基础 ──
         self.APP_ENV: Environment = os.getenv("APP_ENV", "development")  # type: ignore[assignment]
         self.APP_DEBUG: bool = os.getenv("APP_DEBUG", "true").lower() == "true"
-        self.APP_NAME: str = os.getenv("APP_NAME", "AI就业竞争力分析助手")
+        self.APP_NAME: str = os.getenv("APP_NAME", "IT求职与技术成长系统")
         self.APP_VERSION: str = os.getenv("APP_VERSION", "1.2.0")
 
         # ── 数据库 ──

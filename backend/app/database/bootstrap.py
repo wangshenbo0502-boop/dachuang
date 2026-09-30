@@ -10,6 +10,7 @@ _COMPATIBILITY_COLUMNS = {
     "users": {
         "email": "VARCHAR(100) NOT NULL DEFAULT ''",
         "phone": "VARCHAR(20) NOT NULL DEFAULT ''",
+        "birth_date": "DATE",
         "target_city": "VARCHAR(50) NOT NULL DEFAULT ''",
         "target_salary": "VARCHAR(50) NOT NULL DEFAULT ''",
     },

@@ -26,6 +26,7 @@ class User(Base):
     bio: Mapped[str] = mapped_column(Text, nullable=False, default="")
     email: Mapped[str] = mapped_column(String(100), nullable=False, default="")
     phone: Mapped[str] = mapped_column(String(20), nullable=False, default="")
+    birth_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     target_city: Mapped[str] = mapped_column(String(50), nullable=False, default="")
     target_salary: Mapped[str] = mapped_column(String(50), nullable=False, default="")
     created_at: Mapped[datetime] = mapped_column(
