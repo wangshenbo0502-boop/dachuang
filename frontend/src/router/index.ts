@@ -8,6 +8,12 @@ const routes=[
   {path:"/register",name:"register",component:()=>import("@/views/login/RegisterView.vue"),meta:{title:"注册",public:true}},
   {path:"/forgot-password",name:"forgot-password",component:()=>import("@/views/login/ForgotPasswordView.vue"),meta:{title:"重置密码",public:true}},
   {path:"/",component:MainLayout,redirect:"/dashboard",children:[
+    {path:"recruiter",name:"recruiter",component:()=>import("@/views/recruiter/RecruiterView.vue"),meta:{title:"招聘工作台",role:"recruiter"}},
+    {path:"recruiter/jobs/new",name:"recruiter-job-new",component:()=>import("@/views/recruiter/JobEditorView.vue"),meta:{title:"创建招聘岗位",role:"recruiter"}},
+    {path:"recruiter/jobs/:id/edit",name:"recruiter-job-edit",component:()=>import("@/views/recruiter/JobEditorView.vue"),meta:{title:"编辑招聘岗位",role:"recruiter"}},
+    {path:"recruitment",name:"recruitment",component:()=>import("@/views/recruitment/RecruitmentView.vue"),meta:{title:"招聘岗位"}},
+    {path:"recruitment/jobs/:id",name:"recruitment-detail",component:()=>import("@/views/recruitment/RecruitmentDetailView.vue"),meta:{title:"招聘岗位详情"}},
+    {path:"recruitment/applications",name:"recruitment-applications",component:()=>import("@/views/recruitment/MyApplicationsView.vue"),meta:{title:"站内投递"}},
     {path:"dashboard",name:"dashboard",component:()=>import("@/views/dashboard/DashboardView.vue"),meta:{title:"就业能力概览"}},
     {path:"profile",name:"profile",component:()=>import("@/views/profile/ProfileView.vue"),meta:{title:"我的就业档案"}},
     {path:"profile/assistant",name:"profile-assistant",redirect:{path:"/coach",query:{mode:"profile"}}},
@@ -25,5 +31,16 @@ const routes=[
   {path:"/:pathMatch(.*)*",redirect:"/dashboard"}
 ];
 const router=createRouter({history:createWebHistory(),routes,scrollBehavior:()=>({top:0})});
-router.beforeEach(async to=>{const u=useUserStore();document.title=`${String(to.meta.title||"")} - 大学生就业竞争力评估系统`;const loaded=await u.hydrate();if(to.meta.public){if(loaded)return safeInternalRedirect(to.query.redirect);return true}if(!loaded)return{path:"/login",query:{redirect:to.fullPath}};return true});
+router.beforeEach(async to => {
+  const u = useUserStore();
+  document.title = `${String(to.meta.title || "")} - 大学生就业竞争力评估系统`;
+  const identity = await u.hydrate();
+  if (to.meta.public) return identity ? safeInternalRedirect(to.query.redirect, identity.role) : true;
+  if (!identity) return {path: "/login", query: {redirect: to.fullPath}};
+  if (to.path !== "/settings") {
+    const role = to.meta.role || "student";
+    if (identity.role !== role) return identity.role === "recruiter" ? "/recruiter" : "/dashboard";
+  }
+  return true;
+});
 export default router;

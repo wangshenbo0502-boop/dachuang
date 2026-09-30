@@ -14,7 +14,7 @@ async function submit() {
   try {
     await auth.login(form.email, form.password);
     ElMessage.success("登录成功");
-    await router.replace(safeInternalRedirect(route.query.redirect));
+    await router.replace(safeInternalRedirect(route.query.redirect, auth.account?.role));
   } catch (e) { error.value = err(e); }
 }
 </script>
@@ -38,7 +38,7 @@ async function submit() {
         <div class="login-logo"><el-icon><Opportunity /></el-icon></div>
         <div class="login-eyebrow">欢迎回来</div>
         <h2>进入你的成长空间</h2>
-        <p class="muted">使用已验证的 QQ 邮箱登录</p>
+        <p class="muted">学生与招聘者均使用已验证的 QQ 邮箱登录</p>
         <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon />
         <el-form label-position="top" @submit.prevent="submit">
           <el-form-item label="QQ 邮箱"><el-input v-model="form.email" size="large" type="email" placeholder="123456789@qq.com" autocomplete="username" /></el-form-item>

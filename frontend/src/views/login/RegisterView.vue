@@ -8,7 +8,7 @@ import { useAuthStore } from "@/stores/auth";
 import { err } from "@/utils/format";
 import { safeInternalRedirect } from "@/utils/authSession";
 const route = useRoute(), router = useRouter(), auth = useAuthStore();
-const form = reactive({ email: "", code: "", password: "", confirm_password: "", name: "" });
+const form = reactive({ email: "", code: "", password: "", confirm_password: "", name: "", role: "student" as "student" | "recruiter" });
 const error = ref(""), sending = ref(false), cooldown = ref(0);
 async function sendCode() {
   error.value = "";
@@ -27,7 +27,7 @@ async function submit() {
   try {
     await auth.register({ ...form, name: form.name || undefined });
     ElMessage.success("注册成功");
-    await router.replace(safeInternalRedirect(route.query.redirect));
+    await router.replace(safeInternalRedirect(route.query.redirect, auth.account?.role));
   } catch (e) { error.value = err(e); }
 }
 </script>
@@ -49,10 +49,11 @@ async function submit() {
       <div class="login-form">
         <div class="login-logo"><el-icon><Opportunity /></el-icon></div>
         <div class="login-eyebrow">创建账号</div>
-        <h2>开启你的成长空间</h2>
-        <p class="muted">注册只需 QQ 邮箱和密码，就业档案稍后完善</p>
+        <h2>{{ form.role === 'recruiter' ? '开启你的招聘空间' : '开启你的成长空间' }}</h2>
+        <p class="muted">{{ form.role === 'recruiter' ? '注册后完善企业资料，即可发布岗位并接收简历' : '注册只需 QQ 邮箱和密码，就业档案稍后完善' }}</p>
         <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon />
         <el-form label-position="top" @submit.prevent="submit">
+          <el-form-item label="注册身份"><el-radio-group v-model="form.role" size="large"><el-radio-button value="student">学生</el-radio-button><el-radio-button value="recruiter">招聘者</el-radio-button></el-radio-group></el-form-item>
           <el-form-item label="QQ 邮箱"><el-input v-model="form.email" size="large" type="email" placeholder="123456789@qq.com" autocomplete="email" /></el-form-item>
           <el-form-item label="验证码">
             <div style="display:flex;gap:8px;width:100%"><el-input v-model="form.code" size="large" maxlength="6" inputmode="numeric" placeholder="6 位验证码" /><el-button size="large" :disabled="cooldown>0" :loading="sending" @click="sendCode">{{ cooldown>0 ? `${cooldown}s` : "获取验证码" }}</el-button></div>

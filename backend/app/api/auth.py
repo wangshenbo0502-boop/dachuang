@@ -28,7 +28,8 @@ def _as_utc(value: datetime) -> datetime:
     return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value.astimezone(timezone.utc)
 
 def public_user(account: Account) -> dict:
-    return {"id": account.id, "email": account.email, "profile_id": account.profile_id, "email_verified": account.email_verified}
+    return {"id": account.id, "email": account.email, "profile_id": account.profile_id,
+            "email_verified": account.email_verified, "role": account.role, "name": account.profile.name}
 
 def _send_mail(email: str, code: str, purpose: str) -> None:
     settings = get_settings()
@@ -101,10 +102,10 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)) -> dict:
         db.commit()
         raise AppException("验证码错误", code=5209)
     try:
-        profile = User(name=body.name or "新同学", school="待完善", major="待完善", grade="待完善", email=body.email)
+        profile = User(name=body.name or ("招聘者" if body.role == "recruiter" else "新同学"), school="待完善", major="待完善", grade="待完善", email=body.email)
         db.add(profile)
         db.flush()
-        account = Account(username=body.email.split("@")[0], email=body.email, password_hash=hash_password(body.password), profile_id=profile.id, email_verified=True)
+        account = Account(username=body.email.split("@")[0], email=body.email, password_hash=hash_password(body.password), profile_id=profile.id, email_verified=True, role=body.role)
         db.add(account)
         db.delete(row)
         db.commit()

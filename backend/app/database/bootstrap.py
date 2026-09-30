@@ -7,6 +7,9 @@ from app.database.connection import Base, get_engine
 
 
 _COMPATIBILITY_COLUMNS = {
+    "accounts": {
+        "role": "VARCHAR(20) NOT NULL DEFAULT 'student'",
+    },
     "users": {
         "email": "VARCHAR(100) NOT NULL DEFAULT ''",
         "phone": "VARCHAR(20) NOT NULL DEFAULT ''",

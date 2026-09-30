@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "checks": [
+    "recruiter signup, login, logout, default redirect, refresh and honest empty state",
+    "failed publication preserves saved draft, input and visible validation message",
+    "company profile saved, job created and published through UI",
+    "student role signup, job filtering, resume preview, consent and application",
+    "recruiter reads submitted snapshot and saves interview feedback; student sees it",
+    "withdrawal, vacancy closing and unavailable old detail URL",
+    "role route guards and recruiter settings",
+    "390px mobile layouts without page overflow",
+    "no browser page exceptions"
+  ],
+  "browser_errors": [],
+  "database": "private temporary SQLite, removed after run",
+  "email": "verification code fixture; no live SMTP",
+  "screenshots": [
+    "recruiter-applications-desktop.png",
+    "recruiter-desktop.png",
+    "recruiter-mobile.png",
+    "student-applications-desktop.png",
+    "student-jobs-desktop.png",
+    "student-jobs-mobile.png"
+  ]
+}

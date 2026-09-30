@@ -26,6 +26,8 @@ def get_current_account(credentials: HTTPAuthorizationCredentials | None = Depen
     return account
 
 def get_current_user(request: Request, account: Account = Depends(get_current_account), db: Session = Depends(get_db)) -> User:
+    if account.role != "student":
+        raise AppException("此功能仅供学生使用", code=5107, status_code=403)
     user = db.get(User, account.profile_id)
     if not user:
         raise AppException("学生档案不存在", code=5105, status_code=404)
@@ -33,6 +35,12 @@ def get_current_user(request: Request, account: Account = Depends(get_current_ac
     if requested_id is not None:
         require_owner(int(requested_id), user)
     return user
+
+
+def get_current_recruiter(account: Account = Depends(get_current_account)) -> Account:
+    if account.role != "recruiter":
+        raise AppException("此功能仅供招聘者使用", code=5107, status_code=403)
+    return account
 
 def require_owner(requested_id: int | None, current_user: User) -> None:
     if requested_id != current_user.id:

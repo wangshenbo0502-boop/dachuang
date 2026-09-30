@@ -9,6 +9,9 @@ os.environ["JWT_SECRET"] = "test-only-secret-at-least-32-characters-long"
 os.environ["DEEPSEEK_API_KEY"] = ""
 os.environ["AI_TIMEOUT"] = "1"
 os.environ["AI_MAX_RETRIES"] = "1"
+# HTTP tests share the testclient IP; business cases must not exhaust each
+# other's global request quota. Email-code rate-limit tests remain enabled.
+os.environ["RATE_LIMIT_ENABLED"] = "false"
 
 
 class _OfflineKnowledgeService:

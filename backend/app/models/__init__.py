@@ -9,6 +9,7 @@ from app.models.analysis import ProfileAnalysis
 from app.models.resume import Resume, ResumeOptimization
 from app.models.growth import GrowthPlan
 from app.models.application import JobApplication
+from app.models.recruitment import RecruiterProfile, RecruitmentJob, RecruitmentApplication
 
 __all__ = [
     "User",
@@ -24,6 +25,9 @@ __all__ = [
     "JobApplication",
     "Account",
     "EmailCode",
+    "RecruiterProfile",
+    "RecruitmentJob",
+    "RecruitmentApplication",
 ]
 
 from app.models.account import Account, EmailCode

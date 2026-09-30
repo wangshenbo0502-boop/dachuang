@@ -22,6 +22,7 @@ from app.utils.middleware import request_logging_middleware, configure_logging
 from app.utils.response import error, success, ErrorCode
 from app.ai.deepseek_client import DeepSeekClient
 from app.services.boss_automation_service import boss_automation_service
+from app.api.recruitment import recruiter_router, student_router
 
 load_dotenv()
 
@@ -135,6 +136,8 @@ def get_ai_usage():
 
 # 注册路由
 app.include_router(auth.router)
+app.include_router(recruiter_router)
+app.include_router(student_router)
 app.include_router(user.router)
 app.include_router(job_match.router, prefix="/api", tags=["岗位匹配"])
 app.include_router(analysis.router)
