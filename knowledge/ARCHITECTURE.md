@@ -23,7 +23,7 @@ documents/
   -> loaders/
   -> parsers/
   -> chunking/
-  -> embedding/
+  -> BGE embedding/
   -> vector_store/
 ```
 
@@ -32,7 +32,7 @@ documents/
 1. 按扩展名选择 Markdown、JSON 或 TXT Loader。
 2. 解析 Front Matter 与正文，生成统一 `Document`。
 3. 依据标题、段落和句子边界递归切块。
-4. 通过 Embedding Provider 生成固定维度向量。
+4. 通过 BGE Embedding Provider 生成固定维度向量；查询追加检索指令，文档保持原文编码。
 5. 使用 `source + content_hash` 做幂等更新。
 6. 写入文档、Chunk、Embedding、FTS 文本和元数据。
 7. 在 PostgreSQL 中维护 HNSW 向量索引和 GIN 全文索引。
@@ -56,7 +56,7 @@ Query
 ### 检索策略
 
 - 原始查询进入 FTS，保留 `Vue`、`FastAPI`、`Python` 等精确技术词。
-- 规则改写查询进入 Embedding，增强就业意图和技能缺口语义。
+- 规则改写查询进入 BGE Embedding，增强就业意图和技能缺口语义。
 - 分类、岗位类型、技能、来源、文档 ID、标签统一转换为 `KnowledgeFilter`，
   在数据库召回阶段下推。
 - 向量召回和关键词召回按 `chunk_id` 去重，并使用 Reciprocal Rank Fusion。
@@ -72,7 +72,7 @@ Query
 | `loaders/` | 文件读取与统一 `Document` 生成 |
 | `parsers/` | Front Matter 和正文解析 |
 | `chunking/` | 面向检索的递归切块 |
-| `embedding/` | 本地 SentenceTransformers 与测试 Mock Provider |
+| `embedding/` | BGE/SentenceTransformers 本地 Provider 与测试 Mock Provider |
 | `vector_store/` | PostgreSQL/pgvector ORM、建表、索引、查询和健康检查 |
 | `retrieval/` | Query Rewrite、过滤、双路召回、RRF |
 | `reranker/` | Cross-Encoder、NoOp fallback 和工厂 |

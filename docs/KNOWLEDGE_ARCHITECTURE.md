@@ -3,7 +3,7 @@
 ## 一句话架构
 
 ```text
-Markdown -> Loader -> Parser -> Chunking -> Embedding -> PostgreSQL/pgvector
+Markdown -> Loader -> Parser -> Chunking -> BGE Embedding -> PostgreSQL/pgvector
 Query -> Rewrite -> Metadata Filter -> HNSW + FTS -> RRF -> Reranker -> Context
 ```
 
@@ -30,7 +30,8 @@ trace     改写、召回、融合、重排和耗时信息
 
 ## 在线检索
 
-原始查询保留精确技术词并进入 FTS；规则改写查询补充就业意图并进入向量检索。
+原始查询保留精确技术词并进入 FTS；规则改写查询补充就业意图并进入 BGE 向量检索，
+BGE 查询侧默认追加中文检索指令，文档侧不追加指令。
 过滤条件在两路召回前统一转换为 `KnowledgeFilter`。召回结果按 Chunk 合并，
 再执行 RRF 和可选 Cross-Encoder 精排。Reranker 关闭时明确使用 NoOp，
 加载失败时回退到 RRF 顺序。

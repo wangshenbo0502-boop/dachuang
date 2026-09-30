@@ -58,6 +58,9 @@ class KnowledgeSettings:
     reranker_batch_size: int = 8
     query_rewrite_enabled: bool = True
     query_rewrite_llm_enabled: bool = False
+    embedding_query_instruction: str = "为这个句子生成表示以用于检索相关文章："
+    embedding_query_prefix: str = ""
+    embedding_document_prefix: str = ""
 
     @property
     def is_postgresql(self) -> bool:
@@ -80,7 +83,7 @@ def get_knowledge_settings() -> KnowledgeSettings:
         chunk_overlap = max(0, chunk_size // 5)
     return KnowledgeSettings(
         database_url=database_url,
-        embedding_provider=os.getenv("EMBEDDING_PROVIDER", "sentence_transformers").strip(),
+        embedding_provider=os.getenv("EMBEDDING_PROVIDER", "bge").strip(),
         embedding_model=os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-zh-v1.5").strip(),
         embedding_dimension=int(os.getenv("EMBEDDING_DIMENSION", "512")),
         embedding_batch_size=max(1, int(os.getenv("EMBEDDING_BATCH_SIZE", "32"))),
@@ -105,4 +108,9 @@ def get_knowledge_settings() -> KnowledgeSettings:
         reranker_batch_size=max(1, int(os.getenv("RERANKER_BATCH_SIZE", "8"))),
         query_rewrite_enabled=_as_bool("QUERY_REWRITE_ENABLED", True),
         query_rewrite_llm_enabled=_as_bool("QUERY_REWRITE_LLM_ENABLED", False),
+        embedding_query_instruction=os.getenv(
+            "BGE_QUERY_INSTRUCTION", "为这个句子生成表示以用于检索相关文章："
+        ).strip(),
+        embedding_query_prefix=os.getenv("BGE_QUERY_PREFIX", ""),
+        embedding_document_prefix=os.getenv("BGE_DOCUMENT_PREFIX", ""),
     )

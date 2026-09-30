@@ -1,6 +1,7 @@
 import pytest
 
 from embedding.base import EmbeddingError
+from embedding.bge import BGEEmbeddingProvider
 from embedding.factory import MockEmbeddingProvider, create_embedding_model
 from config import KnowledgeSettings
 
@@ -23,3 +24,24 @@ def test_mock_factory_is_testing_only(monkeypatch: pytest.MonkeyPatch) -> None:
         create_embedding_model(_settings())
     monkeypatch.setenv("APP_ENV", "testing")
     assert isinstance(create_embedding_model(_settings()), MockEmbeddingProvider)
+
+
+def test_bge_factory_and_query_instruction(monkeypatch: pytest.MonkeyPatch) -> None:
+    settings = _settings(provider="bge", dimension=3)
+    model = create_embedding_model(settings)
+    assert isinstance(model, BGEEmbeddingProvider)
+
+    encoded: list[str] = []
+
+    class FakeModel:
+        def encode(self, texts, **kwargs):
+            encoded.extend(texts)
+            return [[1.0, 0.0, 0.0] for _ in texts]
+
+    monkeypatch.setattr(model, "_get_model", lambda: FakeModel())
+    model.embed_query("想找前端岗位")
+    assert encoded == ["为这个句子生成表示以用于检索相关文章：想找前端岗位"]
+
+    encoded.clear()
+    model.embed_documents(["Vue 组件开发"])
+    assert encoded == ["Vue 组件开发"]
