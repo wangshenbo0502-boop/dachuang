@@ -1,123 +1,129 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import {
-  ArrowRight,
-  Briefcase,
-  CollectionTag,
-  DataAnalysis,
-  DocumentChecked,
-  FolderOpened,
-  MagicStick,
-} from "@element-plus/icons-vue";
+import { ArrowRight, Refresh, Search, TrendCharts } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useUserStore } from "@/stores/user";
 import { useProfileStore } from "@/stores/profile";
-import type { AnalysisResponse, GrowthResponse } from "@/types/api";
+import type { AnalysisResponse, GrowthResponse, JobBrief } from "@/types/api";
 import { err } from "@/utils/format";
-import PageHeader from "@/components/common/PageHeader.vue";
-import StatCard from "@/components/common/StatCard.vue";
-import StateView from "@/components/common/StateView.vue";
-import SectionPanel from "@/components/common/SectionPanel.vue";
-import RadarChart from "@/components/charts/RadarChart.vue";
+import JobCoverageChart from "@/components/charts/JobCoverageChart.vue";
 
 const router = useRouter();
 const user = useUserStore();
 const profiles = useProfileStore();
 const analysis = ref<AnalysisResponse | null>(null);
 const growth = ref<GrowthResponse | null>(null);
+const jobs = ref<JobBrief[]>([]);
 const loading = ref(true);
-const error = ref("");
+const errors = ref<string[]>([]);
 const profile = computed(() => profiles.profile);
-const radar = computed(() => analysis.value ? Object.values(analysis.value.result.skill_assessment) : []);
-const labels = ["编程基础", "框架应用", "数据库", "工程实践", "项目经验"];
-const actions = [
-  ["/coach?mode=profile", "AI 完善档案", MagicStick],
-  ["/analysis", "生成就业画像", MagicStick],
-  ["/jobs", "查看岗位推荐", Briefcase],
-] as const;
+const directions = computed(() => analysis.value?.result.recommended_directions.slice(0, 3) ?? []);
+const match = computed(() => directions.value.length ? directions.value[0].match_rate : null);
+const categories = ["前端", "后端", "AI", "数据", "测试", "运维", "产品", "安全"];
+const coverage = computed(() => categories.map(label => ({
+  label,
+  count: jobs.value.filter(job => job.category === label).length,
+})).filter(item => item.count > 0).sort((a, b) => b.count - a.count));
+const hour = new Date().getHours();
+const greeting = hour < 11 ? "早上好" : hour < 18 ? "下午好" : "晚上好";
+const topics = [
+  { title: "AI 岗位与技能", query: "AI岗位技能要求", category: "jobs" },
+  { title: "秋招与求职准备", query: "秋招求职准备", category: "market" },
+  { title: "毕业生就业政策", query: "高校毕业生就业政策", category: "policies" },
+  { title: "技术栈需求", query: "技术栈技能要求", category: "skills" },
+];
+const suggestions = computed(() => {
+  const gaps = growth.value?.result.ability_gaps.slice(0, 2).map(gap => gap.skill) ?? [];
+  if (gaps.length) return gaps;
+  return analysis.value?.result.areas_to_improve.slice(0, 2) ?? [];
+});
+const resources = computed(() => growth.value?.result.recommended_resources.slice(0, 3) ?? []);
+
+function openResource(query: string, category?: string) {
+  router.push({ path: "/resources", query: { query, ...(category ? { category } : {}) } });
+}
+
+async function loadJobs(): Promise<JobBrief[]> {
+  const first = await api.jobs({ page: 1, page_size: 50 });
+  const pages = Math.ceil(first.total / 50);
+  if (pages <= 1) return first.items;
+  const remaining = await Promise.all(Array.from({ length: pages - 1 }, (_, index) =>
+    api.jobs({ page: index + 2, page_size: 50 })));
+  return [first, ...remaining].flatMap(page => page.items);
+}
 
 async function load() {
   loading.value = true;
-  error.value = "";
-  try {
-    await profiles.load(user.userId!, true);
-    const [analyses, growths] = await Promise.all([api.analyses(user.userId!), api.growths(user.userId!)]);
-    if (analyses[0]) analysis.value = await api.analysisDetail(analyses[0].id);
-    if (growths[0]) growth.value = await api.growthDetail(growths[0].id);
-  } catch (e) {
-    error.value = err(e);
-  } finally {
-    loading.value = false;
+  errors.value = [];
+  const [profileResult, analysisResult, growthResult, jobResult] = await Promise.allSettled([
+    profiles.load(user.userId!, true), api.analyses(user.userId!),
+    api.growths(user.userId!), loadJobs(),
+  ]);
+  for (const result of [profileResult, analysisResult, growthResult, jobResult]) {
+    if (result.status === "rejected") errors.value.push(err(result.reason));
   }
+  if (analysisResult.status === "fulfilled") {
+    analysis.value = null;
+    if (analysisResult.value[0]) {
+      try { analysis.value = await api.analysisDetail(analysisResult.value[0].id); }
+      catch (e) { errors.value.push(err(e)); }
+    }
+  }
+  if (growthResult.status === "fulfilled") {
+    growth.value = null;
+    if (growthResult.value[0]) {
+      try { growth.value = await api.growthDetail(growthResult.value[0].id); }
+      catch (e) { errors.value.push(err(e)); }
+    }
+  }
+  jobs.value = jobResult.status === "fulfilled" ? jobResult.value : [];
+  loading.value = false;
 }
 
 onMounted(load);
 </script>
 
 <template>
-  <div>
-    <PageHeader title="你的就业工作台" description="从完善档案开始，逐步完成画像、岗位匹配与简历准备。" />
-    <StateView :loading="loading" :error="error" @retry="load">
-      <template #content>
-        <section class="dashboard-welcome">
-          <div class="welcome-copy">
-            <span class="welcome-label">下一步建议</span>
-            <h2>你好，{{ user.user?.name || "同学" }}</h2>
-            <p>先和 AI 求职助手聊聊你的经历与目标。整理好的内容会先进入草稿，确认后再写入档案。</p>
-            <div class="welcome-actions">
-              <el-button type="primary" @click="router.push('/coach?mode=profile')">开始完善档案</el-button>
-              <el-button @click="router.push('/coach')">直接咨询求职问题</el-button>
-            </div>
-          </div>
-          <div class="welcome-progress">
-            <el-progress type="dashboard" :percentage="profiles.completeness || 0" :width="118" :stroke-width="9" color="#176b5b" />
-            <div><b>档案完整度</b><span>持续补充经历，让分析更贴合你的真实能力</span></div>
-          </div>
-        </section>
+  <div class="career-dashboard" v-loading="loading">
+    <div class="career-heading">
+      <div><span class="career-kicker">我的就业工作台</span><h2>{{ greeting }}，{{ profile?.name || user.user?.name || "同学" }}</h2><p>你的就业准备正在持续进化</p></div>
+      <el-tooltip content="刷新首页数据"><el-button :icon="Refresh" circle aria-label="刷新首页数据" @click="load" /></el-tooltip>
+    </div>
+    <el-alert v-if="errors.length" class="career-alert" type="warning" :closable="false" title="部分数据暂时无法加载" :description="[...new Set(errors)].join('；')" />
 
-        <div class="stats-grid">
-          <StatCard label="综合竞争力" :value="analysis?.result.comprehensive_score ?? null" unit="分" :icon="DataAnalysis" tone="blue" />
-          <StatCard label="档案完整度" :value="profiles.completeness" unit="%" :icon="DocumentChecked" tone="green" />
-          <StatCard label="掌握技能" :value="profile?.skills.length ?? 0" unit="项" :icon="CollectionTag" tone="cyan" />
-          <StatCard label="项目经历" :value="profile?.projects.length ?? 0" unit="项" :icon="FolderOpened" tone="orange" />
-        </div>
+    <section class="career-metrics" aria-label="我的数据">
+      <button type="button" @click="router.push('/analysis')"><span>就业竞争力</span><strong>{{ analysis?.result.comprehensive_score ?? "—" }}<small v-if="analysis"> / 100</small></strong><em>{{ analysis ? "最近一次就业画像" : "生成就业画像" }} <el-icon><ArrowRight /></el-icon></em></button>
+      <button type="button" @click="router.push('/profile')"><span>档案完整度</span><strong>{{ profiles.completeness ?? "—" }}<small v-if="profiles.completeness !== null">%</small></strong><em>查看我的档案 <el-icon><ArrowRight /></el-icon></em></button>
+      <button type="button" @click="router.push('/jobs')"><span>推荐方向匹配度</span><strong>{{ match ?? "—" }}<small v-if="match !== null">%</small></strong><em>{{ directions[0]?.job_title || "查看岗位方向" }} <el-icon><ArrowRight /></el-icon></em></button>
+    </section>
 
-        <div class="workflow-grid">
-          <button v-for="[path, label, icon] in actions" :key="path" @click="router.push(path)">
-            <el-icon><component :is="icon" /></el-icon><span>{{ label }}</span><el-icon class="arrow"><ArrowRight /></el-icon>
-          </button>
-        </div>
+    <div class="career-section-head"><div><span>市场数据</span><h3>岗位与市场观察</h3></div><small>岗位分布来自本项目知识库，不代表招聘需求增幅</small></div>
+    <div class="career-market-grid">
+      <section class="career-surface career-chart-section">
+        <div class="career-surface-head"><div><h4>岗位方向覆盖</h4><p>知识库收录岗位数量 · 按方向统计</p></div><el-icon><TrendCharts /></el-icon></div>
+        <JobCoverageChart v-if="coverage.length" :items="coverage" />
+        <div v-else class="career-empty">暂无岗位分布数据。<button type="button" @click="router.push('/jobs')">查看岗位库 <el-icon><ArrowRight /></el-icon></button></div>
+      </section>
+      <section class="career-surface career-topics-section">
+        <div class="career-surface-head"><div><h4>就业与技术动态</h4><p>从知识库探索相关专题</p></div><el-icon><Search /></el-icon></div>
+        <button v-for="topic in topics" :key="topic.title" class="career-topic" type="button" @click="openResource(topic.query, topic.category)"><span>{{ topic.title }}</span><el-icon><ArrowRight /></el-icon></button>
+      </section>
+    </div>
 
-        <div class="two-column">
-          <SectionPanel title="AI就业能力画像" subtitle="最近一次画像分析">
-            <StateView :empty="!analysis" empty-text="尚未生成就业画像">
-              <template #hint>与 AI 对话补充档案后发起分析，即可查看能力雷达图。</template>
-              <el-button type="primary" @click="router.push('/analysis')">立即分析</el-button>
-              <template #content><RadarChart :labels="labels" :values="radar" /></template>
-            </StateView>
-          </SectionPanel>
-          <SectionPanel title="推荐就业方向" subtitle="根据最近一次画像分析生成">
-            <StateView :empty="!analysis?.result.recommended_directions.length" empty-text="暂无推荐方向">
-              <template #content><div class="direction-list"><div v-for="item in analysis?.result.recommended_directions" :key="item.job_title"><div><b>{{ item.job_title }}</b><span>与当前能力画像匹配</span></div><el-progress type="circle" :width="58" :stroke-width="6" :percentage="item.match_rate" /></div></div></template>
-            </StateView>
-          </SectionPanel>
-        </div>
+    <div class="career-section-head"><div><span>AI 建议</span><h3>接下来可以做什么</h3></div><button type="button" @click="router.push('/growth')">查看成长规划 <el-icon><ArrowRight /></el-icon></button></div>
+    <section class="career-advice">
+      <div><span class="career-step">01 / 当前重点</span><h4>{{ suggestions[0] || "完善个人就业档案" }}</h4><p>{{ growth?.result.learning_roadmap[0]?.focus || (analysis ? "查看画像短板，制定下一步学习计划。" : "补充技能和项目经历，生成更贴合你的就业画像。") }}</p></div>
+      <div><span class="career-step">02 / 后续行动</span><h4>{{ suggestions[1] || (growth ? "推进阶段学习任务" : "生成就业画像") }}</h4><p>{{ growth?.result.learning_roadmap[0]?.tasks[0] || "结合个人经历和目标岗位，明确下一步准备方向。" }}</p></div>
+      <button type="button" class="career-advice-action" @click="router.push(growth || analysis ? '/growth' : '/analysis')">{{ growth ? "继续成长计划" : analysis ? "制定成长计划" : "开始就业分析" }} <el-icon><ArrowRight /></el-icon></button>
+    </section>
 
-        <div class="two-column dashboard-bottom-grid">
-          <SectionPanel title="AI就业建议">
-            <StateView :empty="!analysis" empty-text="暂无分析建议">
-              <template #content><p class="summary-text">{{ analysis?.result.profile_summary }}</p><div class="advice-columns"><div><b>核心优势</b><ul><li v-for="item in analysis?.result.core_advantages" :key="item">{{ item }}</li></ul></div><div><b>当前短板</b><ul><li v-for="item in analysis?.result.areas_to_improve" :key="item">{{ item }}</li></ul></div></div></template>
-            </StateView>
-          </SectionPanel>
-          <SectionPanel title="当前成长规划">
-            <StateView :empty="!growth" empty-text="尚未生成成长规划">
-              <el-button type="primary" plain @click="router.push('/growth')">生成规划</el-button>
-              <template #content><div class="growth-summary"><el-tag>{{ growth?.result.expected_timeline }}</el-tag><p>{{ growth?.result.current_situation }}</p><el-steps direction="vertical" :active="0" :space="58"><el-step v-for="stage in growth?.result.learning_roadmap.slice(0, 3)" :key="stage.stage" :title="stage.stage" :description="stage.focus" /></el-steps></div></template>
-            </StateView>
-          </SectionPanel>
-        </div>
-      </template>
-    </StateView>
+    <div class="career-section-head"><div><span>我的数据</span><h3>为你推荐的岗位方向</h3></div><button type="button" @click="router.push('/jobs')">查看岗位 <el-icon><ArrowRight /></el-icon></button></div>
+    <div v-if="directions.length" class="career-directions"><button v-for="(direction, index) in directions" :key="direction.job_title" type="button" @click="router.push({ path: '/jobs', query: { keyword: direction.job_title } })"><span>0{{ index + 1 }} / 推荐方向</span><h4>{{ direction.job_title }}</h4><div><strong>{{ direction.match_rate }}%</strong><small>画像匹配度</small></div><el-progress :percentage="direction.match_rate" :show-text="false" :stroke-width="5" /></button></div>
+    <div v-else class="career-inline-empty">生成就业画像后，这里会显示与你的能力更匹配的方向。<button type="button" @click="router.push('/analysis')">生成画像 <el-icon><ArrowRight /></el-icon></button></div>
+
+    <div class="career-section-head"><div><span>就业资源</span><h3>推荐学习资源</h3></div><button type="button" @click="router.push('/resources')">浏览资源库 <el-icon><ArrowRight /></el-icon></button></div>
+    <div v-if="resources.length" class="career-resources"><button v-for="(resource, index) in resources" :key="index" type="button" @click="openResource(resource)"><span>{{ String(index + 1).padStart(2, '0') }}</span><strong>{{ resource }}</strong><el-icon><ArrowRight /></el-icon></button></div>
+    <div v-else class="career-inline-empty">完成成长规划后，这里会展示适合你的学习资源。<button type="button" @click="router.push('/growth')">查看成长规划 <el-icon><ArrowRight /></el-icon></button></div>
   </div>
 </template>

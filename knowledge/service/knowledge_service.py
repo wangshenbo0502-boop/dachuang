@@ -93,7 +93,13 @@ class KnowledgeService:
 
     def health(self) -> dict[str, Any]:
         checks = self.store.health()
-        checks["embedding"] = {"provider": self.settings.embedding_provider, "model": self.settings.embedding_model}
+        checks["embedding"] = {
+            "provider": self.settings.embedding_provider,
+            "model": self.settings.embedding_model,
+            "dimension": self.settings.embedding_dimension,
+            "query_instruction_enabled": bool(self.settings.embedding_query_instruction),
+            "status": "configured",
+        }
         checks["reranker"] = {
             "enabled": self.settings.reranker_enabled,
             "provider": self.settings.reranker_provider,

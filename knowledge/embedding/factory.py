@@ -1,6 +1,7 @@
 from __future__ import annotations
 import os
 from embedding.base import EmbeddingError, EmbeddingModel
+from embedding.bge import BGEEmbeddingProvider
 from embedding.local import LocalEmbeddingProvider
 from config import KnowledgeSettings, get_knowledge_settings
 
@@ -27,6 +28,15 @@ class MockEmbeddingProvider(EmbeddingModel):
 def create_embedding_model(settings: KnowledgeSettings | None = None) -> EmbeddingModel:
     active = settings or get_knowledge_settings()
     provider = active.embedding_provider.lower().replace("-", "_")
+    if provider in {"bge", "bge_local"}:
+        return BGEEmbeddingProvider(
+            active.embedding_model,
+            active.embedding_dimension,
+            active.embedding_batch_size,
+            active.embedding_query_instruction,
+            active.embedding_query_prefix,
+            active.embedding_document_prefix,
+        )
     if provider in {"sentence_transformers", "local"}:
         return LocalEmbeddingProvider(active.embedding_model, active.embedding_dimension, active.embedding_batch_size)
     if provider == "mock" and os.getenv("APP_ENV") == "testing":
