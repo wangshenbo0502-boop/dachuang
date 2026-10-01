@@ -26,10 +26,12 @@ request.interceptors.response.use(
   (error: AxiosError<ApiEnvelope<unknown>>) => {
     if (axios.isCancel(error)) return Promise.reject(error);
     const status = error.response?.status;
-    if (status === 401 && getAuthToken()) {
+    const activeToken = getAuthToken();
+    if (status === 401 && activeToken && error.config?.headers?.Authorization === `Bearer ${activeToken}`) {
       clearAuthToken();
-      if (window.location.pathname !== "/login" && window.location.pathname !== "/register") {
-        window.location.assign("/login");
+      if (!["/login", "/register", "/forgot-password"].includes(window.location.pathname)) {
+        const redirect = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        window.location.assign(`/login?redirect=${encodeURIComponent(redirect)}`);
       }
     }
     const code = error.response?.data?.code;

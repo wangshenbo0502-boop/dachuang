@@ -1,5 +1,12 @@
 import request,{apiData} from "./request"; import type * as T from "@/types/api";
 export const api={
+ resourceHome:()=>apiData<T.ResourceHome>(request.get("/resources/home")),
+ resourceEvents:()=>apiData<T.ResourceEvent[]>(request.get("/resources/events")),
+ saveResourceEvent:(body:object)=>apiData<T.ResourceEvent>(request.put("/resources/events",body)),
+ growthTasks:()=>apiData<T.GrowthTask[]>(request.get("/growth/tasks/list")),
+ addGrowthTask:(body:object)=>apiData<T.GrowthTask>(request.post("/growth/tasks",body)),
+ updateGrowthTask:(id:number,body:object)=>apiData<T.GrowthTask>(request.patch(`/growth/tasks/${id}`,body)),
+ marketContext:(target_job:string)=>apiData<T.MarketContext>(request.get("/career-profile/market-context",{params:{target_job}})),
  authSendCode:(email:string,purpose:"REGISTER"|"RESET_PASSWORD"="REGISTER")=>apiData<{expires_in:number}>(request.post("/auth/email/send-code",{email,purpose})),
  authResetPassword:(body:object)=>apiData<null>(request.post("/auth/reset-password",body)),
  authRegister:(body:object)=>apiData<{access_token:string;token_type:string;user:import("@/stores/auth").AccountIdentity}>(request.post("/auth/register",body)),

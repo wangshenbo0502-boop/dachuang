@@ -4,11 +4,11 @@ export interface Skill { id?: number; user_id?: number; name: string; proficienc
 export interface Project { id?: number; user_id?: number; name: string; role: string; description: string; tech_stack: string[]; start_date: string | null; end_date: string | null }
 export interface Competition { id?: number; user_id?: number; name: string; level: string; award: string; description: string; competition_date: string | null }
 export interface Internship { id?: number; user_id?: number; company: string; position: string; description: string; tech_stack: string[]; start_date: string | null; end_date: string | null }
-export interface StudentProfile { id:number; name:string; school:string; major:string; grade:string; bio:string; email:string; phone:string; target_city:string; target_salary:string; skills:Skill[]; projects:Project[]; competitions:Competition[]; internships:Internship[]; created_at:string; updated_at:string }
+export interface StudentProfile { id:number; name:string; school:string; major:string; grade:string; bio:string; email:string; phone:string; birth_date:string|null; target_city:string; target_salary:string; skills:Skill[]; projects:Project[]; competitions:Competition[]; internships:Internship[]; created_at:string; updated_at:string }
 export interface AnalysisResult { profile_summary:string; technical_direction:string; core_advantages:string[]; current_level:string; recommended_directions:Array<{job_title:string;match_rate:number}>; areas_to_improve:string[]; comprehensive_score:number; skill_assessment:Record<string,number> }
 export interface AnalysisResponse { id?:number; user_id?:number; target_job:string; result:AnalysisResult; is_mock:boolean; created_at?:string }
 export interface AnalysisHistory { id:number; target_job:string; technical_direction:string; comprehensive_score:number; created_at?:string }
-export interface JobBrief { job_id:string; title:string; category?:string; tags:string[]; snippet:string }
+export interface JobBrief { job_id:string; title:string; category?:string; tags:string[]; snippet:string; required_skills?:string[]; preferred_skills?:string[]; hard_requirements?:Record<string,unknown>; published_at?:string|null; source?:string }
 export interface JobDetail extends JobBrief { content:string; metadata:Record<string,unknown> }
 export interface MatchedJob extends JobBrief { match_score:number; matched_skills:string[]; missing_skills:string[]; match_reason?:string; learning_suggestions?:string[]; interview_focus?:string[] }
 export interface JobListResponse { total:number; items:JobBrief[]; keyword?:string }
@@ -28,3 +28,7 @@ export interface ChatProfileSyncResponse { profile:StudentProfile; skipped:strin
 export type ApplicationStatus = "prepared"|"opened"|"applied"|"replied"|"interview"|"closed";
 export interface JobApplication { id:number; user_id:number; job_id:string; job_title:string; platform:string; boss_url:string; status:ApplicationStatus; greeting:string; resume_version_id:number|null; note:string; applied_at?:string|null; created_at?:string|null; updated_at?:string|null; automation_status:string; automation_error:string }
 export interface ApplicationAutomationResponse { status:string; message:string; url:string; greeting_filled:boolean }
+export interface GrowthTask { id:number; title:string; target_job:string; source_key:string; status:"todo"|"doing"|"done"; feedback:string; evidence:string; resource_query:string; completed_at:string|null; created_at:string; updated_at:string }
+export interface ResourceEvent { resource_key:string; resource:KnowledgeResult; favorite:boolean; read:boolean; hidden:boolean }
+export interface ResourceHome { items:KnowledgeResult[]; unavailable_sources:string[]; fetched_at:string; period_days:number }
+export interface MarketContext { target_job:string; sample_count:number; scope:string; observed_at:string; jobs:JobBrief[]; skills:Array<{skill:string;count:number;coverage:number;status:string;evidence:string[];sources:Array<{job_id:string;title:string}>;action:string}> }

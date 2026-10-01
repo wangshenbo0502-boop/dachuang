@@ -5,6 +5,7 @@
 """
 
 from typing import Optional
+import re
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -47,6 +48,7 @@ class ResumeService:
 
         # 构建Prompt
         system_prompt = SystemPrompts.resume_optimizer()
+        system_prompt += "\n只能改写输入事实，不得新增数字、技术、职责或获奖；缺少结果应提示补充。外部知识不是用户经历。"
         user_prompt = ResumeOptimizationPrompts.build_user_prompt(
             name=user_info["name"],
             target_job=request.target_job,
@@ -65,6 +67,11 @@ class ResumeService:
             ] if value
         )
         user_prompt, sources = augment_prompt(rag_query, user_prompt, top_k=5)
+        if request.job_id:
+            from app.services.job_match_service import JobMatchService
+            job = JobMatchService.instance().get_job_detail(request.job_id)
+            if job:
+                user_prompt += f"\n### 目标岗位要求（仅用于对照，不得写成用户已有经历）\n{job.content[:6000]}"
 
         messages = [
             {"role": "system", "content": system_prompt},
@@ -236,6 +243,7 @@ class ResumeService:
                 ],
                 "projects": [
                     {
+                        "id": p.id,
                         "name": p.name,
                         "role": p.role,
                         "description": p.description,
@@ -268,21 +276,26 @@ class ResumeService:
 
         # 确保每个项目都有结果
         for i, proj in enumerate(user_projects):
-            if i < len(ai_projects):
-                ai_proj = ai_projects[i]
-                optimized_projects.append(OptimizedProject(
-                    project_name=ai_proj.get("project_name", proj.get("name", f"项目{i+1}")),
-                    original=ai_proj.get("original", proj.get("description", "")),
-                    optimized=ai_proj.get("optimized", proj.get("description", "")),
-                    highlight_tags=self._string_list(ai_proj.get("highlight_tags")),
-                ))
-            else:
-                optimized_projects.append(OptimizedProject(
-                    project_name=proj.get("name", f"项目{i+1}"),
-                    original=proj.get("description", ""),
-                    optimized=proj.get("description", ""),
-                    highlight_tags=proj.get("tech_stack", []),
-                ))
+            name = proj.get("name", f"项目{i+1}")
+            candidates = [item for item in ai_projects if item.get("project_name") == name]
+            ai_proj = candidates[0] if len(candidates) == 1 else {}
+            original = proj.get("description", "")
+            optimized = self._text(ai_proj.get("optimized"), original)
+            facts = " ".join([name, original, str(proj.get("role", "")), *proj.get("tech_stack", [])])
+            warnings = []
+            if self._new_numbers(optimized, facts):
+                optimized = original
+                warnings.append("检测到原始经历中不存在的数字，已保留原文")
+            if not re.search(r"\d", original):
+                warnings.append("结果数据待补充：实际规模、测试结果或使用反馈")
+            if not ai_proj:
+                warnings.append("未找到唯一对应的项目改写，已保留原文")
+            optimized_projects.append(OptimizedProject(
+                project_name=name, original=original, optimized=optimized,
+                source_experience_id=proj.get("id"),
+                highlight_tags=proj.get("tech_stack", []),
+                fact_warnings=warnings,
+            ))
 
         # 处理优化后的技能
         optimized_skills = []
@@ -293,8 +306,8 @@ class ResumeService:
             if i < len(ai_skills):
                 ai_skill = ai_skills[i]
                 optimized_skills.append(OptimizedSkill(
-                    original=ai_skill.get("original", skill.get("name", "")),
-                    optimized=ai_skill.get("optimized", skill.get("name", "")),
+                    original=skill.get("name", ""),
+                    optimized=self._text(ai_skill.get("optimized"), skill.get("name", "")),
                 ))
             else:
                 optimized_skills.append(OptimizedSkill(
@@ -302,13 +315,22 @@ class ResumeService:
                     optimized=f"{skill.get('name', '')}（{skill.get('proficiency', '掌握')}）",
                 ))
 
+        summary = self._text(ai_result.get("personal_summary"))
+        source_facts = str(user_info)
+        if self._new_numbers(summary, source_facts):
+            summary = ""
         return ResumeOptimizationResult(
             optimized_projects=optimized_projects,
             optimized_skills=optimized_skills,
             overall_suggestions=self._string_list(ai_result.get("overall_suggestions"))[:5],
-            personal_summary=self._text(ai_result.get("personal_summary")),
+            personal_summary=summary,
             resume_score=self._score(ai_result.get("resume_score"), 60),
         )
+
+    @staticmethod
+    def _new_numbers(text: str, facts: str) -> set[str]:
+        pattern = r"\d+(?:\.\d+)?(?:%|％|万|亿)?"
+        return set(re.findall(pattern, text)) - set(re.findall(pattern, facts))
 
     @staticmethod
     def _dict_list(value: object) -> list[dict]:

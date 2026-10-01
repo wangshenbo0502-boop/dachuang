@@ -12,7 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat, auth, application
+from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat, auth, application, activity
 from app.auth.dependencies import get_current_account
 from fastapi import Depends
 from app.config import get_settings
@@ -142,6 +142,7 @@ app.include_router(user.router)
 app.include_router(job_match.router, prefix="/api", tags=["岗位匹配"])
 app.include_router(analysis.router)
 app.include_router(resume.router)
+app.include_router(activity.router)
 app.include_router(growth.router)
 app.include_router(streaming.router)  # 流式响应路由
 app.include_router(knowledge.router)

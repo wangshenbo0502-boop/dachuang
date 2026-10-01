@@ -1,6 +1,57 @@
 <script setup lang="ts">
-import{computed,onBeforeUnmount,onMounted,ref}from"vue";import{ElMessage}from"element-plus";import{MagicStick,Refresh,Clock}from"@element-plus/icons-vue";import{api}from"@/api";import{consumeSse}from"@/utils/sse";import{err,fmt}from"@/utils/format";import{useUserStore}from"@/stores/user";import type{AnalysisResponse,AnalysisResult}from"@/types/api";import PageHeader from"@/components/common/PageHeader.vue";import StateView from"@/components/common/StateView.vue";import SectionPanel from"@/components/common/SectionPanel.vue";import RadarChart from"@/components/charts/RadarChart.vue";
-const user=useUserStore(),result=ref<AnalysisResponse|null>(null),history=ref<{id:number;created_at?:string}[]>([]),loading=ref(true),running=ref(false),error=ref(""),target=ref(""),streamText=ref(""),status=ref("");let controller:AbortController|undefined;const labels=['编程基础','框架应用','数据库','工程实践','项目经验'];const values=computed(()=>result.value?Object.values(result.value.result.skill_assessment):[]);
-async function load(){loading.value=true;error.value="";try{history.value=await api.analyses(user.userId!);if(history.value[0])result.value=await api.analysisDetail(history.value[0].id)}catch(e){error.value=err(e)}finally{loading.value=false}}async function run(){running.value=true;streamText.value="";status.value="正在准备分析";controller=new AbortController();try{await consumeSse<AnalysisResult>("/stream/analysis",{user_id:user.userId,target_job:target.value||undefined},{start:m=>status.value=m,chunk:c=>streamText.value+=c,complete:()=>status.value="分析已生成，正在保存结果",error:m=>{throw new Error(m)}},controller.signal);result.value=await api.analysis({user_id:user.userId,target_job:target.value||undefined});ElMessage.success("就业画像分析完成");await load()}catch(e){if((e as Error).name!=="AbortError")ElMessage.error(err(e))}finally{running.value=false}}onMounted(load);onBeforeUnmount(()=>controller?.abort());
+import { computed, onMounted, ref } from "vue";
+import { ElMessage } from "element-plus";
+import { MagicStick, Refresh } from "@element-plus/icons-vue";
+import { api } from "@/api";
+import { err, fmt } from "@/utils/format";
+import { useUserStore } from "@/stores/user";
+import type { AnalysisResponse } from "@/types/api";
+import PageHeader from "@/components/common/PageHeader.vue";
+import StateView from "@/components/common/StateView.vue";
+import SectionPanel from "@/components/common/SectionPanel.vue";
+import RadarChart from "@/components/charts/RadarChart.vue";
+import MarketContextPanel from "@/components/common/MarketContextPanel.vue";
+const user = useUserStore();
+const result = ref<AnalysisResponse | null>(null);
+const loading = ref(true);
+const running = ref(false);
+const error = ref("");
+const target = ref("");
+const marketTarget = ref("");
+const dimensionNames: Record<string, string> = { programming_foundation: "编程基础", framework_usage: "框架应用", database_skill: "数据库能力", project_experience: "项目经验", engineering_practice: "工程实践" };
+const labels = computed(() => Object.keys(result.value?.result.skill_assessment || {}).map(key => dimensionNames[key] || key));
+const values = computed(() => Object.values(result.value?.result.skill_assessment || {}));
+async function load() {
+  loading.value = true; error.value = "";
+  try {
+    const history = await api.analyses(user.userId!);
+    if (history[0]) {
+      result.value = await api.analysisDetail(history[0].id);
+      target.value = result.value.target_job;
+      marketTarget.value = result.value.target_job || result.value.result.technical_direction;
+    }
+  } catch (e) { error.value = err(e); }
+  finally { loading.value = false; }
+}
+async function run() {
+  running.value = true;
+  try {
+    result.value = await api.analysis({ user_id: user.userId, target_job: target.value || undefined });
+    marketTarget.value = result.value.target_job || result.value.result.technical_direction;
+    ElMessage.success("IT 就业画像已更新");
+  } catch (e) { ElMessage.error(err(e)); }
+  finally { running.value = false; }
+}
+onMounted(load);
 </script>
-<template><div><PageHeader title="AI就业竞争力画像" description="根据个人经历与就业目标，分析当前就业竞争力及能力短板。"><el-input v-model="target" placeholder="目标岗位（选填）" clearable class="target-input"/><el-button type="primary" :icon="result?Refresh:MagicStick" :loading="running" @click="run">{{result?'重新分析':'开始AI分析'}}</el-button></PageHeader><div v-if="running" class="stream-panel"><div class="stream-status"><el-icon class="is-loading"><Refresh/></el-icon><b>{{status}}</b></div><pre>{{streamText||'正在连接AI服务...'}}</pre></div><StateView :loading="loading" :error="error" :empty="!result" empty-text="暂无就业画像" @retry="load"><template #hint>填写就业档案后点击“开始AI分析”。</template><template #content><div class="analysis-hero"><div><span>综合竞争力</span><strong>{{result?.result.comprehensive_score}}</strong><small>/ 100</small></div><div><el-tag effect="plain">{{result?.result.current_level}}</el-tag><h3>{{result?.result.technical_direction}}</h3><p>{{result?.result.profile_summary}}</p><span class="record-time"><el-icon><Clock/></el-icon>{{fmt(result?.created_at)}} · {{result?.is_mock?'演示模型':'DeepSeek实时分析'}}</span></div></div><div class="two-column"><SectionPanel title="能力维度"><RadarChart :labels="labels" :values="values"/></SectionPanel><SectionPanel title="推荐就业方向"><div class="direction-list"><div v-for="x in result?.result.recommended_directions" :key="x.job_title"><div><b>{{x.job_title}}</b><span>画像综合匹配度</span></div><el-progress :percentage="x.match_rate" :stroke-width="8" style="width:150px"/></div></div></SectionPanel></div><div class="two-column"><SectionPanel title="核心优势"><ul class="result-list success"><li v-for="x in result?.result.core_advantages" :key="x">{{x}}</li></ul></SectionPanel><SectionPanel title="待提升能力"><ul class="result-list warning"><li v-for="x in result?.result.areas_to_improve" :key="x">{{x}}</li></ul></SectionPanel></div></template></StateView></div></template>
+<template>
+  <div>
+    <PageHeader title="IT 就业画像"><el-input v-model="target" placeholder="目标 IT 岗位" clearable class="target-input" /><el-button :icon="Refresh" @click="marketTarget = target">查看企业需求</el-button><el-button type="primary" :icon="MagicStick" :loading="running" @click="run">{{ result ? "重新分析" : "开始分析" }}</el-button></PageHeader>
+    <StateView :loading="loading" :error="error" :empty="!result" empty-text="暂无个人画像" @retry="load"><template #content>
+      <div class="analysis-hero"><div><span>模型评估</span><strong>{{ result?.result.comprehensive_score }}</strong><small>/ 100</small></div><div><el-tag effect="plain">{{ result?.result.current_level }}</el-tag><h3>{{ result?.result.technical_direction }}</h3><p>{{ result?.result.profile_summary }}</p><span class="record-time">{{ fmt(result?.created_at) }} · {{ result?.is_mock ? "演示数据" : "AI 判断，非招聘结论" }}</span></div></div>
+      <div class="two-column"><SectionPanel title="能力维度"><RadarChart :labels="labels" :values="values" /></SectionPanel><SectionPanel title="推荐 IT 方向"><div class="direction-list"><div v-for="direction in result?.result.recommended_directions" :key="direction.job_title"><button class="text-link" @click="target = direction.job_title; marketTarget = direction.job_title">{{ direction.job_title }}</button><el-progress :percentage="direction.match_rate" :stroke-width="8" style="width: 140px" /></div></div></SectionPanel></div>
+      <div class="two-column"><SectionPanel title="模型判断：主要优势"><ul class="result-list success"><li v-for="value in result?.result.core_advantages" :key="value">{{ value }}</li></ul></SectionPanel><SectionPanel title="模型判断：待提升能力"><ul class="result-list warning"><li v-for="value in result?.result.areas_to_improve" :key="value">{{ value }}</li></ul></SectionPanel></div>
+    </template></StateView>
+    <MarketContextPanel :target="marketTarget" />
+  </div>
+</template>

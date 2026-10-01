@@ -20,6 +20,7 @@ class UserBase(BaseModel):
     bio: str = Field(default="", max_length=5000)
     email: str = Field(default="", max_length=100)
     phone: str = Field(default="", max_length=20)
+    birth_date: date | None = None
     target_city: str = Field(default="", max_length=50)
     target_salary: str = Field(default="", max_length=50)
 
@@ -37,6 +38,7 @@ class UserUpdate(BaseModel):
     bio: str | None = Field(default=None, max_length=5000)
     email: str | None = Field(default=None, max_length=100)
     phone: str | None = Field(default=None, max_length=20)
+    birth_date: date | None = None
     target_city: str | None = Field(default=None, max_length=50)
     target_salary: str | None = Field(default=None, max_length=50)
 
@@ -178,6 +180,7 @@ class StudentContextResponse(BaseModel):
     bio: str
     email: str = ""
     phone: str = ""
+    birth_date: date | None = None
     target_city: str = ""
     target_salary: str = ""
     skills: list[UserSkillResponse] = Field(default_factory=list)

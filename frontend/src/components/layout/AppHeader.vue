@@ -13,7 +13,7 @@ const auth = useAuthStore();
   <header class="top-header">
     <div class="header-left">
       <el-button class="mobile-menu" :icon="Menu" circle aria-label="打开导航" aria-controls="app-sidebar" :aria-expanded="app.mobileSidebarOpen" @click="app.toggleMobile" />
-      <div><span class="header-eyebrow">{{ auth.isRecruiter ? 'RECRUITMENT WORKSPACE' : 'CAREER WORKSPACE' }}</span><h1>{{ auth.isRecruiter ? '招聘工作台' : '就业工作台' }}</h1></div>
+      <div><span class="header-eyebrow">{{ auth.isRecruiter ? 'RECRUITMENT WORKSPACE' : 'IT CAREER WORKSPACE' }}</span><h1>{{ auth.isRecruiter ? '招聘工作台' : 'IT 求职工作台' }}</h1></div>
     </div>
     <div class="header-actions">
       <el-tooltip v-if="!auth.isRecruiter" content="检索就业资源"><el-button :icon="Search" circle aria-label="检索就业资源" @click="router.push('/resources')" /></el-tooltip>

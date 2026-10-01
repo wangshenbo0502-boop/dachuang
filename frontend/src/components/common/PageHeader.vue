@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Props {
   title: string;
-  description: string;
+  description?: string;
 }
 
 defineProps<Props>();
@@ -11,7 +11,7 @@ defineProps<Props>();
   <div class="page-header">
     <div>
       <h2>{{ title }}</h2>
-      <p>{{ description }}</p>
+      <p v-if="description">{{ description }}</p>
     </div>
     <div class="page-actions">
       <slot />

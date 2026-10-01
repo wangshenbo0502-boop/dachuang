@@ -115,6 +115,7 @@ class UserService:
             bio=user.bio,
             email=user.email,
             phone=user.phone,
+            birth_date=user.birth_date,
             target_city=user.target_city,
             target_salary=user.target_salary,
             skills=user.skills,

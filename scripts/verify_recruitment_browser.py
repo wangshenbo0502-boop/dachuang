@@ -45,6 +45,12 @@ def field(page, label, value):
     page.get_by_label(label, exact=True).fill(value)
 
 
+def registration_details(page, phone):
+    field(page, '手机号', phone)
+    page.get_by_label('出生日期', exact=True).click()
+    page.locator('.el-date-table td.available:not(.disabled) .el-date-table-cell__text').first.click()
+
+
 def select(page, label, value):
     page.get_by_label(label, exact=True).locator('xpath=ancestor::div[contains(@class,"el-select__wrapper")][1]').click()
     page.get_by_role('option', name=value, exact=True).click()
@@ -125,6 +131,7 @@ def main():
                     field(recruiter, 'QQ 邮箱', '991000001@qq.com')
                     field(recruiter, '验证码', '123456')
                     field(recruiter, '姓名（可选）', '验证招聘经理')
+                    registration_details(recruiter, '13800000001')
                     field(recruiter, '密码', 'verification-password')
                     field(recruiter, '确认密码', 'verification-password')
                     recruiter.get_by_role('button', name='注册并进入', exact=True).click()
@@ -178,6 +185,7 @@ def main():
                     field(student, 'QQ 邮箱', '991000002@qq.com')
                     field(student, '验证码', '123456')
                     field(student, '姓名（可选）', '验证同学')
+                    registration_details(student, '13800000002')
                     field(student, '密码', 'verification-password')
                     field(student, '确认密码', 'verification-password')
                     student.get_by_role('button', name='注册并进入', exact=True).click()

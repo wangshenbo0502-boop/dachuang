@@ -1,7 +1,7 @@
-INFO:     Started server process [6460]
+INFO:     Started server process [60232]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:59532 (Press CTRL+C to quit)
+INFO:     Uvicorn running on http://127.0.0.1:56380 (Press CTRL+C to quit)
 ERROR:    Exception in ASGI application
   + Exception Group Traceback (most recent call last):
   |   File "C:\Users\25113\AppData\Roaming\Python\Python311\site-packages\starlette\_utils.py", line 76, in collapse_excgroups

@@ -20,9 +20,7 @@ const job = ref<JobDetail | null>(null);
 const match = ref<MatchedJob | null>(null);
 const loading = ref(true);
 const matching = ref(false);
-const submitting = ref(false);
 const error = ref("");
-const bossUrl = ref("");
 
 async function load() {
   loading.value = true;
@@ -31,34 +29,14 @@ async function load() {
   finally { loading.value = false; }
 }
 
-async function prepareApplication() {
+function prepareApplication() {
   if (!job.value) return;
-  if (!bossUrl.value.trim()) {
-    error.value = "请先粘贴该岗位的 BOSS 直聘详情页链接";
-    return;
-  }
-  submitting.value = true;
-  try {
-    await profiles.load(user.userId!);
-    const skills = profiles.profile?.skills.slice(0, 3).map(item => item.name).join("、") || "相关技术方向";
-    const greeting = `您好，我是${profiles.profile?.name || "一名求职者"}，正在关注贵司的${job.value.title}岗位。结合我在${skills}方面的学习与项目实践，希望有机会进一步交流。`;
-    const resumeVersionId = Number(route.query.resume_version_id);
-    const created = await api.createApplication({
-      job_id: job.value.job_id,
-      job_title: job.value.title,
-      boss_url: bossUrl.value,
-      greeting,
-      ...(Number.isInteger(resumeVersionId) && resumeVersionId > 0 ? { resume_version_id: resumeVersionId } : {}),
-    });
-    const automation = await api.startApplicationAutomation(created.id);
-    router.push({ path: "/applications", query: { application: created.id } });
-    ElMessage.success(automation.message);
-  } catch (e) { error.value = err(e); }
-  finally { submitting.value = false; }
+  router.push({ path: "/resume", query: { job_id: job.value.job_id, target_job: job.value.title } });
 }
 
 async function runMatch() {
   matching.value = true;
+  error.value = "";
   try {
     await profiles.load(user.userId!);
     const result = await api.match({ skills: profiles.profile!.skills.map(item => item.name), top_k: 20, user_id: user.userId });
@@ -78,8 +56,9 @@ onMounted(load);
       <template #content>
         <div class="job-detail-head">
           <div><el-tag>{{ job?.category }}</el-tag><h2>{{ job?.title }}</h2><div class="tag-row"><el-tag v-for="tag in job?.tags" :key="tag" type="info" effect="plain">{{ tag }}</el-tag></div></div>
-          <div class="job-detail-actions"><el-input v-model="bossUrl" class="boss-url-input" placeholder="粘贴 BOSS 岗位链接" clearable /><el-button type="primary" :icon="Promotion" :loading="submitting" @click="prepareApplication">一键投递</el-button><el-button type="primary" :icon="MagicStick" :loading="matching" @click="runMatch">分析我的匹配度</el-button></div>
+          <div class="job-detail-actions"><el-button type="primary" :icon="Promotion" @click="prepareApplication">生成岗位简历</el-button><el-button :icon="MagicStick" :loading="matching" @click="runMatch">分析我的匹配度</el-button></div>
         </div>
+        <el-alert v-if="error" :title="error" type="warning" :closable="false" />
         <div class="detail-layout">
           <SectionPanel title="岗位说明"><div class="markdown-text">{{ text(job?.content) }}</div></SectionPanel>
           <aside>
