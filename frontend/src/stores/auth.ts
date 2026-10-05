@@ -3,8 +3,9 @@ import { defineStore } from "pinia";
 import { api } from "@/api";
 import type { StudentProfile } from "@/types/api";
 import { clearAuthToken, getAuthToken, setAuthToken } from "@/utils/authSession";
+import type { AccountRole } from "@/utils/authSession";
 
-export interface AccountIdentity { id: number; email: string; profile_id: number; email_verified: boolean; role: "student" | "recruiter"; name: string }
+export interface AccountIdentity { id: number; email: string; profile_id: number; email_verified: boolean; role: AccountRole; name: string }
 export const useAuthStore = defineStore("auth", () => {
   const token = ref<string | null>(getAuthToken());
   const account = ref<AccountIdentity | null>(null);
@@ -24,9 +25,9 @@ export const useAuthStore = defineStore("auth", () => {
     hydrated = true;
     return account.value;
   }
-  async function login(email: string, password: string) {
+  async function login(email: string, password: string, role?: AccountRole) {
     loading.value = true;
-    try { return await establish(await api.authLogin({ email, password })); }
+    try { return await establish(await api.authLogin({ email, password, role })); }
     catch (error) { clearLocal(); throw error; }
     finally { loading.value = false; }
   }

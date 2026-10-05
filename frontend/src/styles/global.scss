@@ -3116,6 +3116,64 @@ a {
 
 .login-eyebrow { margin-top: 28px; color: #155eef; font-size: 13px; font-weight: 600; }
 
+.role-login-page .login-form > .muted { margin-bottom: 24px; }
+
+.login-role-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.login-role-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding: 16px 14px;
+  border: 1px solid #dce2e3;
+  border-radius: 10px;
+  background: #fff;
+  color: #35424a;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+
+  &:hover { border-color: #8fb8ff; }
+  &:focus-visible { outline: 3px solid #8fb8ff; outline-offset: 3px; }
+  &:disabled { cursor: wait; }
+  &.is-selected { border-color: #155eef; background: #eef4ff; color: #155eef; }
+  small { color: #7b8790; font-size: 11px; line-height: 1.5; }
+}
+
+.login-role-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .el-icon { font-size: 18px; }
+  b { font-size: 14px; font-weight: 600; }
+}
+
+.role-login-page .el-alert { margin-bottom: 20px; }
+
+@media (max-width: 640px) {
+  .role-login-page {
+    .login-brand { padding: 24px 22px; }
+    .login-brand-content h1 { margin: 16px 0 0; font-size: 26px; }
+    .login-brand-content > p, .login-pillars, .brand-footnote { display: none; }
+    .login-area { padding: 28px 22px; }
+    .login-form { padding: 0; }
+    .login-logo { display: none; }
+    .login-eyebrow { margin-top: 0; }
+    .login-copyright { position: static; margin-top: 28px; }
+    .login-role-options { gap: 10px; }
+    .login-role-option { padding: 14px 10px; }
+  }
+}
+
 .login-options { margin: 0 0 24px; }
 
 .secure-note { display: inline-flex; align-items: center; gap: 5px; color: #89949a; font-size: 12px; }

@@ -36,7 +36,7 @@ router.beforeEach(async to => {
   document.title = `${String(to.meta.title || "")} - IT 求职成长系统`;
   const identity = await u.hydrate();
   if (to.meta.public) return identity ? safeInternalRedirect(to.query.redirect, identity.role) : true;
-  if (!identity) return {path: "/login", query: {redirect: to.fullPath}};
+  if (!identity) return {path: "/login", query: {redirect: to.fullPath, role: to.meta.role === "recruiter" ? "recruiter" : "student"}};
   if (to.path !== "/settings") {
     const role = to.meta.role || "student";
     if (identity.role !== role) return identity.role === "recruiter" ? "/recruiter" : "/dashboard";

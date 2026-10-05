@@ -1,7 +1,0 @@
-2026-09-30 22:16:24,947 | DEBUG | Using proactor: IocpProactor
-INFO:     Started server process [6952]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-2026-09-30 22:16:46,560 | INFO | [eeb7c336] GET /api/health -> 200 (35.3ms)
-2026-09-30 22:19:06,719 | INFO | [9e143452] GET /api/auth/me -> 401 (4.0ms)

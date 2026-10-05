@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "checks": [
+    "both visible role entries, context copy, retained inputs and refresh selection",
+    "registration preselects both roles and returns with the current registration role",
+    "password reset and return preserve recruiter selection and original destination",
+    "wrong recruiter entry creates no session; role switch clears error; Enter submits once and preserves destination",
+    "wrong seeker entry creates no session; seeker login rejects cross-role redirect and enters dashboard",
+    "protected recruiter URL opens the matching login entry and preserves the full destination",
+    "both mobile entries appear in the first viewport without horizontal overflow"
+  ],
+  "browser_errors": [],
+  "screenshots": [
+    "desktop-recruiter.png",
+    "desktop-student.png",
+    "mobile-recruiter.png",
+    "mobile-student.png",
+    "role-mismatch.png"
+  ]
+}

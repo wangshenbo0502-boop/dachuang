@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, reactive, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { Opportunity } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { err } from "@/utils/format";
-const router = useRouter();
+import { resolveAuthRole } from "@/utils/authSession";
+const route = useRoute(), router = useRouter();
+const authQuery = computed(() => ({ ...route.query, role: resolveAuthRole(route.query.role, route.query.redirect) }));
 const form = reactive({ email: "", code: "", password: "", confirm_password: "" });
 const error = ref(""), sending = ref(false), saving = ref(false), cooldown = ref(0);
 async function sendCode() {
@@ -26,7 +28,7 @@ async function submit() {
   try {
     await api.authResetPassword(form);
     ElMessage.success("密码已重置，请重新登录");
-    await router.replace("/login");
+    await router.replace({ path: "/login", query: authQuery.value });
   } catch (e) { error.value = err(e); }
   finally { saving.value = false; }
 }
@@ -54,7 +56,7 @@ async function submit() {
           <el-form-item label="确认新密码"><el-input v-model="form.confirm_password" size="large" type="password" show-password autocomplete="new-password" /></el-form-item>
           <el-button native-type="submit" type="primary" size="large" :loading="saving" class="full-button">重置密码</el-button>
         </el-form>
-        <p class="login-note"><router-link to="/login">返回登录</router-link></p>
+        <p class="login-note"><router-link :to="{ path: '/login', query: authQuery }">返回登录</router-link></p>
       </div>
     </section>
   </main>

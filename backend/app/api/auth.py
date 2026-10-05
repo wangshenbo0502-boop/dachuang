@@ -151,6 +151,9 @@ def login(body: LoginRequest, db: Session = Depends(get_db)) -> dict:
         raise AppException("邮箱或密码错误", code=5210, status_code=401)
     if not account.is_active:
         raise AppException("账号已禁用", code=5104, status_code=403)
+    if body.role is not None and body.role != account.role:
+        label = "招聘者" if account.role == "recruiter" else "求职者"
+        raise AppException(f"该账号是{label}账号，请选择“{label}登录”", code=5211, status_code=403)
     account.last_login_at = datetime.now(timezone.utc)
     db.commit()
     return success({"access_token": issue_token(account.id, account.token_version), "token_type": "bearer", "user": public_user(account)}, message="登录成功")

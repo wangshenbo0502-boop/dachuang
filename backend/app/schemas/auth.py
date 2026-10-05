@@ -43,6 +43,7 @@ class RegisterRequest(QQEmailRequest):
 
 class LoginRequest(QQEmailRequest):
     password: str = Field(min_length=1, max_length=128)
+    role: Literal["student", "recruiter"] | None = None
 
 class ResetPasswordRequest(QQEmailRequest):
     code: str = Field(pattern=r"^\d{6}$")

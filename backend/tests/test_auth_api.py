@@ -129,3 +129,62 @@ def test_password_reset_uses_qq_code_and_revokes_old_token(auth_api):
     assert client.get("/api/auth/me", headers=headers(original)).status_code == 401
     assert client.post("/api/auth/login", json={"email": email, "password": "correct-password"}).status_code == 401
     assert client.post("/api/auth/login", json={"email": email, "password": "new-password"}).status_code == 200
+
+@pytest.mark.parametrize("role", ["student", "recruiter"])
+def test_login_accepts_matching_selected_role(auth_api, role):
+    client, db, codes = auth_api
+    original = register(client, codes, "991100001@qq.com", role=role)
+    response = client.post("/api/auth/login", json={
+        "email": original["user"]["email"], "password": "correct-password", "role": role,
+    })
+    assert response.status_code == 200, response.json()
+    payload = response.json()["data"]
+    assert payload["user"]["role"] == role
+    assert client.get("/api/auth/me", headers=headers(payload)).json()["data"]["role"] == role
+
+@pytest.mark.parametrize("role, selected, label", [
+    ("student", "recruiter", "求职者"),
+    ("recruiter", "student", "招聘者"),
+])
+def test_login_rejects_wrong_selected_role_without_establishing_session(auth_api, role, selected, label):
+    client, db, codes = auth_api
+    original = register(client, codes, "991100002@qq.com", role=role)
+    account = db.get(Account, original["user"]["id"])
+    previous_login = account.last_login_at
+    previous_version = account.token_version
+    response = client.post("/api/auth/login", json={
+        "email": account.email, "password": "correct-password", "role": selected,
+    })
+    assert response.status_code == 403, response.json()
+    assert response.json()["message"] == f"该账号是{label}账号，请选择“{label}登录”"
+    assert "access_token" not in response.text
+    db.refresh(account)
+    assert account.last_login_at == previous_login
+    assert account.token_version == previous_version
+    assert client.get("/api/auth/me", headers=headers(original)).status_code == 200
+
+@pytest.mark.parametrize("role, selected", [("student", "recruiter"), ("recruiter", "student")])
+def test_login_checks_password_before_selected_role(auth_api, role, selected):
+    client, db, codes = auth_api
+    original = register(client, codes, "991100003@qq.com", role=role)
+    response = client.post("/api/auth/login", json={
+        "email": original["user"]["email"], "password": "wrong-password", "role": selected,
+    })
+    assert response.status_code == 401
+    assert response.json()["message"] == "邮箱或密码错误"
+
+def test_login_rejects_invalid_role(auth_api):
+    client, db, codes = auth_api
+    response = client.post("/api/auth/login", json={
+        "email": "991100004@qq.com", "password": "correct-password", "role": "admin",
+    })
+    assert response.status_code == 422
+
+def test_legacy_recruiter_login_without_role_still_succeeds(auth_api):
+    client, db, codes = auth_api
+    original = register(client, codes, "991100005@qq.com", role="recruiter")
+    response = client.post("/api/auth/login", json={
+        "email": original["user"]["email"], "password": "correct-password",
+    })
+    assert response.status_code == 200, response.json()
+    assert response.json()["data"]["user"]["role"] == "recruiter"

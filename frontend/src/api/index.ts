@@ -10,7 +10,7 @@ export const api={
  authSendCode:(email:string,purpose:"REGISTER"|"RESET_PASSWORD"="REGISTER")=>apiData<{expires_in:number}>(request.post("/auth/email/send-code",{email,purpose})),
  authResetPassword:(body:object)=>apiData<null>(request.post("/auth/reset-password",body)),
  authRegister:(body:object)=>apiData<{access_token:string;token_type:string;user:import("@/stores/auth").AccountIdentity}>(request.post("/auth/register",body)),
- authLogin:(body:{email:string;password:string})=>apiData<{access_token:string;token_type:string;user:import("@/stores/auth").AccountIdentity}>(request.post("/auth/login",body)),
+ authLogin:(body:{email:string;password:string;role?:import("@/utils/authSession").AccountRole})=>apiData<{access_token:string;token_type:string;user:import("@/stores/auth").AccountIdentity}>(request.post("/auth/login",body)),
  authMe:()=>apiData<import("@/stores/auth").AccountIdentity>(request.get("/auth/me")),
  authLogout:(token:string)=>apiData<null>(request.post("/auth/logout",null,{headers:{Authorization:`Bearer ${token}`}})),
 
