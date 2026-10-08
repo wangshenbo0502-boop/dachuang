@@ -26,14 +26,27 @@ _COMPATIBILITY_COLUMNS = {
         # reject defaults on TEXT columns.
         "automation_error": "VARCHAR(2000) NOT NULL DEFAULT ''",
     },
+    "recruitment_jobs": {
+    },
+}
+
+_ADMIN_CONTROL_COLUMNS = {
+    "accounts": {
+        "management_version": "INTEGER NOT NULL DEFAULT 0",
+    },
+    "recruitment_jobs": {
+        "moderation_status": "VARCHAR(20) NOT NULL DEFAULT 'allowed'",
+        "management_version": "INTEGER NOT NULL DEFAULT 0",
+    },
 }
 
 
-def ensure_compatibility_columns(engine: Engine) -> list[str]:
+def ensure_compatibility_columns(engine: Engine, compatibility_columns=None) -> list[str]:
     """Add columns introduced after an existing database was initialized."""
+    compatibility_columns = compatibility_columns or _COMPATIBILITY_COLUMNS
     table_names = set(inspect(engine).get_table_names())
     missing_columns: list[tuple[str, str, str]] = []
-    for table_name, columns in _COMPATIBILITY_COLUMNS.items():
+    for table_name, columns in compatibility_columns.items():
         if table_name not in table_names:
             continue
         existing_columns = {column["name"] for column in inspect(engine).get_columns(table_name)}
@@ -63,5 +76,16 @@ def initialize_database_schema(engine: Engine | None = None) -> list[str]:
     import app.models  # noqa: F401
 
     active_engine = engine or get_engine()
+    inspector = inspect(active_engine)
+    if "business_admin_receipts" in inspector.get_table_names():
+        columns = {column["name"] for column in inspector.get_columns("business_admin_receipts")}
+        if "actor" in columns and "actor_id" not in columns:
+            # Retain the provisional development schema without deleting records.
+            with active_engine.begin() as connection:
+                connection.execute(text("ALTER TABLE business_admin_receipts RENAME TO business_admin_receipts_legacy_v0"))
     Base.metadata.create_all(bind=active_engine)
-    return ensure_compatibility_columns(active_engine)
+    migrated = ensure_compatibility_columns(active_engine)
+    # Keep the historical compatibility helper's return contract stable while
+    # applying control-plane columns during normal application startup.
+    admin_migrated = ensure_compatibility_columns(active_engine, _ADMIN_CONTROL_COLUMNS)
+    return migrated + [item for item in admin_migrated if item not in migrated]

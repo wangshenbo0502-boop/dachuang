@@ -10,6 +10,7 @@ from app.models.resume import Resume, ResumeOptimization
 from app.models.growth import GrowthPlan
 from app.models.application import JobApplication
 from app.models.recruitment import RecruiterProfile, RecruitmentJob, RecruitmentApplication
+from app.models.admin_receipt import BusinessAdminReceipt
 from app.models.activity import GrowthTask, ResourceEvent
 
 __all__ = [
@@ -29,6 +30,7 @@ __all__ = [
     "RecruiterProfile",
     "RecruitmentJob",
     "RecruitmentApplication",
+    "BusinessAdminReceipt",
 ]
 
 from app.models.account import Account, EmailCode

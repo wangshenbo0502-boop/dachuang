@@ -34,6 +34,10 @@ env/
 node_modules/
 frontend/dist/
 frontend/.vite/
+admin-frontend/dist/
+admin-frontend/.vite/
+admin-backend/*.db
+admin-backend/*.log
 
 # --- 操作系统 ---
 .DS_Store

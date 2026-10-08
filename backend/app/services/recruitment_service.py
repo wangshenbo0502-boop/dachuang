@@ -58,7 +58,8 @@ class RecruitmentService:
         # Lock the vacancy until an application is committed, so closing/deleting
         # a vacancy cannot race an accepted application on row-locking databases.
         row = self.db.scalar(select(RecruitmentJob).join(Account, RecruitmentJob.recruiter_id == Account.id).where(
-            RecruitmentJob.id == job_id, RecruitmentJob.status == "published", Account.is_active.is_(True)).with_for_update(of=RecruitmentJob))
+            RecruitmentJob.id == job_id, RecruitmentJob.status == "published",
+            RecruitmentJob.moderation_status == "allowed", Account.is_active.is_(True)).with_for_update(of=RecruitmentJob))
         if row is None:
             raise ResourceNotFoundError("岗位不存在或已下架")
         return row
@@ -73,9 +74,16 @@ class RecruitmentService:
         row = self.owned_job(job_id, recruiter_id)
         if row.status == "published":
             raise AppException("请先下架岗位再编辑", code=5301, status_code=409)
-        for key, value in body.model_dump().items():
-            setattr(row, key, value)
+        changed = self.db.execute(update(RecruitmentJob).where(RecruitmentJob.id == row.id,
+            RecruitmentJob.recruiter_id == recruiter_id, RecruitmentJob.status == row.status,
+            RecruitmentJob.management_version == row.management_version).values(
+                **body.model_dump(), management_version=RecruitmentJob.management_version + 1),
+            execution_options={"synchronize_session": False})
+        if changed.rowcount != 1:
+            self.db.rollback()
+            raise AppException("岗位已变化，请刷新", code=5302, status_code=409)
         self.db.commit()
+        self.db.refresh(row)
         return serialize(row)
 
     def set_job_status(self, job_id, recruiter_id, status):
@@ -83,15 +91,26 @@ class RecruitmentService:
         if status == row.status or (status == "closed" and row.status != "published"):
             raise AppException("岗位状态已变化，请刷新后重试", code=5302, status_code=409)
         if status == "published":
+            if row.moderation_status != "allowed":
+                raise AppException("岗位处于平台限制中，暂不能发布", code=5308, status_code=409)
             missing = [label for key, label in {"title": "岗位名称", "category": "分类", "city": "城市", "salary": "薪资", "description": "岗位职责", "requirements": "任职要求"}.items() if not getattr(row, key).strip()]
             profile = self.profile(recruiter_id)
             missing.extend(label for key, label in {"company_name": "企业名称", "contact_name": "联系人", "contact_email": "联系邮箱"}.items() if not profile[key].strip())
             if missing:
                 raise AppException("发布前请补充：" + "、".join(missing), code=5303)
-            row.company_name = profile["company_name"]
-            row.published_at = datetime.now(timezone.utc)
-        row.status = status
+        values = {"status": status, "management_version": RecruitmentJob.management_version + 1}
+        conditions = [RecruitmentJob.id == row.id, RecruitmentJob.recruiter_id == recruiter_id,
+                      RecruitmentJob.status == row.status, RecruitmentJob.management_version == row.management_version]
+        if status == "published":
+            values.update(company_name=profile["company_name"], published_at=datetime.now(timezone.utc))
+            conditions.append(RecruitmentJob.moderation_status == "allowed")
+        changed = self.db.execute(update(RecruitmentJob).where(*conditions).values(**values),
+                                  execution_options={"synchronize_session": False})
+        if changed.rowcount != 1:
+            self.db.rollback()
+            raise AppException("岗位已变化，请刷新", code=5302, status_code=409)
         self.db.commit()
+        self.db.refresh(row)
         return serialize(row)
 
     def delete_job(self, job_id, recruiter_id):
@@ -189,6 +208,7 @@ def job_query(*, recruiter_id=None, keyword="", category="", city="", status="")
     else:
         stmt = stmt.join(Account, RecruitmentJob.recruiter_id == Account.id).where(Account.is_active.is_(True))
         status = "published"
+        stmt = stmt.where(RecruitmentJob.moderation_status == "allowed")
     if status:
         stmt = stmt.where(RecruitmentJob.status == status)
     if keyword:

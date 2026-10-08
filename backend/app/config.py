@@ -39,6 +39,8 @@ class Settings:
 
         # ── Account authentication and QQ email delivery ──
         self.JWT_SECRET: str = os.getenv("JWT_SECRET", "")
+        self.INTERNAL_ADMIN_ENABLED: bool = os.getenv("INTERNAL_ADMIN_ENABLED", "false").lower() == "true"
+        self.INTERNAL_ADMIN_SERVICE_SECRET: str = os.getenv("INTERNAL_ADMIN_SERVICE_SECRET", "")
         self.JWT_ACCESS_MINUTES: int = max(1, int(os.getenv("JWT_ACCESS_MINUTES", "1440")))
         self.DEV_EMAIL_CODE_MODE: bool = self.is_dev and os.getenv("DEV_EMAIL_CODE_MODE", "false").lower() == "true"
         self.SMTP_HOST: str = os.getenv("SMTP_HOST", "")

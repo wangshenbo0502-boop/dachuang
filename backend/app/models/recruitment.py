@@ -1,6 +1,6 @@
 """Recruiter-owned vacancies and immutable, voluntarily shared resume snapshots."""
 from datetime import datetime
-from sqlalchemy import DateTime, ForeignKey, JSON, String, Text, UniqueConstraint, func
+from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String, Text, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database.connection import Base
 
@@ -32,6 +32,8 @@ class RecruitmentJob(Base):
     requirements: Mapped[str] = mapped_column(Text, default="", nullable=False)
     tags: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="draft", index=True, nullable=False)
+    moderation_status: Mapped[str] = mapped_column(String(20), default="allowed", server_default="allowed", index=True, nullable=False)
+    management_version: Mapped[int] = mapped_column(Integer, default=0, server_default="0", nullable=False)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

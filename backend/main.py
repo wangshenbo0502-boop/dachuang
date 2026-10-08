@@ -11,6 +11,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat, auth, application, activity
 from app.auth.dependencies import get_current_account
@@ -23,6 +24,7 @@ from app.utils.response import error, success, ErrorCode
 from app.ai.deepseek_client import DeepSeekClient
 from app.services.boss_automation_service import boss_automation_service
 from app.api.recruitment import recruiter_router, student_router
+from app.api.internal_admin import router as internal_admin_router
 
 load_dotenv()
 
@@ -75,6 +77,7 @@ async def handle_validation_error(_: Request, exc: RequestValidationError) -> JS
     details = []
     for item in exc.errors():
         detail = dict(item)
+        detail.pop("input", None)
         # Pydantic may include a non-JSON-serializable ValueError in `ctx`.
         if "ctx" in detail:
             detail["ctx"] = {key: str(value) for key, value in detail["ctx"].items()}
@@ -83,6 +86,16 @@ async def handle_validation_error(_: Request, exc: RequestValidationError) -> JS
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content=error(code=ErrorCode.PARAM_VALIDATION_ERROR.value, message="参数校验失败", data=details),
     )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def handle_http_error(request: Request, exc: StarletteHTTPException):
+    if request.url.path.startswith("/internal/"):
+        from app.internal_admin.queries import envelope
+        codes = {401: 6101, 403: 6103, 404: 6404, 409: 6409, 422: 6422}
+        return JSONResponse(status_code=exc.status_code, content=envelope(
+            code=codes.get(exc.status_code, 6503), message=str(exc.detail), request_id=str(__import__("uuid").uuid4())))
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail}, headers=exc.headers)
 
 
 @app.exception_handler(Exception)
@@ -148,3 +161,7 @@ app.include_router(streaming.router)  # 流式响应路由
 app.include_router(knowledge.router)
 app.include_router(chat.router)
 app.include_router(application.router)
+if settings.INTERNAL_ADMIN_ENABLED:
+    if len(settings.INTERNAL_ADMIN_SERVICE_SECRET.encode()) < 32 or settings.INTERNAL_ADMIN_SERVICE_SECRET == settings.JWT_SECRET:
+        raise ValueError("Internal admin requires a separate service secret of at least 32 bytes")
+    app.include_router(internal_admin_router, include_in_schema=False)
