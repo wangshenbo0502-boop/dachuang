@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { MagicStick, Search, Document, Plus } from "@element-plus/icons-vue";
+import { Aim, Search, Document, Plus } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useProfileStore } from "@/stores/profile";
 import { useUserStore } from "@/stores/user";
@@ -119,8 +119,8 @@ onMounted(() => {
 
 <template>
   <div class="jobs-page">
-    <PageHeader title="IT 岗位匹配">
-      <el-button type="primary" :icon="MagicStick" :loading="matching" :disabled="loading" @click="match">智能匹配</el-button>
+    <PageHeader title="找到适合你的技术岗位" description="对照岗位要求与技能证据，再决定下一步。">
+      <el-button type="primary" :icon="Aim" :loading="matching" :disabled="loading" @click="match">智能匹配</el-button>
     </PageHeader>
 
     <div class="filter-bar">
@@ -142,11 +142,11 @@ onMounted(() => {
       <template #content>
         <div class="job-result-caption">共找到 {{ matchMode ? visibleJobs.length : total }} 个岗位</div>
         <div class="job-grid">
-          <article v-for="job in visibleJobs" :key="job.job_id" class="job-card" @click="openJob(job.job_id)">
+          <article v-for="job in visibleJobs" :key="job.job_id" class="job-card">
             <header>
               <div>
                 <el-tag size="small" effect="plain">{{ job.category || "IT 技术岗位" }}</el-tag>
-                <h3>{{ job.title }}</h3>
+                <h3><button class="job-title" @click="openJob(job.job_id)">{{ job.title }}</button></h3>
               </div>
               <div v-if="matchScore(job) !== null" class="job-score">
                 <strong>{{ matchScore(job) }}<small>%</small></strong>
@@ -186,7 +186,7 @@ onMounted(() => {
               <span v-else>学历、城市、毕业时间等硬条件：待核对招聘原文</span>
             </div>
             <div class="job-actions" @click.stop><el-button text :icon="Document" @click="router.push({ path: '/resume', query: { job_id: job.job_id, target_job: job.title } })">为该岗位新建简历</el-button><el-button v-if="isMatched(job) && job.missing_skills.length" text :icon="Plus" @click="addGap(job)">加入成长任务</el-button></div>
-            <footer>查看岗位详情 <span>→</span></footer>
+            <footer><button class="text-link" @click="openJob(job.job_id)">查看岗位详情</button></footer>
           </article>
         </div>
         <el-pagination v-if="!matchMode && total > 30" v-model:current-page="page" :page-size="30" :total="total" layout="prev, pager, next" @current-change="load" />

@@ -174,36 +174,17 @@ async function remove(k: typeof kind.value, index: number) {
 onMounted(load);
 </script>
 <template>
-  <div>
+  <div class="profile-page">
     <PageHeader
       title="我的 IT 求职档案"
+      description="记录真实技能与项目成果，为匹配、简历和成长提供依据。"
       ><el-progress
         :percentage="store.completeness || 0"
         :stroke-width="8"
         style="width: 180px" /></PageHeader
     ><StateView :loading="store.loading && !p" :error="error" @retry="load"
       ><template #content
-        ><div class="profile-insights">
-          <div class="profile-insight-heading">
-            <div><span>IT 能力证据概览</span><h3>档案完整度与经历构成</h3><p>记录完整度不等于技术能力评分；内容来自你的个人档案。</p></div>
-            <el-tag type="success" effect="plain">档案完整度 {{ store.completeness || 0 }}%</el-tag>
-          </div>
-          <div class="profile-insight-grid">
-            <SectionPanel title="能力证据雷达" subtitle="各类记录中已填写说明的比例">
-              <RadarChart :labels="insightLabels" :values="insightValues" @select="index => tab = ['skill', 'project', 'project', 'internship', 'competition', 'basic'][index] || 'basic'" />
-            </SectionPanel>
-            <SectionPanel title="经历构成" subtitle="数量越多不代表质量越高，重点是补充成果证据">
-              <BarChart :labels="evidenceLabels" :values="evidenceValues" unit="项" @select="index => tab = ['skill', 'project', 'internship', 'competition'][index] || 'basic'" />
-            </SectionPanel>
-            <section class="profile-insight-summary">
-              <span>下一步建议</span>
-              <h4>{{ !p?.projects.length ? "先补充一个技术项目" : !p?.skills.length ? "先添加你的核心技术栈" : !p?.bio ? "补充一段开发方向简介" : "为项目补充可验证成果" }}</h4>
-              <p>完整的技术事实会直接影响岗位匹配、简历表达和成长规划质量。</p>
-              <el-button type="primary" plain @click="tab = !p?.projects.length ? 'project' : !p?.skills.length ? 'skill' : 'basic'">去补充档案</el-button>
-            </section>
-          </div>
-        </div>
-        <div class="profile-layout">
+        ><div class="profile-layout">
           <aside class="profile-summary">
             <el-avatar :size="72">{{ p?.name.slice(0, 1) }}</el-avatar>
             <h3>{{ p?.name }}</h3>
@@ -337,7 +318,27 @@ onMounted(load);
                     </div>
                   </article></div></el-tab-pane
             ></el-tabs>
-          </section></div></template></StateView
+          </section></div><div class="profile-insights">
+          <div class="profile-insight-heading">
+            <div><span>IT 能力证据概览</span><h3>档案完整度与经历构成</h3><p>记录完整度不等于技术能力评分；内容来自你的个人档案。</p></div>
+            <el-tag type="success" effect="plain">档案完整度 {{ store.completeness || 0 }}%</el-tag>
+          </div>
+          <div class="profile-insight-grid">
+            <SectionPanel title="能力证据雷达" subtitle="各类记录中已填写说明的比例">
+              <RadarChart :labels="insightLabels" :values="insightValues" @select="index => tab = ['skill', 'project', 'project', 'internship', 'competition', 'basic'][index] || 'basic'" />
+            </SectionPanel>
+            <SectionPanel title="经历构成" subtitle="数量越多不代表质量越高，重点是补充成果证据">
+              <BarChart :labels="evidenceLabels" :values="evidenceValues" unit="项" @select="index => tab = ['skill', 'project', 'internship', 'competition'][index] || 'basic'" />
+            </SectionPanel>
+            <section class="profile-insight-summary">
+              <span>下一步建议</span>
+              <h4>{{ !p?.projects.length ? "先补充一个技术项目" : !p?.skills.length ? "先添加你的核心技术栈" : !p?.bio ? "补充一段开发方向简介" : "为项目补充可验证成果" }}</h4>
+              <p>完整的技术事实会直接影响岗位匹配、简历表达和成长规划质量。</p>
+              <el-button type="primary" plain @click="tab = !p?.projects.length ? 'project' : !p?.skills.length ? 'skill' : 'basic'">去补充档案</el-button>
+            </section>
+          </div>
+        </div>
+        </template></StateView
     ><el-dialog
       v-model="dialog"
       :title="`${editing >= 0 ? '编辑' : '新增'}${({ skill: '技能', project: '项目经历', competition: '竞赛经历', internship: '实习经历' } as any)[kind]}`"

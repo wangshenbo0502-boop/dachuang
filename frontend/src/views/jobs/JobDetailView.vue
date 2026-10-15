@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ArrowLeft, MagicStick, Promotion } from "@element-plus/icons-vue";
+import { ArrowLeft, Aim, Promotion } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { api } from "@/api";
 import { useProfileStore } from "@/stores/profile";
@@ -50,13 +50,13 @@ onMounted(load);
 </script>
 
 <template>
-  <div>
+  <div class="job-detail-page">
     <div class="detail-back"><el-button :icon="ArrowLeft" text @click="router.back()">返回岗位列表</el-button></div>
     <StateView :loading="loading" :error="error && !job ? error : ''" :empty="!job" @retry="load">
       <template #content>
         <div class="job-detail-head">
           <div><el-tag>{{ job?.category }}</el-tag><h2>{{ job?.title }}</h2><div class="tag-row"><el-tag v-for="tag in job?.tags" :key="tag" type="info" effect="plain">{{ tag }}</el-tag></div></div>
-          <div class="job-detail-actions"><el-button type="primary" :icon="Promotion" @click="prepareApplication">为该岗位新建简历</el-button><el-button :icon="MagicStick" :loading="matching" @click="runMatch">分析我的匹配度</el-button></div>
+          <div class="job-detail-actions"><el-button type="primary" :icon="Promotion" @click="prepareApplication">为该岗位新建简历</el-button><el-button :icon="Aim" :loading="matching" @click="runMatch">分析我的匹配度</el-button></div>
         </div>
         <el-alert v-if="error" :title="error" type="warning" :closable="false" />
         <div class="detail-layout">

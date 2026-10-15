@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ElMessage } from "element-plus";
-import { MagicStick, Refresh } from "@element-plus/icons-vue";
+import { TrendCharts, Refresh } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { err, fmt } from "@/utils/format";
 import { useUserStore } from "@/stores/user";
@@ -45,10 +45,10 @@ async function run() {
 onMounted(load);
 </script>
 <template>
-  <div>
-    <PageHeader title="IT 就业画像"><el-input v-model="target" placeholder="目标 IT 岗位" clearable class="target-input" /><el-button :icon="Refresh" @click="marketTarget = target">查看企业需求</el-button><el-button type="primary" :icon="MagicStick" :loading="running" @click="run">{{ result ? "重新分析" : "开始分析" }}</el-button></PageHeader>
+  <div class="analysis-page">
+    <PageHeader title="看清你的技术竞争力" description="结合档案与岗位要求，找到优势和需要补强的方向。"><el-input v-model="target" placeholder="目标 IT 岗位" clearable class="target-input" /><el-button :icon="Refresh" @click="marketTarget = target">查看企业需求</el-button><el-button type="primary" :icon="TrendCharts" :loading="running" @click="run">{{ result ? "重新分析" : "开始分析" }}</el-button></PageHeader>
     <StateView :loading="loading" :error="error" :empty="!result" empty-text="暂无个人画像" @retry="load"><template #content>
-      <div class="analysis-hero"><div><span>模型评估</span><strong>{{ result?.result.comprehensive_score }}</strong><small>/ 100</small></div><div><el-tag effect="plain">{{ result?.result.current_level }}</el-tag><h3>{{ result?.result.technical_direction }}</h3><p>{{ result?.result.profile_summary }}</p><span class="record-time">{{ fmt(result?.created_at) }} · {{ result?.is_mock ? "演示数据" : "AI 判断，非招聘结论" }}</span></div></div>
+      <div class="analysis-hero"><div class="analysis-conclusion"><el-tag effect="plain">{{ result?.result.current_level }}</el-tag><h3>{{ result?.result.technical_direction }}</h3><p>{{ result?.result.profile_summary }}</p><span class="record-time">{{ fmt(result?.created_at) }} · {{ result?.is_mock ? "演示数据" : "AI 判断，非招聘结论" }}</span></div><div class="analysis-score"><span>模型综合评估</span><strong>{{ result?.result.comprehensive_score }}<small>/ 100</small></strong><p>用于参考与追踪</p></div></div>
       <div class="two-column"><SectionPanel title="能力维度"><RadarChart :labels="labels" :values="values" /></SectionPanel><SectionPanel title="推荐 IT 方向"><div class="direction-list"><div v-for="direction in result?.result.recommended_directions" :key="direction.job_title"><button class="text-link" @click="target = direction.job_title; marketTarget = direction.job_title">{{ direction.job_title }}</button><el-progress :percentage="direction.match_rate" :stroke-width="8" style="width: 140px" /></div></div></SectionPanel></div>
       <div class="two-column"><SectionPanel title="模型判断：主要优势"><ul class="result-list success"><li v-for="value in result?.result.core_advantages" :key="value">{{ value }}</li></ul></SectionPanel><SectionPanel title="模型判断：待提升能力"><ul class="result-list warning"><li v-for="value in result?.result.areas_to_improve" :key="value">{{ value }}</li></ul></SectionPanel></div>
     </template></StateView>

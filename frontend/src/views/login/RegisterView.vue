@@ -3,6 +3,7 @@ import { onBeforeUnmount, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { Opportunity } from "@element-plus/icons-vue";
+import BrandMark from "@/components/layout/BrandMark.vue";
 import { api } from "@/api";
 import { useAuthStore } from "@/stores/auth";
 import { err } from "@/utils/format";
@@ -40,7 +41,7 @@ async function submit() {
   <main class="login-page registration-page">
     <section class="login-area">
       <div class="login-form">
-        <div class="registration-brand"><div class="login-logo"><el-icon><Opportunity /></el-icon></div><span>IT 求职成长系统</span></div>
+        <div class="registration-brand"><div class="brand-mark"><BrandMark /></div><span>IT 求职成长系统</span></div>
         <h2>{{ form.role === 'recruiter' ? '创建招聘者账号' : '创建求职者账号' }}</h2><p v-if="form.role === 'recruiter'" class="muted">注册后完善企业资料，即可发布岗位并接收简历</p>
         <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon />
         <el-form label-position="top" @submit.prevent="submit">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { ArrowRight, Refresh, Search, Document, MagicStick, Reading, Aim, TopRight } from "@element-plus/icons-vue";
+import { ArrowRight, Refresh, Search, Document, Reading, Aim, TopRight } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useUserStore } from "@/stores/user";
 import { useProfileStore } from "@/stores/profile";
@@ -15,6 +15,7 @@ const user = useUserStore();
 const profiles = useProfileStore();
 const analysis = ref<AnalysisResponse | null>(null);
 const growth = ref<GrowthResponse | null>(null);
+const resumeCount = ref(0);
 const jobs = ref<JobBrief[]>([]);
 const loading = ref(false);
 const errors = ref<string[]>([]);
@@ -112,6 +113,19 @@ const nextActions = computed(() => [
   },
 ]);
 
+const preparationSteps = computed(() => [
+  { title: "个人档案", note: profile.value?.skills.length ? `${profile.value.skills.length} 项技能已记录` : "可和 AI 求职助手聊着补充", path: profile.value?.skills.length ? "/profile" : "/coach?mode=profile", ready: !!profile.value?.skills.length },
+  { title: "就业画像", note: analysis.value ? "已有分析记录" : "明确你的技术方向", path: "/analysis", ready: !!analysis.value },
+  { title: "岗位简历", note: resumeCount.value ? `已保存 ${resumeCount.value} 份简历` : "用项目证据呈现能力", path: "/resume", ready: resumeCount.value > 0 },
+  { title: "技术成长", note: growth.value ? "已有成长规划" : "把差距变成行动", path: "/growth", ready: !!growth.value },
+]);
+const primaryAction = computed(() => {
+  if (!profile.value?.skills.length) return {
+    title: "先把你的技术经历记录下来", description: "和 AI 求职助手聊一聊你的技能和项目，确认后自动写入档案，让岗位匹配与简历有真实的依据。", action: "用 AI 对话完善档案", path: "/coach?mode=profile",
+  };
+  return analysis.value ? nextActions.value[1] : nextActions.value[0];
+});
+
 function openJobs(value = keyword.value) {
   router.push({ path: "/jobs", query: { ...(value.trim() ? { keyword: value.trim() } : {}), ...(selectedCategory.value ? { category: selectedCategory.value } : {}) } });
 }
@@ -146,13 +160,14 @@ async function load() {
   jobsError.value = "";
   const newsRequest = loadNews();
   try {
-    const [profileResult, analysisResult, growthResult, jobResult] = await Promise.allSettled([
+    const [profileResult, analysisResult, growthResult, jobResult, resumeResult] = await Promise.allSettled([
       profiles.load(user.userId!, true), api.analyses(user.userId!),
-      api.growths(user.userId!), loadJobs(),
+      api.growths(user.userId!), loadJobs(), api.resumeVersions(user.userId!),
     ]);
     for (const result of [profileResult, analysisResult, growthResult]) {
       if (result.status === "rejected") errors.value.push(err(result.reason));
     }
+    resumeCount.value = resumeResult.status === "fulfilled" ? resumeResult.value.length : 0;
     analysis.value = null;
     growth.value = null;
     if (analysisResult.status === "fulfilled" && analysisResult.value[0]) {
@@ -181,17 +196,24 @@ onMounted(load);
         <p>{{ greeting }}，{{ profile?.name || user.user?.name || "求职者" }}<span>今天也离理想岗位近一步。</span></p>
         <div class="heading-tools"><time>{{ dateLabel }}</time><el-tooltip content="刷新首页数据"><el-button :icon="Refresh" :loading="loading" circle aria-label="刷新首页数据" @click="load" /></el-tooltip></div>
       </div>
-      <div class="personal-banner">
-        <img class="circuit-image" src="/images/circuit-board.jpg" alt="" fetchpriority="high" />
-        <div class="banner-copy">
-          <span class="eyebrow">BUILD YOUR NEXT CHAPTER</span>
-          <h2>IT 求职工作台<span>看见行业，找到你的下一站。</span></h2>
-          <div class="banner-actions">
-            <el-button class="resume-button" :icon="Document" @click="router.push('/resume')">我的简历</el-button>
-            <button class="banner-link" @click="router.push('/profile')">完善个人档案 <el-icon><ArrowRight /></el-icon></button>
+      <div class="preparation-layout">
+        <div class="personal-banner">
+          <div class="banner-copy">
+            <h2>你的求职准备</h2>
+            <p>把技术经历整理好，让每一步都有依据。</p>
+          </div>
+          <div class="preparation-steps" aria-label="求职准备步骤">
+            <button v-for="(step, index) in preparationSteps" :key="step.path" :class="{ ready: step.ready }" @click="router.push(step.path)">
+              <span class="step-node" aria-hidden="true">{{ step.ready ? '✓' : index + 1 }}</span>
+              <strong>{{ step.title }}</strong><small>{{ step.note }}</small>
+            </button>
           </div>
         </div>
-        <span class="banner-index">CAREER / TECH / FUTURE</span>
+        <aside class="next-step-panel">
+          <span class="next-step-label"><el-icon><Aim /></el-icon>接下来可以做</span>
+          <h3>{{ primaryAction.title }}</h3><p>{{ primaryAction.description }}</p>
+          <el-button @click="router.push(primaryAction.path)">{{ primaryAction.action }}<el-icon><ArrowRight /></el-icon></el-button>
+        </aside>
       </div>
       <div class="personal-status">
         <button @click="router.push('/profile')"><span>档案完整度</span><strong>{{ profiles.completeness ?? "—" }}<small v-if="profiles.completeness !== null">%</small></strong><i class="completion-track"><i :style="{ width: `${profiles.completeness || 0}%` }" /></i></button>
@@ -202,9 +224,23 @@ onMounted(load);
       <el-alert v-if="errors.length" type="warning" :closable="false" title="部分个人数据暂时无法加载" :description="[...new Set(errors)].join('；')" />
     </section>
 
+    <section class="ai-section" aria-labelledby="ai-heading">
+      <header class="section-heading">
+        <div><h2 id="ai-heading">继续你的求职准备</h2></div>
+        <span class="ai-source">{{ analysis || growth ? (analysis?.is_mock || growth?.is_mock ? "示例模式 · 建议仅供参考" : "基于最近的就业画像与成长记录") : "完成就业分析后，获取个性化建议" }}</span>
+      </header>
+      <div class="ai-actions">
+        <article v-for="action in nextActions" :key="action.label">
+          <div class="action-eyebrow"><el-icon><component :is="action.icon" /></el-icon><span>{{ action.label }}</span></div>
+          <h3 :title="action.title">{{ action.title }}</h3><p :title="action.description">{{ action.description }}</p>
+          <button class="text-link" @click="router.push({ path: action.path, query: action.query ? { query: action.query } : {} })">{{ action.action }} <el-icon><ArrowRight /></el-icon></button>
+        </article>
+      </div>
+    </section>
+
     <section class="industry-section" aria-labelledby="industry-heading">
       <header class="section-heading">
-        <div><span class="eyebrow">INDUSTRY INTELLIGENCE</span><h2 id="industry-heading">IT 行业观察<span class="section-tag">岗位与技术</span></h2></div>
+        <div><h2 id="industry-heading">技术岗位，正在需要什么</h2><p class="section-description">从岗位样本中，找到值得关注的方向与技能。</p></div>
         <form class="industry-search" role="search" @submit.prevent="openJobs()">
           <el-icon><Search /></el-icon><input v-model="keyword" aria-label="搜索岗位或技能" placeholder="搜索岗位、技术或技能" type="search" maxlength="100" />
           <button type="submit" aria-label="搜索岗位"><el-icon><ArrowRight /></el-icon></button>
@@ -220,20 +256,20 @@ onMounted(load);
       <div v-if="jobsError" class="section-empty" role="status"><p>岗位统计暂时无法加载：{{ jobsError }}</p><el-button :icon="Refresh" :loading="loading" @click="load">重新加载</el-button></div>
       <div v-else class="market-analysis" v-loading="loading && !jobs.length">
         <div class="distribution">
-          <div class="subheading"><div><span class="chart-eyebrow">01 / TECH LANDSCAPE</span><h3>IT 岗位版图</h3></div><button v-if="coverage.length" class="map-reset" :class="{ active: !selectedCategory }" :aria-pressed="!selectedCategory" @click="selectedCategory = ''">全部方向</button></div>
+          <div class="subheading"><h3>岗位方向分布</h3><button v-if="coverage.length" class="map-reset" :class="{ active: !selectedCategory }" :aria-pressed="!selectedCategory" @click="selectedCategory = ''">全部方向</button></div>
           <p v-if="leadingDirection" class="map-insight"><strong>{{ leadingDirection.label }}</strong> 收录最多<span>{{ leadingDirection.count }} 个样本 · 占比 {{ Math.round(leadingDirection.count / jobs.length * 100) }}%</span></p>
           <JobDirectionMap v-if="coverage.length" :items="coverage" :selected="selectedCategory" @select="selectedCategory = $event" />
           <div v-else class="section-empty"><p>{{ loading ? "正在获取岗位样本…" : "暂无岗位样本" }}</p><router-link v-if="!loading" to="/jobs">浏览岗位库 <el-icon><ArrowRight /></el-icon></router-link></div>
         </div>
         <div class="skill-demand">
-          <div class="subheading"><div><span class="chart-eyebrow">02 / SKILL SIGNALS</span><h3>{{ selectedCategory || "跨方向" }}高频技能</h3></div><button class="text-link" @click="openJobs('')">查看岗位 <el-icon><TopRight /></el-icon></button></div>
+          <div class="subheading"><h3>{{ selectedCategory || "跨方向" }}高频技能</h3><button class="text-link" @click="openJobs('')">查看岗位 <el-icon><TopRight /></el-icon></button></div>
           <div v-if="activeSkill" class="skill-insight" aria-live="polite">
             <div><strong>{{ activeSkill.name }}</strong><span>{{ activeSkill.count }} / {{ selectedJobs.length }} 个样本要求这项技能</span></div>
             <b>{{ Math.round(activeSkill.count / selectedJobs.length * 100) }}<small>%</small></b>
           </div>
           <div v-if="skillStats.length" class="skill-grid" role="group" aria-label="查看技能证据">
-            <button v-for="(skill, index) in skillStats.slice(0, 6)" :key="skill.name" class="skill-tile" :class="{ active: activeSkill?.name === skill.name }" :aria-pressed="activeSkill?.name === skill.name" :aria-label="`分析 ${skill.name} 技能要求`" @click="selectedSkill = skill.name">
-              <span class="tile-rank">{{ String(index + 1).padStart(2, '0') }}</span><strong :title="skill.name">{{ skill.name }}</strong>
+            <button v-for="skill in skillStats.slice(0, 6)" :key="skill.name" class="skill-tile" :class="{ active: activeSkill?.name === skill.name }" :aria-pressed="activeSkill?.name === skill.name" :aria-label="`分析 ${skill.name} 技能要求`" @click="selectedSkill = skill.name">
+              <strong :title="skill.name">{{ skill.name }}</strong>
               <span class="tile-coverage"><span>{{ skill.count }} 个岗位</span><b>{{ Math.round(skill.count / selectedJobs.length * 100) }}<small>%</small></b></span>
               <span class="tile-dots" aria-hidden="true"><i v-for="dot in 10" :key="dot" :class="{ filled: dot <= Math.round(skill.count / selectedJobs.length * 10) }" /></span>
             </button>
@@ -244,7 +280,7 @@ onMounted(load);
         </div>
       </div>
       <div v-if="!jobsError && evidenceJobs.length" class="job-evidence">
-        <div class="evidence-intro"><span class="chart-eyebrow">FROM SKILLS TO ROLES</span><h3>{{ activeSkill ? `哪些岗位要求 ${activeSkill.name}？` : `${selectedCategory || '全部方向'}岗位样本` }}</h3><button class="text-link" @click="openJobs(activeSkill?.name || '')">查看 {{ evidenceJobs.length }} 个相关岗位 <el-icon><ArrowRight /></el-icon></button></div>
+        <div class="evidence-intro"><span class="chart-eyebrow">从技能到岗位</span><h3>{{ activeSkill ? `哪些岗位要求 ${activeSkill.name}？` : `${selectedCategory || '全部方向'}岗位样本` }}</h3><button class="text-link" @click="openJobs(activeSkill?.name || '')">查看 {{ evidenceJobs.length }} 个相关岗位 <el-icon><ArrowRight /></el-icon></button></div>
         <router-link v-for="job in evidenceJobs.slice(0, 2)" :key="job.job_id" class="evidence-job" :to="`/jobs/${encodeURIComponent(job.job_id)}`">
           <span>{{ job.category || "其他" }}<el-icon><TopRight /></el-icon></span>
           <h4 :title="job.title">{{ job.title }}</h4>
@@ -255,8 +291,8 @@ onMounted(load);
       <div class="news-heading subheading"><div><h3>近期技术动态</h3><span>{{ newsDate ? `资讯获取于 ${newsDate}` : "技术生态与官方资讯" }}</span></div><router-link class="text-link" to="/resources">全部资讯 <el-icon><ArrowRight /></el-icon></router-link></div>
       <p v-if="newsError" class="news-notice" role="status">{{ newsError }} <button v-if="!newsLoading" class="text-link" @click="loadNews">重试</button></p>
       <div class="industry-news" v-loading="newsLoading">
-        <article v-for="(item, index) in news" :key="item.doc_id || resourceTitle(item)" class="news-item">
-          <div class="news-meta"><span>{{ item.source || "技术资讯" }}</span><span>{{ String(index + 1).padStart(2, '0') }}</span></div>
+        <article v-for="item in news" :key="item.doc_id || resourceTitle(item)" class="news-item">
+          <div class="news-meta"><span>{{ item.source || "技术资讯" }}</span></div>
           <h4><a v-if="resourceUrl(item)" :href="resourceUrl(item)" target="_blank" rel="noopener noreferrer">{{ resourceTitle(item) }} <el-icon><TopRight /></el-icon></a><button v-else @click="openResource(resourceTitle(item))">{{ resourceTitle(item) }}</button></h4>
           <p>{{ item.content }}</p>
           <footer><time>{{ resourceDate(item) }}</time><button class="text-link" @click="openResource(resourceTitle(item))">相关解读 <el-icon><ArrowRight /></el-icon></button></footer>
@@ -265,20 +301,7 @@ onMounted(load);
       </div>
     </section>
 
-    <section class="ai-section" aria-labelledby="ai-heading">
-      <header class="section-heading">
-        <div><span class="eyebrow">YOUR NEXT MOVE</span><h2 id="ai-heading"><el-icon><MagicStick /></el-icon>你的下一步</h2></div>
-        <span class="ai-source">{{ analysis || growth ? (analysis?.is_mock || growth?.is_mock ? "示例模式 · 建议仅供参考" : "基于最近的就业画像与成长记录") : "完成就业分析后，获取个性化 AI 建议" }}</span>
-      </header>
-      <div class="ai-actions">
-        <article v-for="(action, index) in nextActions" :key="action.label">
-          <div class="action-eyebrow"><el-icon><component :is="action.icon" /></el-icon><span>{{ action.label }}</span><small>0{{ index + 1 }}</small></div>
-          <h3 :title="action.title">{{ action.title }}</h3><p :title="action.description">{{ action.description }}</p>
-          <button class="text-link" @click="router.push({ path: action.path, query: action.query ? { query: action.query } : {} })">{{ action.action }} <el-icon><ArrowRight /></el-icon></button>
-        </article>
-      </div>
-    </section>
-    <footer class="home-footer"><span>IT CAREER WORKSPACE</span><span>从了解行业，到成为行业的一员。</span></footer>
+    <footer class="home-footer"><span>IT 求职成长系统</span><span>从了解行业，到成为行业的一员。</span></footer>
   </div>
 </template>
 

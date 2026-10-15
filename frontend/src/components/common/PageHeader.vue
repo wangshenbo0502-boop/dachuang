@@ -13,7 +13,7 @@ defineProps<Props>();
       <h2>{{ title }}</h2>
       <p v-if="description">{{ description }}</p>
     </div>
-    <div class="page-actions">
+    <div v-if="$slots.default" class="page-actions">
       <slot />
     </div>
   </div>

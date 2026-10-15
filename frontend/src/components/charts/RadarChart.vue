@@ -10,8 +10,10 @@ function draw() {
   const series = [{ name: "当前记录", value: props.values }];
   if (props.compare) series.push({ name: "岗位要求", value: props.compare });
   chart?.setOption({
-    tooltip: {}, color: ["#2563eb", "#158779"], legend: { bottom: 0 },
-    radar: { radius: "57%", center: ["50%", "45%"], triggerEvent: true, indicator: props.labels.map(name => ({ name, max: 100 })), splitNumber: 4, axisName: { color: "#475569" }, splitArea: { areaStyle: { color: ["#fff", "#f8fafc"] } }, axisLine: { lineStyle: { color: "#dbe4ef" } }, splitLine: { lineStyle: { color: "#dbe4ef" } } },
+    animation: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    textStyle: { fontFamily: 'Microsoft YaHei UI, sans-serif', color: '#cbd6e3' },
+    tooltip: { backgroundColor: "#142333", borderColor: "#415b63", textStyle: { color: "#f2f4fa" } }, color: ["#83e5b2", "#ebc780"], legend: { bottom: 0, textStyle: { fontSize: 12, color: '#a3b1c5' } },
+    radar: { radius: "57%", center: ["50%", "45%"], triggerEvent: true, indicator: props.labels.map(name => ({ name, max: 100 })), splitNumber: 4, axisName: { color: "#cbd6e3" }, splitArea: { areaStyle: { color: ["#111b2a", "#152634"] } }, axisLine: { lineStyle: { color: "#3c5361" } }, splitLine: { lineStyle: { color: "#3c5361" } } },
     series: [{ type: "radar", data: series, symbolSize: 5, lineStyle: { width: 2 }, areaStyle: { opacity: 0.12 } }],
   }, true);
 }

@@ -9,7 +9,6 @@ import {
   Delete,
   Document,
   EditPen,
-  MagicStick,
   Plus,
   Promotion,
   RefreshRight,
@@ -532,8 +531,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="assistant-page">
-    <PageHeader title="IT 求职教练">
+  <div class="assistant-page assistant-cosmic">
+    <PageHeader title="聊聊你的下一步" description="从一个具体问题开始，梳理求职方向、项目表达与面试准备。">
       <div class="assistant-page-actions">
         <el-button class="assistant-header-new" :icon="Plus" @click="startNewConversation">新对话</el-button>
         <el-segmented v-model="mode" :options="modeOptions" :disabled="loading" />
@@ -545,7 +544,7 @@ onBeforeUnmount(() => {
       <section class="assistant-chat-panel">
         <header class="assistant-chat-header">
           <div class="conversation-title">
-            <div class="conversation-avatar"><el-icon><MagicStick /></el-icon></div>
+            <div class="conversation-avatar"><img src="/images/assistant-robot.webp" alt="" /></div>
             <div>
               <h2>{{ mode === "consult" ? "聊聊你的求职问题" : "一起完善就业档案" }}</h2>
               <p>{{ mode === "consult" ? "简历、面试、岗位选择和成长方向，都可以从这里开始" : "对话采集信息，草稿确认后再写入正式档案" }}</p>
@@ -557,7 +556,7 @@ onBeforeUnmount(() => {
 
         <div ref="chatBody" class="assistant-chat-body">
           <div v-if="mode === 'consult' && !consultMessages.length" class="conversation-empty">
-            <div class="conversation-empty-icon"><el-icon><MagicStick /></el-icon></div>
+            <div class="conversation-empty-icon"><img src="/images/assistant-robot.webp" alt="" /></div>
             <h3>今天想聊什么？</h3>
             <p>可以从一个具体问题开始，也可以直接讲讲你的经历和目标。</p>
             <div class="conversation-suggestions">
@@ -568,10 +567,10 @@ onBeforeUnmount(() => {
           </div>
 
           <div v-for="(message, index) in messages" :key="message.id" class="chat-message" :class="[message.role, { failed: message.failed }]">
-            <div class="message-avatar"><el-icon><component :is="message.role === 'assistant' ? MagicStick : UserFilled" /></el-icon></div>
+            <div class="message-avatar"><img v-if="message.role === 'assistant'" src="/images/assistant-robot.webp" alt="" /><el-icon v-else><UserFilled /></el-icon></div>
             <div class="message-content">
               <div v-if="message.content" class="message-bubble">{{ message.content }}</div>
-              <div v-else class="message-bubble loading-dots">AI 正在思考<span>.</span><span>.</span><span>.</span></div>
+              <div v-else class="message-bubble loading-dots">正在思考<span>.</span><span>.</span><span>.</span></div>
               <div class="message-meta">
                 <span>{{ formatTime(message.createdAt) }}</span>
                 <span v-if="message.failed" class="message-error">发送失败</span>
@@ -590,6 +589,7 @@ onBeforeUnmount(() => {
             :rows="2"
             resize="none"
             maxlength="4000"
+            aria-label="输入求职问题或补充档案信息"
             :disabled="loading"
             :placeholder="mode === 'consult' ? '输入你想聊的内容...' : '直接回答，也可以说“跳过”或继续补充其他经历'"
             @keydown.enter.exact.prevent="send()"
@@ -613,8 +613,12 @@ onBeforeUnmount(() => {
       </aside>
     </div>
 
-    <el-drawer v-model="draftDrawer" title="待确认档案草稿" size="92%" append-to-body>
+    <el-drawer v-model="draftDrawer" class="assistant-cosmic-drawer" title="待确认档案草稿" size="92%" append-to-body>
       <ProfileDraftPanel v-model:review-input="reviewInput" :draft="draft" :loading="loading" :syncing="syncing" @change="requestChange" @confirm="confirmSync" />
     </el-drawer>
   </div>
 </template>
+
+<style lang="scss">
+@use "@/styles/assistant-cosmic";
+</style>

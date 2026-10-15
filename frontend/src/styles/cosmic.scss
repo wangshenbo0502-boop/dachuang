@@ -1,0 +1,47 @@
+// Shared visual finish; imported after the existing page styles.
+body { background: var(--color-bg) url("/images/assistant-stars.svg") repeat; }
+::selection { color: #f2f4fa; background: #286456; }
+:focus-visible { outline-color: #a7ef96; }
+::-webkit-scrollbar-thumb { background: #3b5664; }
+.app-shell, .app-workspace { background: transparent; }
+.sidebar { background: #0c1422f5; border-color: #304250; }
+.sidebar-foot { background: #0c1422; }
+.top-header { background: #0c1422ed; border-color: #304250; }
+.assistant-new-button { color: #cbf9c1; background: linear-gradient(110deg, #1b2c38, #17443f); border-color: #41655d; }
+.nav-list a.active { background: linear-gradient(110deg, #223b39, #143d39); color: #c8ffb6; }
+.nav-list a.active .el-icon { color: #c8ffb6; }
+.user-mini .el-avatar { color: #caf5d7; background: #23443e; }
+.section-panel, .stat-card, .career-surface, .personal-banner,
+.market-analysis, .news-item, .job-detail-head, .analysis-hero,
+.growth-statistics, .resource-list article { background: var(--gradient-panel); }
+.section-panel, .stat-card, .job-grid, .personal-banner { box-shadow: 0 8px 28px #00000020; }
+.next-step-panel { border: 1px solid #41655d; background: linear-gradient(125deg, #1d2639, #175044); }
+.next-step-panel .el-button { color: var(--color-on-primary); background: var(--gradient-primary); border: 0; }
+.login-page { background: var(--color-bg) url("/images/assistant-stars.svg") repeat; }
+.login-brand { background: linear-gradient(135deg, #171e32db, #12413be8); border-color: var(--color-border); }
+.login-area { background: #080f1de0; }
+.registration-page .login-area { background: transparent; }
+.registration-page .login-form { background: var(--gradient-panel); box-shadow: 0 8px 28px #00000020; }
+.login-role-option.is-selected { color: #d5ffc9; background: #244c43; border-color: #477264; }
+.login-page .login-form .full-button { color: var(--color-on-primary); background: var(--gradient-primary); border: 0; }
+.pillar-icon { color: #b5f3a8; background: #173c39; border-color: #3b6258; }
+.el-button--primary:not(.is-plain):not(.is-text):not(.is-link):not(:disabled) { color: var(--color-on-primary); background: var(--gradient-primary); border-color: transparent; }
+.el-button--primary:not(.is-plain):not(.is-text):not(.is-link):not(:disabled):hover { filter: brightness(1.08); }
+.el-button--primary.is-plain { color: #b5f3a8; background: #183c35; border-color: #476e5d; }
+.el-button--primary:disabled { color: #9eb3ae; background: #263f3c; border-color: #3a5851; }
+.el-switch { --el-switch-on-color: #28b89b; }
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-radio__input.is-checked .el-radio__inner { background: #29b69d; border-color: #29b69d; }
+.el-radio-button.is-active .el-radio-button__original-radio:not(:disabled) + .el-radio-button__inner { color: #082720; background: var(--gradient-primary); border-color: #a7ef96; }
+.el-tag--dark { color: #092621; }
+.el-dialog, .el-drawer, .el-message-box { border: 1px solid var(--color-border); background: linear-gradient(145deg, #171f31, #123335); }
+.el-popper.is-dark { color: #e5eff6; border-color: #405763; background: #182c3b; }
+.el-table { --el-table-bg-color: var(--color-surface); --el-table-tr-bg-color: var(--color-surface); --el-table-header-bg-color: #1c303f; --el-table-row-hover-bg-color: #203e41; --el-table-border-color: var(--color-border-light); }
+.el-alert { border: 1px solid var(--color-border-light); }
+.el-progress-bar__outer { background: #253d49; }
+.pending-panel { border-color: var(--color-warning); background: var(--color-warning-soft); }
+.accepted-panel { border-color: var(--color-success); background: var(--color-success-soft); }
+.el-empty__description p { color: var(--color-text-muted); }
+.el-empty { --el-empty-fill-color-0: #243743; --el-empty-fill-color-1: #344953; --el-empty-fill-color-2: #30464e; --el-empty-fill-color-3: #253943; --el-empty-fill-color-4: #38525b; --el-empty-fill-color-5: #20343c; --el-empty-fill-color-6: #34505b; --el-empty-fill-color-7: #192c35; --el-empty-fill-color-8: #2a404a; --el-empty-fill-color-9: #182b34; }
+.el-pagination.is-background .el-pager li.is-active { color: #092621; background: #a7ef96; }
+.assistant-page.assistant-cosmic { background-color: transparent; background-image: none; }
+@media print { :root { color-scheme: light; } body { color: #24303a; background: #fff; } }

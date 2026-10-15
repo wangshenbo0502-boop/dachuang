@@ -9,16 +9,17 @@ let chart: echarts.ECharts | undefined;
 let observer: ResizeObserver | undefined;
 const total = computed(() => props.items.reduce((sum, item) => sum + item.count, 0));
 const colors: Record<string, string> = {
-  AI: "#226b57", "后端": "#437dc0", "前端": "#549ca2", "数据": "#8777b4",
-  "测试": "#ba8650", "运维": "#697d99", "安全": "#a36883", "产品": "#ac7564",
-  "移动端": "#619076", "运营": "#7d8763", "其他": "#697f85",
+  AI: "#315cd8", "后端": "#426cb4", "前端": "#428293", "数据": "#796aa8",
+  "测试": "#986e31", "运维": "#62718b", "安全": "#94647f", "产品": "#9e6757",
+  "移动端": "#47766c", "运营": "#76814e", "其他": "#697585",
 };
 function color(label: string) { return colors[label] || "#697f85"; }
 function draw() {
   chart?.setOption({
-    animationDuration: 450,
+    animation: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    animationDuration: 300,
     animationDurationUpdate: 250,
-    tooltip: {
+    tooltip: { backgroundColor: "#142333", borderColor: "#415b63", textStyle: { color: "#f2f4fa" },
       confine: true, renderMode: "richText",
       formatter: (params: any) => {
         const item = props.items.find(item => item.label === params.name);
@@ -29,7 +30,7 @@ function draw() {
       type: "treemap", left: 0, right: 0, top: 0, bottom: 0,
       roam: false, nodeClick: false, breadcrumb: { show: false },
       sort: "desc", squareRatio: 1.25,
-      itemStyle: { borderColor: "#fff", borderWidth: 0, gapWidth: 4 },
+      itemStyle: { borderColor: "#fff", borderWidth: 0, gapWidth: 5, borderRadius: 6 },
       label: {
         show: true, position: "insideTopLeft", padding: [8, 8],
         color: "#fff", fontSize: 13, lineHeight: 22, overflow: "truncate",
@@ -40,13 +41,13 @@ function draw() {
           value: { fontSize: 22, fontWeight: 600, color: "#fff", lineHeight: 28 },
         },
       },
-      emphasis: { itemStyle: { borderColor: "#183f35", borderWidth: 2 }, label: { show: true } },
+      emphasis: { itemStyle: { borderColor: "#192a44", borderWidth: 2 }, label: { show: true } },
       data: props.items.map(item => ({
         name: item.label, value: item.count,
         itemStyle: {
           color: color(item.label),
           opacity: props.selected && props.selected !== item.label ? 0.4 : 1,
-          borderColor: props.selected === item.label ? "#183f35" : "#fff",
+          borderColor: props.selected === item.label ? "#192a44" : "#fff",
           borderWidth: props.selected === item.label ? 3 : 0,
         },
       })),
@@ -82,11 +83,11 @@ onBeforeUnmount(() => { observer?.disconnect(); chart?.dispose(); });
 .direction-map-canvas { width: 100%; height: 240px; }
 .map-legend {
   display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 12px;
-  button { display: flex; align-items: center; gap: 5px; border: 1px solid transparent; border-radius: 3px; padding: 3px 6px; background: transparent; color: #637071; font: inherit; font-size: 11px; line-height: 1.5; }
-  button:hover, button.selected { color: #173e31; background: #eff5f1; border-color: #b7cdc0; }
-  button:focus-visible { outline: 2px solid #155eef; outline-offset: 2px; }
+  button { display: flex; align-items: center; gap: 6px; border: 1px solid transparent; border-radius: 5px; min-height: 32px; padding: 4px 7px; background: transparent; color: var(--color-text-muted); font: inherit; font-size: 12px; line-height: 1.5; }
+  button:hover, button.selected { color: var(--color-primary); background: var(--color-primary-soft); border-color: var(--color-border); }
+  button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
   i { width: 7px; height: 7px; flex-shrink: 0; border-radius: 1px; }
-  small { color: #697771; font-size: 10px; }
+  small { color: var(--color-text-muted); font-size: 12px; }
 }
 @media (max-width: 650px) { .direction-map-canvas { height: 232px; } }
 </style>

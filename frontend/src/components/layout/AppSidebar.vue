@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessageBox } from "element-plus";
+import BrandMark from "@/components/layout/BrandMark.vue";
 import { useAppStore } from "@/stores/app";
 import { useUserStore } from "@/stores/user";
 import {
@@ -23,7 +24,6 @@ import {
   ChatDotRound,
   Delete,
   EditPen,
-  Opportunity,
   Close,
   Search,
   TrendCharts,
@@ -169,7 +169,7 @@ onBeforeUnmount(() => {
 <template>
   <aside id="app-sidebar" class="sidebar" :class="{ open: app.mobileSidebarOpen, 'is-compact': isCompact }" :inert="isMobile && !app.mobileSidebarOpen" aria-label="工作台导航" @keydown.esc="closeMobile">
     <div class="brand">
-      <div class="brand-mark"><el-icon><Opportunity /></el-icon></div>
+      <div class="brand-mark"><BrandMark /></div>
       <div class="brand-text"><b>{{ user.isRecruiter ? '招聘工作台' : 'IT 求职成长系统' }}</b><span>{{ user.isRecruiter ? '发布岗位 · 发现人才' : '技术岗位求职工作台' }}</span></div>
       <el-tooltip :content="isCompact ? '展开侧栏' : '收起侧栏'" placement="right" :disabled="isMobile">
         <button class="sidebar-toggle" :aria-label="isMobile ? '关闭导航' : isCompact ? '展开侧栏' : '收起侧栏'" :aria-expanded="!isCompact" aria-controls="sidebar-content" @click="isMobile ? closeMobile() : app.toggleSidebar()">

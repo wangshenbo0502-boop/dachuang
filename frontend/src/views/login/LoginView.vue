@@ -2,7 +2,8 @@
 import { computed, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { Lock, Opportunity, ChatDotRound, TrendCharts, User, Suitcase, Document, Tickets } from "@element-plus/icons-vue";
+import { Lock, Opportunity, ChatDotRound, TrendCharts, User, Suitcase, Document, Tickets, ArrowRight } from "@element-plus/icons-vue";
+import BrandMark from "@/components/layout/BrandMark.vue";
 import { useAuthStore } from "@/stores/auth";
 import { err } from "@/utils/format";
 import { resolveAuthRole, safeInternalRedirect } from "@/utils/authSession";
@@ -56,20 +57,21 @@ async function submit() {
   <main class="login-page role-login-page">
     <section class="login-brand">
       <div class="login-brand-content">
-        <div class="institution-label"><span class="brand-mark">IT</span> IT 求职成长系统</div>
+        <div class="institution-label"><span class="brand-mark"><BrandMark /></span> IT 求职成长系统</div>
         <h1>{{ content.headline }}<br /><span>{{ content.highlight }}</span></h1>
         <p>{{ content.description }}</p>
+        <div class="login-direction-strip" aria-label="工作台流程"><span>{{ role === 'recruiter' ? '发布岗位' : '技术经历' }}</span><el-icon aria-hidden="true"><ArrowRight /></el-icon><span>{{ role === 'recruiter' ? '了解候选人' : '岗位匹配' }}</span><el-icon aria-hidden="true"><ArrowRight /></el-icon><span>{{ role === 'recruiter' ? '跟进招聘' : '求职行动' }}</span></div>
         <div class="login-pillars">
           <div v-for="pillar in content.pillars" :key="pillar.title"><span class="pillar-icon"><el-icon><component :is="pillar.icon" /></el-icon></span><span><b>{{ pillar.title }}</b><small>{{ pillar.description }}</small></span></div>
         </div>
-        <div class="brand-footnote">CAREER INTELLIGENCE · BUILT AROUND YOU</div>
+        <div class="brand-footnote">围绕你的技术能力，构建求职竞争力</div>
       </div>
     </section>
     <section class="login-area">
       <div class="login-form">
         <div class="login-logo"><el-icon><component :is="content.icon" /></el-icon></div>
-        <div class="login-eyebrow">欢迎回来</div>
-        <h2>{{ content.title }}</h2>
+        <div class="login-eyebrow">{{ content.title }}</div>
+        <h2>欢迎回来</h2>
         <p class="muted">{{ content.note }}</p>
         <div class="login-role-options" role="group" aria-label="选择登录身份">
           <button v-for="entry in roles" :key="entry.value" type="button" class="login-role-option"

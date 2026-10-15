@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { Check, Edit, MagicStick, Plus, Reading, VideoPlay } from "@element-plus/icons-vue";
+import { Check, Edit, TrendCharts, Plus, Reading, VideoPlay } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useUserStore } from "@/stores/user";
 import { err, fmt } from "@/utils/format";
@@ -82,9 +82,9 @@ onMounted(load);
 
 <template>
   <div class="growth-page" v-loading="loading">
-    <PageHeader title="IT 技术成长规划">
+    <PageHeader title="让成长有迹可循" description="把能力差距拆成任务，留下实践成果和学习复盘。">
       <el-input v-model="target" placeholder="目标 IT 岗位" class="target-input" maxlength="100" />
-      <el-button type="primary" :icon="MagicStick" :loading="running" @click="run">{{ result ? "重新规划" : "生成规划" }}</el-button>
+      <el-button type="primary" :icon="TrendCharts" :loading="running" @click="run">{{ result ? "重新规划" : "生成规划" }}</el-button>
       <el-button :icon="Plus" @click="edit(null)">新建任务</el-button>
     </PageHeader>
     <el-alert v-if="error" :title="error" type="warning" :closable="false"><el-button text @click="load">重试</el-button></el-alert>
@@ -99,7 +99,7 @@ onMounted(load);
         <div class="resource-toolbar"><el-radio-group v-model="filter"><el-radio-button value="all">全部</el-radio-button><el-radio-button value="todo">未开始</el-radio-button><el-radio-button value="doing">进行中</el-radio-button><el-radio-button value="done">成长记录</el-radio-button></el-radio-group></div>
         <el-empty v-if="!visible.length" description="暂无任务" />
         <div class="task-list">
-          <article v-for="task in visible" :key="task.id" class="task-row">
+          <article v-for="task in visible" :key="task.id" class="task-row" :class="`task-${task.status}`">
             <div><el-tag :type="task.status === 'done' ? 'success' : task.status === 'doing' ? 'warning' : 'info'">{{ labels[task.status] }}</el-tag><h3>{{ task.title }}</h3><small>{{ task.target_job || "自主学习" }} · {{ fmt(task.updated_at) }}</small><p v-if="task.evidence"><b>完成产物：</b>{{ task.evidence }}</p><p v-if="task.feedback"><b>复盘：</b>{{ task.feedback }}</p></div>
             <div class="resource-actions"><el-button v-if="task.status === 'todo'" :icon="VideoPlay" @click="start(task)">开始</el-button><el-button v-if="task.status !== 'done'" type="primary" :icon="Check" @click="edit(task, true)">提交完成</el-button><el-button text :icon="Edit" @click="edit(task)">反馈</el-button><el-button text :icon="Reading" @click="openResource(task.resource_query || task.title)">学习资源</el-button></div>
           </article>

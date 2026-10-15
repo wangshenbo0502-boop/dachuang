@@ -8,11 +8,13 @@ let chart: echarts.ECharts | undefined;
 let observer: ResizeObserver | undefined;
 function draw() {
   chart?.setOption({
-    tooltip: { trigger: "axis" },
+    animation: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    textStyle: { fontFamily: 'Microsoft YaHei UI, sans-serif', color: '#cbd6e3', fontSize: 12 },
+    tooltip: { trigger: "axis", confine: true, backgroundColor: "#142333", borderColor: "#415b63", textStyle: { color: "#f2f4fa" } },
     grid: { left: 12, right: 35, top: 12, bottom: 12, containLabel: true },
-    xAxis: { type: "value", max: props.unit === "%" ? 100 : undefined, minInterval: 1, splitLine: { lineStyle: { color: "#e5ece8" } } },
-    yAxis: { type: "category", data: props.labels, axisLine: { show: false }, axisTick: { show: false } },
-    series: [{ type: "bar", data: props.values, barWidth: 14, itemStyle: { color: "#158779", borderRadius: [0, 4, 4, 0] }, label: { show: true, position: "right", formatter: `{c}${props.unit}` } }],
+    xAxis: { type: "value", max: props.unit === "%" ? 100 : undefined, minInterval: 1, axisLabel: { color: "#a3b1c5" }, splitLine: { lineStyle: { color: "#304654" } } },
+    yAxis: { type: "category", data: props.labels, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: "#cbd6e3" } },
+    series: [{ type: "bar", data: props.values, barWidth: 12, itemStyle: { color: "#83e5b2", borderRadius: [0, 4, 4, 0] }, label: { show: true, position: "right", color: "#cbd6e3", formatter: `{c}${props.unit}` } }],
   });
 }
 onMounted(() => {

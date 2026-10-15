@@ -4,6 +4,7 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import "@/styles/variables.scss";
 import "@/styles/global.scss";
+import "@/styles/cosmic.scss";
 import App from "./App.vue";
 import router from "./router";
 

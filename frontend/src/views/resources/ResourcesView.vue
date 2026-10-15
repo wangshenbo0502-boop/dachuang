@@ -133,7 +133,6 @@ onMounted(async () => {
       <template #content>
         <div class="resource-list">
           <article v-for="(item, index) in visible" :key="identity(item)">
-            <div class="resource-index">{{ String(index + 1).padStart(2, "0") }}</div>
             <div class="resource-content">
               <div class="resource-meta"><el-tag size="small">{{ categoryOf(item) }}</el-tag><span>{{ resourceDate(item) }}</span><span>{{ sourceOf(item) }}</span><el-tag v-if="eventOf(item)?.read" type="info" size="small">已读</el-tag></div>
               <button class="resource-title" @click="open(item)">{{ resourceTitle(item) }}</button>

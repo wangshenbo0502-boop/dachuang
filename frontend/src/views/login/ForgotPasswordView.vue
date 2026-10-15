@@ -3,6 +3,7 @@ import { computed, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { Opportunity } from "@element-plus/icons-vue";
+import BrandMark from "@/components/layout/BrandMark.vue";
 import { api } from "@/api";
 import { err } from "@/utils/format";
 import { resolveAuthRole } from "@/utils/authSession";
@@ -37,7 +38,7 @@ async function submit() {
   <main class="login-page">
     <section class="login-brand">
       <div class="login-brand-content">
-        <div class="institution-label"><span class="brand-mark">IT</span> IT 求职成长系统</div>
+        <div class="institution-label"><span class="brand-mark"><BrandMark /></span> IT 求职成长系统</div>
         <h1>重新找回<br /><span>你的成长空间</span></h1>
         <p>通过已绑定的 QQ 邮箱验证码重置密码。</p>
       </div>

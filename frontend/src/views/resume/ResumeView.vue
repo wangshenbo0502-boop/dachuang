@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { Check, CopyDocument, Edit, MagicStick, Plus, Printer, Promotion, Refresh, Select } from "@element-plus/icons-vue";
+import { Check, CopyDocument, Edit, EditPen, Plus, Printer, Promotion, Refresh, Select } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { useUserStore } from "@/stores/user";
 import type { ResumeVersion, StudentProfile } from "@/types/api";
@@ -173,7 +173,7 @@ onMounted(async () => { await load(); if (route.query.job_id) { openCreate(); ap
 
 <template>
   <div class="resume-version-page">
-    <PageHeader title="开发者简历"><el-button :icon="Refresh" :disabled="saving || optimizing" @click="load">刷新</el-button><el-button type="primary" :icon="Plus" :disabled="saving || optimizing" @click="openCreate()">新建简历</el-button></PageHeader>
+    <PageHeader title="把经历写成一份好简历" description="选择真实的技能和项目，为不同岗位保留独立版本。"><el-button :icon="Refresh" :disabled="saving || optimizing" @click="load">刷新</el-button><el-button type="primary" :icon="Plus" :disabled="saving || optimizing" @click="openCreate()">新建简历</el-button></PageHeader>
     <StateView :loading="loading" :error="''" @retry="load"><template #content>
       <div v-if="!versions.length" class="resume-empty"><el-icon><Edit /></el-icon><h3>还没有简历</h3><p>创建第一份 IT 岗位简历。</p><el-button type="primary" :icon="Plus" @click="openCreate()">创建第一份简历</el-button></div>
       <div v-else class="resume-version-layout">
@@ -182,7 +182,7 @@ onMounted(async () => { await load(); if (route.query.job_id) { openCreate(); ap
           <button v-for="item in versions" :key="item.id" class="version-item" :class="{ active: selected?.id === item.id }" :disabled="saving || optimizing" @click="selected = item; pending = null; selectedJobId = ''"><b>{{ item.name }}</b><span>{{ item.target_job }}</span><small>更新于 {{ formatVersionTime(item.updated_at || item.created_at) }}</small></button>
         </aside>
         <main v-if="selected" class="version-editor">
-          <section class="version-heading"><div><span class="resume-kicker">岗位简历</span><h2>{{ selected.name }}</h2><p>目标岗位：{{ selected.target_job }}</p></div><div class="version-actions"><el-button type="primary" :icon="Promotion" @click="startApplication">准备投递</el-button><el-button :icon="CopyDocument" @click="openCreate(selected)">复制一份</el-button><el-button :icon="Printer" @click="printResume">打印 / 导出 PDF</el-button><el-button :icon="MagicStick" type="primary" :loading="optimizing" @click="optimize">AI 优化</el-button><el-button :icon="Select" :loading="saving" @click="saveSelection">保存选择</el-button></div></section>
+          <section class="version-heading"><div><h2>{{ selected.name }}</h2><p>目标岗位：{{ selected.target_job }}</p></div><div class="version-actions"><el-button type="primary" :icon="Select" :loading="saving" @click="saveSelection">保存选择</el-button><el-button :icon="EditPen" :loading="optimizing" @click="optimize">AI 优化</el-button><el-button :icon="Printer" @click="printResume">打印 / 导出 PDF</el-button><el-button :icon="Promotion" @click="startApplication">准备投递</el-button><el-button text :icon="CopyDocument" @click="openCreate(selected)">复制一份</el-button></div></section>
           <ApplicationWorkbench v-if="applicationOpen" :key="selected.id" :version="selected" @job="selectedJobId = $event" />
           <ResumeReview v-if="pending" :suggestion="pending" :saving="saving" @accept="acceptSuggestion" @cancel="pending = null" />
           <div class="resume-editor-grid">
