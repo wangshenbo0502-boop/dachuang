@@ -262,3 +262,51 @@ def test_inactive_recruiter_vacancies_are_unavailable(recruitment_api):
     db.commit()
     assert client.get('/api/recruitment/jobs', headers=sh).json()['data']['total'] == 0
     assert client.get(f"/api/recruitment/jobs/{job['id']}", headers=sh).status_code == 404
+
+
+def test_demo_seed_publishes_labelled_jobs_that_support_the_full_flow(recruitment_api):
+    from app.services.demo_recruitment import DEMO_COMPANIES, seed_demo_recruitment
+    client, db, _ = recruitment_api
+    first = seed_demo_recruitment(db, 'demo-password-1')
+    total_jobs = sum(len(company['jobs']) for company in DEMO_COMPANIES)
+    assert first == {'companies': len(DEMO_COMPANIES), 'jobs': total_jobs,
+                     'created_accounts': len(DEMO_COMPANIES), 'created_jobs': total_jobs}
+
+    _, sh = account(recruitment_api, '222222222@qq.com')
+    listing = client.get('/api/recruitment/jobs', headers=sh, params={'page_size': 50}).json()['data']
+    assert listing['total'] == total_jobs
+    assert all(item['company_name'].endswith('（示例）') for item in listing['items'])
+    ai_jobs = client.get('/api/recruitment/jobs', headers=sh, params={'category': 'AI'}).json()['data']
+    assert ai_jobs['total'] == 2
+    detail = client.get(f"/api/recruitment/jobs/{ai_jobs['items'][0]['id']}", headers=sh).json()['data']
+    assert '虚构企业' in detail['company']['description']
+
+    application, _, _, _ = apply(recruitment_api, ai_jobs['items'][0], email='333333333@qq.com')
+    login = client.post('/api/auth/login', json={'email': DEMO_COMPANIES[1]['email'],
+                                                 'password': 'demo-password-1', 'role': 'recruiter'})
+    assert login.status_code == 200, login.text
+    rh = {'Authorization': f"Bearer {login.json()['data']['access_token']}"}
+    received = client.get('/api/recruiter/applications', headers=rh).json()['data']
+    assert received['total'] == 1
+    reviewed = client.patch(f"/api/recruiter/applications/{application['id']}", headers=rh,
+                            json={'status': 'interview', 'feedback': '欢迎参加示例面试'})
+    assert reviewed.status_code == 200, reviewed.text
+
+    second = seed_demo_recruitment(db, 'demo-password-2')
+    assert (second['created_accounts'], second['created_jobs']) == (0, 0)
+    assert client.get('/api/recruiter/applications', headers=rh).status_code == 401
+    assert client.post('/api/auth/login', json={'email': DEMO_COMPANIES[1]['email'], 'password': 'demo-password-2'}).status_code == 200
+
+
+def test_demo_seed_refuses_to_take_over_a_student_email(recruitment_api):
+    from app.services.demo_recruitment import DEMO_COMPANIES, seed_demo_recruitment
+    _, db, _ = recruitment_api
+    # Occupy a later company's email so earlier companies are flushed before the conflict.
+    account(recruitment_api, DEMO_COMPANIES[-1]['email'])
+    with pytest.raises(ValueError):
+        seed_demo_recruitment(db, 'demo-password-1')
+    from app.models.account import Account
+    from app.models.recruitment import RecruiterProfile, RecruitmentJob
+    assert db.query(RecruitmentJob).count() == 0
+    assert db.query(RecruiterProfile).count() == 0
+    assert db.query(Account).filter(Account.role == 'recruiter').count() == 0

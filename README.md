@@ -26,6 +26,12 @@
 
 后端启动时自动新增招聘业务表，并为旧账号补充默认学生角色，迁移不清空原有数据。正常重启后端并重启前端即可使用。设计和实施记录见 [设计书](docs/superpowers/specs/2026-09-30-recruiter-design.md)、[实施计划](docs/superpowers/plans/2026-09-30-recruiter-role.md) 和 [验证报告](docs/招聘者功能验证报告.md)。
 
+### 招聘演示数据
+
+本地演示可在 `backend` 目录下运行 `python seed_demo_recruitment.py`，写入 5 家虚构的“示例”企业和 18 个已发布的 IT 岗位，并打印演示招聘者账号 `demo-recruiter-01@qq.com` ～ `demo-recruiter-05@qq.com` 及密码。不带 `--password` 时随机生成密码。企业名称都带“（示例）”，企业简介注明为虚构，不代表真实招聘。
+
+脚本可重复执行：已有的账号和岗位不会重复创建，每次执行都会把演示账号密码重置为本次密码。`APP_ENV=production` 时脚本拒绝执行。
+
 ## 核心流程
 
 ```text
