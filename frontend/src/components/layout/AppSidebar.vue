@@ -40,6 +40,7 @@ const isMobile = ref(window.matchMedia("(max-width: 900px)").matches);
 const isCompact = computed(() => app.sidebarCollapsed && !isMobile.value);
 const studentItems = [
   ["/dashboard", "首页", House],
+  ["/coach", "AI 求职助手", ChatDotRound],
   ["/profile", "个人档案", User],
   ["/analysis", "就业画像", DataAnalysis],
   ["/jobs", "岗位匹配", Briefcase],

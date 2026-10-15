@@ -5,7 +5,7 @@
 
 from typing import Any
 
-from fastapi import APIRouter, Depends, Path, status
+from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -14,7 +14,6 @@ from app.models.user import User
 from app.database.session import get_db
 from app.schemas.user import (
     StudentContextResponse,
-    UserCreate,
     UserProfileResponse,
     UserProjectsReplace,
     UserSkillsReplace,
@@ -24,7 +23,6 @@ from app.schemas.user import (
 )
 from app.services.user_service import UserService
 from app.utils.response import success
-from app.utils.exceptions import AppException
 
 router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/users", tags=["学生资料"])
 
@@ -32,11 +30,6 @@ router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/users"
 def serialize_model(model: BaseModel) -> dict[str, Any]:
     return model.model_dump(mode="json")
 
-
-@router.post("", status_code=status.HTTP_201_CREATED)
-def create_user(user_data: UserCreate, database_session: Session = Depends(get_db)) -> dict[str, Any]:
-    """创建学生基本资料。"""
-    raise AppException("请通过注册创建学生档案", code=5106, status_code=403)
 
 
 @router.get("/me")

@@ -56,7 +56,7 @@ onMounted(load);
       <template #content>
         <div class="job-detail-head">
           <div><el-tag>{{ job?.category }}</el-tag><h2>{{ job?.title }}</h2><div class="tag-row"><el-tag v-for="tag in job?.tags" :key="tag" type="info" effect="plain">{{ tag }}</el-tag></div></div>
-          <div class="job-detail-actions"><el-button type="primary" :icon="Promotion" @click="prepareApplication">生成岗位简历</el-button><el-button :icon="MagicStick" :loading="matching" @click="runMatch">分析我的匹配度</el-button></div>
+          <div class="job-detail-actions"><el-button type="primary" :icon="Promotion" @click="prepareApplication">为该岗位新建简历</el-button><el-button :icon="MagicStick" :loading="matching" @click="runMatch">分析我的匹配度</el-button></div>
         </div>
         <el-alert v-if="error" :title="error" type="warning" :closable="false" />
         <div class="detail-layout">

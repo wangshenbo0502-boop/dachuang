@@ -185,7 +185,7 @@ onMounted(() => {
               </template>
               <span v-else>学历、城市、毕业时间等硬条件：待核对招聘原文</span>
             </div>
-            <div class="job-actions" @click.stop><el-button text :icon="Document" @click="router.push({ path: '/resume', query: { job_id: job.job_id, target_job: job.title } })">生成岗位简历</el-button><el-button v-if="isMatched(job) && job.missing_skills.length" text :icon="Plus" @click="addGap(job)">加入成长任务</el-button></div>
+            <div class="job-actions" @click.stop><el-button text :icon="Document" @click="router.push({ path: '/resume', query: { job_id: job.job_id, target_job: job.title } })">为该岗位新建简历</el-button><el-button v-if="isMatched(job) && job.missing_skills.length" text :icon="Plus" @click="addGap(job)">加入成长任务</el-button></div>
             <footer>查看岗位详情 <span>→</span></footer>
           </article>
         </div>

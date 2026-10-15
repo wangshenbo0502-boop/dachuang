@@ -13,16 +13,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api import user, job_match, analysis, resume, growth, streaming, knowledge, chat, auth, application, activity
-from app.auth.dependencies import get_current_account
-from fastapi import Depends
+from app.api import user, job_match, analysis, resume, growth, knowledge, chat, auth, application, activity
 from app.config import get_settings
 from app.database.bootstrap import initialize_database_schema
 from app.utils.exceptions import AppException
 from app.utils.middleware import request_logging_middleware, configure_logging
 from app.utils.response import error, success, ErrorCode
 from app.ai.deepseek_client import DeepSeekClient
-from app.services.boss_automation_service import boss_automation_service
 from app.api.recruitment import recruiter_router, student_router
 from app.api.internal_admin import router as internal_admin_router
 
@@ -37,10 +34,7 @@ configure_logging()
 async def lifespan(_: FastAPI):
     """Initialize persistent resources once for the application lifecycle."""
     initialize_database_schema()
-    try:
-        yield
-    finally:
-        await boss_automation_service.close()
+    yield
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -134,17 +128,9 @@ def health_check():
             "AI简历优化",
             "AI成长规划",
             "RAG知识库（Embedding + Hybrid Retrieval + Sources）",
-            "AI流式响应（SSE）",
-            "Token用量统计",
+            "AI求职助手（流式对话）",
         ]
     })
-
-
-@app.get("/api/usage", dependencies=[Depends(get_current_account)])
-def get_ai_usage():
-    """GET /api/usage — 获取AI Token用量和成本统计"""
-    stats = DeepSeekClient.get_usage_stats()
-    return success(stats, message="Token用量统计")
 
 
 # 注册路由
@@ -157,7 +143,6 @@ app.include_router(analysis.router)
 app.include_router(resume.router)
 app.include_router(activity.router)
 app.include_router(growth.router)
-app.include_router(streaming.router)  # 流式响应路由
 app.include_router(knowledge.router)
 app.include_router(chat.router)
 app.include_router(application.router)

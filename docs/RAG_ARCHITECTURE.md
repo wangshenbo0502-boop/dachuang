@@ -117,16 +117,15 @@ Context Builder 只拼接最终 Top-K，并受 `RAG_CONTEXT_MAX_CHARS` 限制。
 
 ## 12. API
 
+学生端 HTTP 接口只读：
+
 - `GET /api/knowledge`
 - `POST /api/knowledge/search`
-- `POST /api/knowledge/search/debug`
 - `GET /api/knowledge/health`
 - `GET /api/knowledge/documents/{id}`
-- `POST /api/knowledge/documents`
-- `DELETE /api/knowledge/documents/{id}`
-- `POST /api/knowledge/documents/{id}/index`
-- `POST /api/knowledge/reindex`
 - `GET /api/knowledge/stats`
+
+文档写入、重建索引和检索链路调试（Rewrite、双路候选、RRF、重排）不再通过 HTTP 开放，由运维在服务器上执行 `scripts/seed_knowledge.py`、`scripts/check_rag_indexes.py` 和 `scripts/run_rag_evaluation.py`，或在 Python 中直接调用 `KnowledgeService.debug_search`。
 
 搜索示例：
 

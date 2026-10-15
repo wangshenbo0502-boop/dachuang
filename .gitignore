@@ -39,6 +39,12 @@ admin-frontend/.vite/
 admin-backend/*.db
 admin-backend/*.log
 
+# --- 本地浏览器与验收产物 ---
+# 旧版 BOSS 预填功能留下的浏览器登录态（含第三方 cookie）
+backend/.boss-browser-profiles/
+frontend/.playwright-cli/
+frontend/output/
+
 # --- 操作系统 ---
 .DS_Store
 Thumbs.db

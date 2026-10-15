@@ -1,4 +1,4 @@
-"""BOSS 直聘投递助手接口数据结构。"""
+"""外部投递记录接口数据结构。"""
 
 from datetime import datetime
 from typing import Literal
@@ -23,13 +23,6 @@ class JobApplicationUpdate(BaseModel):
     note: str | None = Field(default=None, max_length=2000)
 
 
-class ApplicationAutomationResponse(BaseModel):
-    status: str
-    message: str
-    url: str = ""
-    greeting_filled: bool = False
-
-
 class JobApplicationResponse(BaseModel):
     id: int
     user_id: int
@@ -44,5 +37,3 @@ class JobApplicationResponse(BaseModel):
     applied_at: datetime | None
     created_at: datetime | None
     updated_at: datetime | None
-    automation_status: str
-    automation_error: str

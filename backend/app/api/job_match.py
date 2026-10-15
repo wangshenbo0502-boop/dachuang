@@ -10,7 +10,8 @@
     GET  /api/match/{match_id} - 查询历史匹配结果
 """
 
-from typing import Any
+from contextlib import contextmanager
+from typing import Any, Iterator
 
 from fastapi import APIRouter, Depends, Path, Query
 from pydantic import BaseModel
@@ -28,10 +29,23 @@ from app.schemas.job import (
     JobMatchResponse,
 )
 from app.services.job_match_service import JobMatchService
-from app.utils.exceptions import ResourceNotFoundError
+from app.utils.exceptions import AppException, ResourceNotFoundError
 from app.utils.response import success
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
+
+
+@contextmanager
+def knowledge_required() -> Iterator[None]:
+    """Turn knowledge-base outages into a clear 503 instead of a generic 500."""
+    try:
+        yield
+    except AppException:
+        raise
+    except Exception as exc:
+        raise AppException(
+            "岗位知识库暂不可用，请确认知识库服务已启动后重试", code=3101, status_code=503
+        ) from exc
 
 
 def serialize_model(model: BaseModel) -> dict[str, Any]:
@@ -50,7 +64,8 @@ def list_jobs(
 ) -> dict[str, Any]:
     """GET /api/jobs — 岗位列表搜索"""
     service = JobMatchService.instance()
-    result = service.search_jobs(keyword=keyword, category=category, page=page, page_size=page_size)
+    with knowledge_required():
+        result = service.search_jobs(keyword=keyword, category=category, page=page, page_size=page_size)
     return success(serialize_model(result), message="岗位列表获取成功")
 
 
@@ -60,7 +75,8 @@ def list_jobs(
 def get_job_detail(job_id: str = Path(description="岗位ID（文件名，如 Java后端开发工程师）")) -> dict[str, Any]:
     """GET /api/jobs/{job_id} — 岗位详情"""
     service = JobMatchService.instance()
-    detail: JobDetail | None = service.get_job_detail(job_id)
+    with knowledge_required():
+        detail: JobDetail | None = service.get_job_detail(job_id)
     if not detail:
         raise ResourceNotFoundError(message=f"岗位「{job_id}」不存在")
     return success(serialize_model(detail), message="岗位详情获取成功")
@@ -89,7 +105,8 @@ def match_jobs(
     if request.user_id is not None and database_session.get(User, request.user_id) is None:
         raise ResourceNotFoundError(f"用户 {request.user_id} 不存在")
     service = JobMatchService.instance()
-    result: JobMatchResponse = service.match_jobs(request)
+    with knowledge_required():
+        result: JobMatchResponse = service.match_jobs(request)
     # 持久化匹配历史（仅当有匹配结果时）
     record_id = None
     if result.matches:

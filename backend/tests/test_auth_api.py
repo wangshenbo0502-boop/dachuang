@@ -82,9 +82,9 @@ def test_two_users_cannot_read_or_write_each_others_data(auth_api):
     assert client.get(f"/api/users/{bid}", headers=ah).status_code == 403
     assert client.put(f"/api/users/{bid}", headers=ah, json={"name": "越权"}).status_code == 403
     assert client.get(f"/api/analysis/user/{bid}", headers=ah).status_code == 403
-    assert client.post("/api/chat/turn", headers=ah, json={"user_id": bid, "messages": []}).status_code == 403
+    assert client.post("/api/chat/profile-turn", headers=ah, json={"user_id": bid, "messages": []}).status_code == 403
     assert client.post("/api/match", headers=ah, json={"skills": ["Python"], "user_id": bid}).status_code == 403
-    assert client.post("/api/stream/analysis", headers=ah, json={"user_id": bid, "target_job": "Python"}).status_code == 403
+    assert client.post("/api/analysis", headers=ah, json={"user_id": bid, "target_job": "Python"}).status_code == 403
     version = client.post("/api/resume/versions", headers=headers(b), json={"user_id": bid, "name": "校招简历", "target_job": "Python工程师"})
     assert version.status_code == 200, version.json()
     version_id = version.json()["data"]["id"]
@@ -101,6 +101,20 @@ def test_sql_injection_strings_are_rejected_or_parameterized(auth_api):
     account = register(client, codes, "555666777@qq.com")
     assert client.post("/api/auth/login", json={"email": "555666777@qq.com", "password": "' OR 1=1 --"}).status_code == 401
     assert client.get("/api/auth/me", headers=headers(account)).status_code == 200
+
+def test_students_cannot_modify_or_debug_the_knowledge_base(auth_api):
+    client, db, codes = auth_api
+    ah = headers(register(client, codes, "121212121@qq.com"))
+    document = {"title": "伪造岗位", "source": "x.md", "category": "jobs", "content": "fake"}
+    blocked = [
+        client.post("/api/knowledge/documents", headers=ah, json=document),
+        client.delete("/api/knowledge/documents/1", headers=ah),
+        client.post("/api/knowledge/documents/1/index", headers=ah),
+        client.post("/api/knowledge/reindex", headers=ah),
+        client.post("/api/knowledge/search/debug", headers=ah, json={"query": "Java"}),
+    ]
+    assert [response.status_code for response in blocked] == [404, 405, 404, 404, 404]
+    assert client.post("/api/knowledge/search", headers=ah, json={"query": "Java"}).status_code == 200
 
 def test_expired_token_and_disabled_account(auth_api):
     client, db, codes = auth_api

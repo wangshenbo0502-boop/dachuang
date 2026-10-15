@@ -1,4 +1,8 @@
-"""Knowledge management and retrieval API backed exclusively by PostgreSQL/pgvector."""
+"""Read-only knowledge retrieval API backed exclusively by PostgreSQL/pgvector.
+
+Document writes, re-indexing and retrieval debugging are operator tasks and are
+performed through scripts/seed_knowledge.py, not through the student API.
+"""
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Path, Query
@@ -6,7 +10,7 @@ from fastapi.responses import JSONResponse
 
 from app.auth.dependencies import get_current_user
 from app.knowledge.knowledge_service import KnowledgeService, KnowledgeUnavailableError
-from app.schemas.knowledge import KnowledgeDocumentCreate, KnowledgeSearchRequest
+from app.schemas.knowledge import KnowledgeSearchRequest
 from app.utils.exceptions import AppException, ResourceNotFoundError
 from app.utils.response import success
 
@@ -40,15 +44,6 @@ def search_knowledge(body: KnowledgeSearchRequest) -> dict:
         raise _knowledge_error(exc) from exc
 
 
-@router.post("/search/debug")
-def debug_search_knowledge(body: KnowledgeSearchRequest) -> dict:
-    try:
-        result = _service().debug_search(body.query, category=body.category, top_k=body.top_k, filters=body.filters)
-        return success(result, message="RAG 检索链路调试完成")
-    except Exception as exc:
-        raise _knowledge_error(exc) from exc
-
-
 @router.get("/health")
 def knowledge_health() -> dict:
     result = _service().health()
@@ -67,54 +62,6 @@ def get_document(document_id: int = Path(ge=1)) -> dict:
     if not item:
         raise ResourceNotFoundError(f"知识文档 {document_id} 不存在")
     return success(item, message="知识文档获取成功")
-
-
-@router.post("/documents", status_code=201)
-def create_document(body: KnowledgeDocumentCreate) -> dict:
-    try:
-        document_id = _service().create_document(
-            title=body.title,
-            source=body.source,
-            category=body.category,
-            content=body.content,
-            metadata=body.metadata,
-        )
-        return success({"id": document_id, "status": "pending"}, message="知识文档创建成功")
-    except Exception as exc:
-        raise _knowledge_error(exc) from exc
-
-
-@router.delete("/documents/{document_id}")
-def delete_document(document_id: int = Path(ge=1)) -> dict:
-    try:
-        deleted = _service().delete_document(document_id)
-    except Exception as exc:
-        raise _knowledge_error(exc) from exc
-    if not deleted:
-        raise ResourceNotFoundError(f"知识文档 {document_id} 不存在")
-    return success({"id": document_id}, message="知识文档删除成功")
-
-
-@router.post("/documents/{document_id}/index")
-def index_document(document_id: int = Path(ge=1)) -> dict:
-    try:
-        result = _service().index_document(document_id, force=True)
-    except KeyError as exc:
-        raise ResourceNotFoundError(f"知识文档 {document_id} 不存在") from exc
-    except Exception as exc:
-        raise _knowledge_error(exc) from exc
-    return success(result, message="知识文档索引完成")
-
-
-@router.post("/reindex")
-def reindex_documents() -> dict:
-    try:
-        results = []
-        for item in _service().list_documents():
-            results.append(_service().index_document(item["id"], force=True))
-        return success({"documents": len(results), "results": results}, message="知识库重建完成")
-    except Exception as exc:
-        raise _knowledge_error(exc) from exc
 
 
 @router.get("/stats")

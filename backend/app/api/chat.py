@@ -1,4 +1,4 @@
-"""AI 求职助手：开放咨询、档案访谈、简历生成与档案同步。"""
+"""AI 求职助手：开放咨询、档案访谈与档案同步。"""
 
 import json
 from typing import Any
@@ -14,13 +14,10 @@ from app.database.session import get_db
 from app.schemas.chat import (
     ChatConversationRequest,
     ChatProfileRequest,
-    ChatResumeRequest,
     ChatTurnRequest,
     ChatTurnResponse,
 )
 from app.schemas.user import UserProfileResponse
-from app.schemas.resume import ResumeOptimizationRequest, ResumeOptimizationResponse
-from app.services.resume_service import ResumeService
 from app.services.user_service import UserService
 from app.utils.response import success
 
@@ -65,14 +62,6 @@ def _sse_event(event: str, payload: dict[str, Any]) -> str:
     return f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
 
 
-@router.post("/conversation")
-def chat_conversation(request: ChatConversationRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
-    """通用自由对话，不执行简历采集问卷。"""
-    require_owner(request.user_id, current_user)
-    reply = DeepSeekClient.instance().chat(_conversation_messages(db, request), temperature=0.65, max_tokens=1800)
-    return success({"reply": reply.strip(), "suggested_action": _suggested_action(request)}, message="回复生成成功")
-
-
 @router.post("/conversation-stream")
 def chat_conversation_stream(request: ChatConversationRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> StreamingResponse:
     """Stream an open-ended consultation response as SSE."""
@@ -94,34 +83,6 @@ def chat_conversation_stream(request: ChatConversationRequest, db: Session = Dep
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
-
-
-@router.post("/turn")
-def chat_turn(request: ChatTurnRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
-    """根据聊天上下文提出下一问，并返回结构化信息草稿。"""
-    require_owner(request.user_id, current_user)
-    context = _user_context(db, request.user_id)
-    question_number = sum(1 for m in request.messages if m.role == "user")
-    system = """你是一个专业、友好的大学生求职教练。通过自然对话逐步了解学生并帮助生成真实、有竞争力的简历。
-严禁编造经历、数字或技能。每轮只问一个最关键的问题，问题要具体，优先追问项目中的目标、个人职责、技术方案和可验证成果。
-请严格返回JSON：{"reply":"给用户的一句话和一个问题","finished":false,"extracted":{"target_job":"","bio":"","skills":[],"projects":[],"competitions":[],"internships":[]},"missing":[]}。
-extracted只填写本轮对话中有明确依据的信息；技能格式为{name,proficiency,description}，项目格式为{name,role,description,tech_stack}。
-项目角色、项目说明、竞赛级别和奖项均为选填，不应因缺少这些信息阻止保存或反复追问。有名称即可保存项目或参赛经历；未说明的字段在 extracted 中省略，保存时新项目角色默认“主要负责人”，新竞赛奖项默认“已参加”，级别留空，不推断获奖。
-当用户明确表示要结束访谈、生成或保存时finished=true；否则允许继续补充。"""
-    user = f"目标岗位：{request.target_job or '尚未确定'}\n已有档案：{context}\n对话：\n{_conversation_text(request)}"
-    result = DeepSeekClient.instance().chat_json(
-        [{"role": "system", "content": system}, {"role": "user", "content": user}],
-        temperature=0.45,
-        max_tokens=1600,
-    )
-    response = ChatTurnResponse(
-        reply=str(result.get("reply", "请介绍一段最能代表你的项目经历。")),
-        question_number=question_number,
-        finished=bool(result.get("finished", False)),
-        extracted=result.get("extracted", {}),
-        missing=result.get("missing", []),
-    )
-    return success(response.model_dump(mode="json"), message="对话回复生成成功")
 
 
 @router.post("/profile-turn")
@@ -153,24 +114,6 @@ def profile_turn(request: ChatTurnRequest, db: Session = Depends(get_db), curren
         missing=result.get("missing", []),
     )
     return success(response.model_dump(mode="json"), message="档案访谈回复生成成功")
-
-
-@router.post("/generate-resume")
-def generate_resume(request: ChatResumeRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
-    """使用现有档案和对话补充信息，直接生成完整简历优化结果。"""
-    require_owner(request.user_id, current_user)
-    context = _user_context(db, request.user_id)
-    transcript = "\n".join(f"{m.role}: {m.content}" for m in request.messages)
-    prompt = f"对话补充信息：\n{transcript[-7000:]}\n\n结构化补充信息：{request.extracted}"
-    result = ResumeService(db).optimize_resume(
-        ResumeOptimizationRequest(
-            user_id=request.user_id,
-            target_job=request.target_job,
-            original_resume=prompt,
-            name=context["name"],
-        )
-    )
-    return success(result.model_dump(mode="json"), message="简历生成完成")
 
 
 @router.post("/sync-profile")

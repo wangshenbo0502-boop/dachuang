@@ -60,13 +60,16 @@ RERANKER_DEVICE=auto
 
 ## 接口
 
+学生端 HTTP 接口只读：
+
 - `POST /api/knowledge/search`：正式检索
-- `POST /api/knowledge/search/debug`：返回 Rewrite、双路结果、RRF、重排、Context、耗时与数量
 - `GET /api/knowledge/health`：检查 PostgreSQL、pgvector、HNSW、FTS、GIN、Embedding 和 Reranker 配置
 - `GET /api/knowledge/stats`：文档、Chunk、Embedding 和分类统计
-- `/api/knowledge/documents/*`：知识文档管理与重建索引
+- `GET /api/knowledge/documents/{id}`：查看单个知识文档
 
-调试请求示例：
+文档写入、重建索引和检索调试只在服务器上通过脚本或 Python 调用完成，不对登录用户开放。调试时在 Python 中调用 `KnowledgeService.instance().debug_search(...)`，可返回 Rewrite、双路结果、RRF、重排、Context、耗时与数量。
+
+检索请求示例：
 
 ```json
 {

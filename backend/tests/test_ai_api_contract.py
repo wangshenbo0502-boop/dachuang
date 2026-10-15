@@ -90,40 +90,37 @@ class AiApiContractTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()["code"], 5106)
 
-    def test_route_inventory_request_id_and_sse_contract(self) -> None:
+    def test_route_inventory_and_request_id(self) -> None:
         expected_paths = {
-            "/", "/api/health", "/api/usage", "/api/users", "/api/users/{user_id}",
+            "/", "/api/health", "/api/users/{user_id}",
             "/api/users/{user_id}/skills", "/api/users/{user_id}/projects",
             "/api/users/{user_id}/competitions", "/api/users/{user_id}/internships",
             "/api/users/{user_id}/context", "/api/jobs", "/api/jobs/{job_id}",
             "/api/match", "/api/match/{match_id}", "/api/analysis", "/api/analysis/{analysis_id}",
             "/api/analysis/user/{user_id}", "/api/resume", "/api/resume/{optimization_id}",
             "/api/resume/user/{user_id}", "/api/growth", "/api/growth/{plan_id}",
-            "/api/growth/user/{user_id}", "/api/stream/analysis", "/api/stream/resume",
-            "/api/stream/growth",
+            "/api/growth/user/{user_id}",
+        }
+        # Removed in the 2026-10 redundancy cleanup; they must not reappear unnoticed.
+        removed_paths = {
+            "/api/usage", "/api/stream/analysis", "/api/stream/resume", "/api/stream/growth",
+            "/api/chat/conversation", "/api/chat/turn", "/api/chat/generate-resume",
+            "/api/applications/{application_id}/automation/start",
+            "/api/applications/{application_id}/automation/status",
+            "/api/knowledge/documents", "/api/knowledge/documents/{document_id}/index",
+            "/api/knowledge/reindex", "/api/knowledge/search/debug",
         }
         # FastAPI 0.121+ keeps included routers lazy in app.routes; OpenAPI is
         # the stable public route inventory across supported FastAPI versions.
-        route_paths = {path for path in app.openapi()["paths"] if path in expected_paths}
-        self.assertEqual(route_paths, expected_paths)
+        openapi_paths = app.openapi()["paths"]
+        self.assertEqual({path for path in openapi_paths if path in expected_paths}, expected_paths)
+        self.assertEqual(set(openapi_paths) & removed_paths, set())
+        self.assertNotIn("post", openapi_paths.get("/api/users", {}))
+        self.assertEqual(set(openapi_paths.get("/api/knowledge/documents/{document_id}", {})), {"get"})
 
         root = self.client.get("/", headers={"X-Request-ID": "contract-1"})
         self.assertEqual(root.status_code, 200)
         self.assertEqual(root.headers.get("X-Request-ID"), "contract-1")
-
-        user_id = self.create_user()
-        payloads = {
-            "/api/stream/analysis": {"user_id": user_id, "target_job": "Java后端开发工程师"},
-            "/api/stream/resume": {"user_id": user_id, "target_job": "Java后端开发工程师"},
-            "/api/stream/growth": {"user_id": user_id, "target_job": "Java后端开发工程师"},
-        }
-        for path, payload in payloads.items():
-            with self.subTest(path=path):
-                response = self.client.post(path, json=payload)
-                self.assertEqual(response.status_code, 200)
-                self.assertIn("text/event-stream", response.headers.get("content-type", ""))
-                self.assertIn("event: start", response.text)
-                self.assertIn("event: complete", response.text)
 
 
 if __name__ == "__main__":

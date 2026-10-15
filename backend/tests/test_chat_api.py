@@ -59,11 +59,11 @@ class ChatApiTestCase(unittest.TestCase):
     def create_user(self) -> int:
         return create_authenticated_profile(self.session, self.client, major="Computer Science")
 
-    def test_usage_endpoint_returns_without_deadlock(self):
+    def test_platform_usage_is_not_exposed_to_students(self):
         self.create_user()
-        response = self.client.get("/api/usage")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("daily_cost_usd", response.json()["data"])
+        self.assertEqual(self.client.get("/api/usage").status_code, 404)
+        # The tracker remains available in-process for operators and logs.
+        self.assertIn("daily_cost_usd", DeepSeekClient.get_usage_stats())
 
     def test_profile_turn_accepts_more_than_ten_answers(self):
         user_id = self.create_user()

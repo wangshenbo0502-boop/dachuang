@@ -1,7 +1,8 @@
-"""BOSS 直聘投递助手 API。"""
+"""外部投递记录 API：学生在 BOSS 直聘等平台手动投递后在此跟进状态。"""
 
 from datetime import datetime, timezone
 from typing import Any
+from urllib.parse import urlparse
 
 from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel
@@ -14,20 +15,40 @@ from app.models.application import JobApplication
 from app.models.user import User
 from app.models.resume import Resume
 from app.schemas.application import (
-    ApplicationAutomationResponse,
     JobApplicationCreate,
     JobApplicationResponse,
     JobApplicationUpdate,
 )
-from app.services.boss_automation_service import BossAutomationError, boss_automation_service
 from app.utils.exceptions import AppException, ResourceNotFoundError
 from app.utils.response import success
 
 router = APIRouter(
     dependencies=[Depends(get_current_user)],
     prefix="/api/applications",
-    tags=["BOSS直聘投递助手"],
+    tags=["外部投递记录"],
 )
+
+
+def validate_boss_url(url: str) -> None:
+    """Accept only concrete HTTPS zhipin.com job pages without credentials or custom ports."""
+    try:
+        parsed = urlparse(url)
+        port = parsed.port
+    except ValueError as exc:
+        raise AppException("请填写有效的 BOSS 直聘岗位链接", code=4221, status_code=422) from exc
+    if (
+        parsed.scheme != "https"
+        or not parsed.netloc
+        or parsed.username is not None
+        or parsed.password is not None
+        or port not in (None, 443)
+    ):
+        raise AppException("请填写 HTTPS 的 BOSS 直聘岗位链接，不要包含账号或自定义端口", code=4221, status_code=422)
+    host = parsed.hostname or ""
+    if not (host == "zhipin.com" or host.endswith(".zhipin.com")):
+        raise AppException("岗位链接只支持 zhipin.com", code=4221, status_code=422)
+    if not parsed.path.strip("/"):
+        raise AppException("请填写具体岗位链接，不要使用 BOSS 首页", code=4221, status_code=422)
 
 
 def serialize(model: JobApplication) -> dict[str, Any]:
@@ -45,8 +66,6 @@ def serialize(model: JobApplication) -> dict[str, Any]:
         applied_at=model.applied_at,
         created_at=model.created_at,
         updated_at=model.updated_at,
-        automation_status=model.automation_status,
-        automation_error=model.automation_error,
     ).model_dump(mode="json")
 
 
@@ -73,10 +92,7 @@ def create_application(
         version = db.get(Resume, request.resume_version_id)
         if not version or version.user_id != current_user.id:
             raise ResourceNotFoundError("简历版本不存在")
-    try:
-        boss_automation_service._validate_url(str(request.boss_url))
-    except BossAutomationError as exc:
-        raise AppException(str(exc), code=4221, status_code=422) from exc
+    validate_boss_url(str(request.boss_url))
     existing = db.scalar(select(JobApplication).where(
         JobApplication.user_id == current_user.id,
         JobApplication.boss_url == str(request.boss_url),
@@ -117,50 +133,3 @@ def update_application(
     db.commit()
     db.refresh(record)
     return success(serialize(record), message="投递状态已更新")
-
-
-@router.post("/{application_id}/automation/start")
-async def start_automation(
-    application_id: int = Path(ge=1),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-) -> dict[str, Any]:
-    record = db.get(JobApplication, application_id)
-    if not record or record.user_id != current_user.id:
-        raise ResourceNotFoundError(message="投递记录不存在")
-    if record.status not in ("prepared", "opened"):
-        raise AppException("该岗位已有投递结果，请继续跟进已有记录", code=4091, status_code=409)
-    try:
-        result = await boss_automation_service.start(record)
-        record.automation_status = result["status"]
-        record.automation_error = ""
-        if result["status"] == "ready_for_user_confirm":
-            record.status = "opened"
-        db.commit()
-        response = ApplicationAutomationResponse(**result).model_dump(mode="json")
-        return success(response, message=response["message"])
-    except BossAutomationError as exc:
-        record.automation_status = "error"
-        record.automation_error = str(exc)
-        db.commit()
-        raise AppException(str(exc), code=4221, status_code=422) from exc
-
-
-@router.get("/{application_id}/automation/status")
-async def automation_status(
-    application_id: int = Path(ge=1),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-) -> dict[str, Any]:
-    record = db.get(JobApplication, application_id)
-    if not record or record.user_id != current_user.id:
-        raise ResourceNotFoundError(message="投递记录不存在")
-    result = await boss_automation_service.status(current_user.id)
-    return success(
-        {
-            "status": result["status"],
-            "message": record.automation_error or "浏览器会话状态正常",
-            "url": result.get("url", ""),
-            "greeting_filled": False,
-        }
-    )

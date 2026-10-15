@@ -7,12 +7,13 @@ import pytest
 from pydantic import ValidationError
 
 from test_auth_api import auth_api, headers, register
+from app.api.application import validate_boss_url
 from app.models.user import User, UserSkill
 from app.schemas.auth import RegisterRequest
 from app.schemas.job import JobBrief, JobListResponse, JobMatchRequest
 from app.services.insight_service import parse_feed
-from app.services.boss_automation_service import BossAutomationError, BossAutomationService
 from app.services.resume_service import ResumeService
+from app.utils.exceptions import AppException
 
 
 def test_registration_rejects_invalid_new_fields():
@@ -23,7 +24,7 @@ def test_registration_rejects_invalid_new_fields():
         RegisterRequest(**base, birth_date=date.today() + timedelta(days=1))
 
 
-def test_prefill_rejects_unsafe_or_homepage_urls():
+def test_boss_url_rejects_unsafe_or_homepage_urls():
     for url in (
         "http://www.zhipin.com/job_detail/test.html",
         "https://www.zhipin.com:8443/job_detail/test.html",
@@ -34,10 +35,10 @@ def test_prefill_rejects_unsafe_or_homepage_urls():
         "https://www.zhipin.com:invalid/job_detail/test.html",
         "https://[invalid/",
     ):
-        with pytest.raises(BossAutomationError):
-            BossAutomationService._validate_url(url)
-    BossAutomationService._validate_url("https://www.zhipin.com/job_detail/test.html")
-    BossAutomationService._validate_url("https://www.zhipin.com:443/job_detail/test.html")
+        with pytest.raises(AppException):
+            validate_boss_url(url)
+    validate_boss_url("https://www.zhipin.com/job_detail/test.html")
+    validate_boss_url("https://www.zhipin.com:443/job_detail/test.html")
 
 
 def test_task_lifecycle_dedup_and_ownership(auth_api):
@@ -113,6 +114,26 @@ def test_market_context_has_source_and_user_evidence(auth_api, monkeypatch):
     assert rows["SQL"]["sources"][0]["job_id"] == "backend"
 
 
+def test_job_endpoints_report_knowledge_outage_as_503(auth_api, monkeypatch):
+    from app.services.job_match_service import JobMatchService
+    from app.knowledge.knowledge_service import KnowledgeUnavailableError
+
+    def unavailable(*args, **kwargs):
+        raise KnowledgeUnavailableError("pgvector down")
+
+    broken = SimpleNamespace(search_jobs=unavailable, get_job_detail=unavailable, match_jobs=unavailable)
+    monkeypatch.setattr(JobMatchService, "instance", classmethod(lambda cls: broken))
+    client, db, codes = auth_api
+    a = register(client, codes, "131313131@qq.com")
+    responses = [
+        client.get("/api/jobs", headers=headers(a)),
+        client.get("/api/jobs/java", headers=headers(a)),
+        client.post("/api/match", headers=headers(a), json={"skills": ["Java"]}),
+    ]
+    assert [response.status_code for response in responses] == [503, 503, 503]
+    assert all(response.json()["code"] == 3101 for response in responses)
+
+
 def test_match_uses_requirements_without_substring_false_positives(monkeypatch):
     from app.services.job_match_service import JobMatchService
     service = JobMatchService.__new__(JobMatchService)
@@ -161,5 +182,5 @@ def test_application_ownership_dedup_and_no_resubmit(auth_api):
     assert client.post("/api/applications", headers=headers(a), json=body).json()["data"]["id"] == first["id"]
     path = f"/api/applications/{first['id']}"
     assert client.patch(path, headers=headers(a), json={"status": "applied", "note": "Sent externally"}).status_code == 200
-    assert client.post(path + "/automation/start", headers=headers(a)).status_code == 409
+    assert client.post(path + "/automation/start", headers=headers(a)).status_code == 404
     assert client.patch(path, headers=headers(b), json={"status": "closed"}).status_code == 404

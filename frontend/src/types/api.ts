@@ -23,11 +23,9 @@ export interface GrowthHistory { id:number; target_job:string; expected_timeline
 export interface KnowledgeResult { id?:number; document_id?:number; doc_id?:string; title?:string; source?:string; category?:string; content:string; score?:number; metadata?:Record<string,unknown> }
 export interface ChatMessage { role:"user"|"assistant"; content:string }
 export interface ChatTurnResponse { reply:string; question_number:number; finished:boolean; extracted:Record<string,unknown>; missing:string[] }
-export interface ChatConversationResponse { reply:string; suggested_action?:"profile"|"resume"|"analysis"|"growth"|"jobs"|null; extracted?:Record<string,unknown> }
 export interface ChatProfileSyncResponse { profile:StudentProfile; skipped:string[] }
 export type ApplicationStatus = "prepared"|"opened"|"applied"|"replied"|"interview"|"closed";
-export interface JobApplication { id:number; user_id:number; job_id:string; job_title:string; platform:string; boss_url:string; status:ApplicationStatus; greeting:string; resume_version_id:number|null; note:string; applied_at?:string|null; created_at?:string|null; updated_at?:string|null; automation_status:string; automation_error:string }
-export interface ApplicationAutomationResponse { status:string; message:string; url:string; greeting_filled:boolean }
+export interface JobApplication { id:number; user_id:number; job_id:string; job_title:string; platform:string; boss_url:string; status:ApplicationStatus; greeting:string; resume_version_id:number|null; note:string; applied_at?:string|null; created_at?:string|null; updated_at?:string|null }
 export interface GrowthTask { id:number; title:string; target_job:string; source_key:string; status:"todo"|"doing"|"done"; feedback:string; evidence:string; resource_query:string; completed_at:string|null; created_at:string; updated_at:string }
 export interface ResourceEvent { resource_key:string; resource:KnowledgeResult; favorite:boolean; read:boolean; hidden:boolean }
 export interface ResourceHome { items:KnowledgeResult[]; unavailable_sources:string[]; fetched_at:string; period_days:number }

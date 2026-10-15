@@ -68,14 +68,6 @@ async function copyGreeting(item: JobApplication) {
   try { await navigator.clipboard.writeText(item.greeting); ElMessage.success("开场白已复制"); }
   catch { ElMessage.warning("无法访问剪贴板，请在简历工作台查看开场白"); }
 }
-async function startAutomation(item: JobApplication) {
-  try {
-    const result = await api.startApplicationAutomation(item.id);
-    const index = applications.value.findIndex(row => row.id === item.id);
-    if (index >= 0) applications.value[index] = { ...applications.value[index], automation_status: result.status, automation_error: "" };
-    ElMessage.success(result.message);
-  } catch (e) { ElMessage.error(err(e)); }
-}
 async function confirmApplied(item: JobApplication) {
   try {
     const updated = await api.updateApplication(item.id, { status: "applied", note: "用户已在 BOSS 页面确认发送" });
@@ -85,7 +77,7 @@ async function confirmApplied(item: JobApplication) {
   } catch (e) { ElMessage.error(err(e)); }
 }
 onMounted(load);
-function goToJobs() {
+function goToResume() {
   router.push("/resume");
 }
 function openFeedback(item: JobApplication) {
@@ -111,7 +103,7 @@ async function saveFeedback() {
   <div class="applications-page">
     <PageHeader title="IT 投递记录">
       <el-button :icon="Refresh" :loading="loading" @click="load">刷新</el-button>
-      <el-button type="primary" :icon="Promotion" @click="goToJobs">从简历准备投递</el-button>
+      <el-button type="primary" :icon="Promotion" @click="goToResume">从简历准备投递</el-button>
     </PageHeader>
     <div class="application-stats">
       <button class="application-stat" :class="{ active: activeStatus === 'all' }" @click="activeStatus = 'all'"><span>全部记录</span><strong>{{ counts.all }}</strong></button>
@@ -126,7 +118,7 @@ async function saveFeedback() {
       </el-radio-group>
     </div>
     <StateView :loading="loading" :error="error" :empty="!filtered.length" empty-text="还没有投递记录" @retry="load">
-      <el-button type="primary" :icon="Promotion" @click="goToJobs">从简历准备投递</el-button>
+      <el-button type="primary" :icon="Promotion" @click="goToResume">从简历准备投递</el-button>
       <template #content>
         <div class="application-list">
           <article v-for="item in filtered" :key="item.id" class="application-row">
@@ -137,12 +129,11 @@ async function saveFeedback() {
             </div>
             <div class="application-actions">
               <el-button text :icon="CopyDocument" @click="copyGreeting(item)">复制开场白</el-button>
-              <el-button v-if="item.status === 'prepared' || item.status === 'opened'" type="primary" :icon="Promotion" :loading="item.automation_status === 'starting'" @click="startAutomation(item)">打开并预填</el-button>
+              <el-button v-if="item.status === 'prepared' || item.status === 'opened'" type="primary" :icon="Link" @click="openBoss(item)">打开 BOSS 页面</el-button>
               <el-button v-if="item.status === 'opened'" type="success" plain :icon="Check" @click="confirmApplied(item)">已确认发送</el-button>
               <el-button v-if="item.status !== 'prepared' && item.status !== 'opened'" type="primary" plain :icon="Link" @click="openBoss(item)">继续跟进</el-button>
               <el-button text @click="openFeedback(item)">记录反馈</el-button>
             </div>
-            <p v-if="item.automation_error" class="application-note application-error">{{ item.automation_error }}</p>
           </article>
         </div>
       </template>

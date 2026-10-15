@@ -2,7 +2,7 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { Check, Promotion, Refresh } from "@element-plus/icons-vue";
+import { Check, CopyDocument, Promotion, Refresh } from "@element-plus/icons-vue";
 import { api } from "@/api";
 import { err } from "@/utils/format";
 import type { JobBrief, JobDetail, JobApplication, ResumeVersion } from "@/types/api";
@@ -54,19 +54,26 @@ function validUrl() {
   try { const url = new URL(bossUrl.value); return url.protocol === "https:" && (url.hostname === "zhipin.com" || url.hostname.endsWith(".zhipin.com")) && !!url.pathname.replaceAll("/", "") && (!url.port || url.port === "443") && !url.username && !url.password; }
   catch { return false; }
 }
-async function prepare(prefill = false) {
+async function copyGreeting() {
+  try { await navigator.clipboard.writeText(greeting.value); ElMessage.success("开场白已复制"); }
+  catch { ElMessage.warning("无法访问剪贴板，请手动复制开场白"); }
+}
+async function prepare(open = false) {
   if (!job.value) return ElMessage.warning("请选择目标岗位");
   if (!validUrl()) return ElMessage.warning("请填写 HTTPS 的 BOSS 直聘具体岗位链接");
   saving.value = true; error.value = "";
+  // Open synchronously inside the click handler so the browser does not treat it as a popup.
+  const target = application.value?.boss_url || bossUrl.value;
+  if (open) window.open(target, "_blank", "noopener,noreferrer");
   try {
     if (!application.value) application.value = await api.createApplication({ job_id: job.value.job_id, job_title: job.value.title, boss_url: bossUrl.value, greeting: greeting.value, resume_version_id: props.version.id });
     if (!["prepared", "opened"].includes(application.value.status)) {
       status.value = "该岗位已有投递结果，请到投递记录继续跟进";
       return;
     }
-    if (prefill) {
-      const response = await api.startApplicationAutomation(application.value.id);
-      status.value = response.message;
+    if (open) {
+      if (application.value.status === "prepared") application.value = await api.updateApplication(application.value.id, { status: "opened" });
+      status.value = "已在新标签页打开 BOSS 岗位页，请粘贴开场白并在页面上确认发送";
     } else status.value = "投递材料已保存，尚未发送";
   } catch (e) { error.value = err(e); }
   finally { saving.value = false; }
@@ -90,8 +97,8 @@ watch(() => props.version.id, () => { application.value = null; status.value = "
       <div v-if="job" class="full"><div class="tag-row"><el-tag v-for="skill in requirements" :key="skill" :type="missing.includes(skill) ? 'warning' : 'success'">{{ skill }}</el-tag></div><p class="muted">关键词覆盖：{{ requirements.length - missing.length }} / {{ requirements.length }}。仅按当前简历技能名称对照，硬条件与实际熟练程度待确认。</p></div>
       <el-form-item label="开场白（可编辑）" class="full"><el-input v-model="greeting" type="textarea" :rows="3" maxlength="2000" :disabled="!!application || saving" /></el-form-item>
     </el-form>
-    <p class="muted">预填不会自动发送或上传简历。请在招聘页面核对材料并确认最终提交；登录、验证码由你接管。</p>
-    <div class="resource-actions"><el-button :loading="saving" :disabled="!job || !!application" @click="prepare(false)">保存投递材料</el-button><el-button type="primary" :icon="Promotion" :loading="saving" :disabled="!job || application?.status === 'applied'" @click="prepare(true)">打开页面并预填</el-button><el-button v-if="application && application.status !== 'applied'" :icon="Check" :loading="saving" @click="confirm">我已在招聘页面发送</el-button><el-button v-if="!jobs.length" :icon="Refresh" @click="loadJobs">重新加载岗位</el-button></div>
+    <p class="muted">系统不会代你登录、发送或上传简历。复制开场白后在 BOSS 页面核对并确认最终提交。</p>
+    <div class="resource-actions"><el-button :loading="saving" :disabled="!job || !!application" @click="prepare(false)">保存投递材料</el-button><el-button :icon="CopyDocument" :disabled="!greeting" @click="copyGreeting">复制开场白</el-button><el-button type="primary" :icon="Promotion" :loading="saving" :disabled="!job || application?.status === 'applied'" @click="prepare(true)">打开 BOSS 页面</el-button><el-button v-if="application && application.status !== 'applied'" :icon="Check" :loading="saving" @click="confirm">我已在招聘页面发送</el-button><el-button v-if="!jobs.length" :icon="Refresh" @click="loadJobs">重新加载岗位</el-button></div>
     <el-alert v-if="status" :title="status" type="info" :closable="false" />
   </section>
 </template>
