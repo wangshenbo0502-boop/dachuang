@@ -17,6 +17,7 @@ from fastapi import APIRouter, Depends, Path, Query
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.ai.quota import consume_ai_quota
 from app.auth.dependencies import get_current_user, require_owner
 from app.database.session import get_db
 from app.models.job import JobMatchRecord
@@ -102,6 +103,7 @@ def match_jobs(
     if request.user_id is not None:
         require_owner(request.user_id, current_user)
     request = request.model_copy(update={"user_id": current_user.id})
+    consume_ai_quota(database_session, current_user)
     if request.user_id is not None and database_session.get(User, request.user_id) is None:
         raise ResourceNotFoundError(f"用户 {request.user_id} 不存在")
     service = JobMatchService.instance()

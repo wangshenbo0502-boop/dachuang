@@ -169,6 +169,14 @@ class DeepSeekClient:
         """获取全局Token用量统计"""
         return cls._usage_tracker.to_dict()
 
+    def _ensure_within_budget(self) -> None:
+        """超过每日成本预算时拒绝调用真实模型。"""
+        if self._usage_tracker.is_over_budget():
+            raise AIServiceError(
+                "今日 AI 服务额度已用完，请明天再试",
+                error_type=AIServiceError.TYPE_BUDGET_EXCEEDED,
+            )
+
     @property
     def is_mock_mode(self) -> bool:
         return self._mock_mode
@@ -212,6 +220,7 @@ class DeepSeekClient:
         """
         if self._mock_mode:
             return self._mock_response(messages)
+        self._ensure_within_budget()
 
         if temperature is None:
             temperature = self.temperature
@@ -288,6 +297,7 @@ class DeepSeekClient:
                 yield mock_text[i : i + 10]
                 time.sleep(0.02)
             return
+        self._ensure_within_budget()
 
         if temperature is None:
             temperature = self.temperature
@@ -300,11 +310,19 @@ class DeepSeekClient:
             "temperature": temperature,
             "max_tokens": max_tokens,
             "stream": True,
+            # 让最后一个分片携带用量，流式调用同样计入每日预算
+            "stream_options": {"include_usage": True},
         }
 
         try:
             stream = self._client.chat.completions.create(**kwargs)
             for chunk in stream:
+                if chunk.usage:
+                    self._usage_tracker.record(
+                        prompt_tokens=chunk.usage.prompt_tokens,
+                        completion_tokens=chunk.usage.completion_tokens,
+                        model=self.model,
+                    )
                 if chunk.choices and chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
         except Exception as e:
@@ -548,6 +566,7 @@ class AIServiceError(Exception):
     TYPE_API_ERROR = "api_error"
     TYPE_RETRY_EXHAUSTED = "retry_exhausted"
     TYPE_PARSE_ERROR = "parse_error"
+    TYPE_BUDGET_EXCEEDED = "budget_exceeded"
     TYPE_UNKNOWN = "unknown"
 
     def __init__(

@@ -162,6 +162,10 @@ python -m pytest backend/tests/knowledge -q
 
 当前版本已使用 QQ 邮箱验证码注册、Argon2 密码哈希和 JWT 登录，不再通过填写档案编号进入。服务端根据数据库里的账号角色和数据归属校验访问权；退出登录或重置密码会使旧凭证失效。
 
+`APP_ENV` 未设置时按 `production` 处理：关闭 DEBUG 与 Swagger 文档、开启限流，且 `JWT_SECRET` 少于 32 个字符时拒绝启动。本地开发请在 `backend/.env` 中显式写 `APP_ENV=development`。
+
+接入真实模型后，每个学生每天的 AI 请求次数受 `AI_USER_DAILY_LIMIT` 限制（默认 50 次，超出返回 429），平台整体花费超过 `AI_COST_BUDGET_PER_DAY` 后暂停调用（返回 503）；Mock 模式不计数。登录、注册、发送验证码和重置密码另有按 IP 的严格限流（`RATE_LIMIT_AUTH_REQUESTS`）。限流计数保存在单个进程内存中，多 worker 或多实例部署时需要改用 Redis 等共享存储；部署在反向代理之后时需设置 `RATE_LIMIT_TRUST_PROXY=true`。
+
 验证码发送需要配置 `SMTP_HOST`、`SMTP_PORT`、`SMTP_USERNAME`、`SMTP_PASSWORD` 和 `SMTP_FROM`；JWT 需要配置 `JWT_SECRET`。本地开发可使用已有 `DEV_EMAIL_CODE_MODE`，生产环境不启用该模式。招聘者身份通过注册时选择建立，本轮未增加企业资质审核或校园统一身份认证。
 
 独立浏览器验收可在项目根目录运行 `python scripts/verify_recruitment_browser.py`。脚本使用现有 Microsoft Edge、临时端口和临时 SQLite 数据，不修改默认后端代理，也不会写入现有业务数据库；验证码使用验证夹具，不发送真实邮件。

@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.ai.quota import consume_ai_quota
 from app.auth.dependencies import get_current_user, require_owner
 from app.models.user import User
 from app.database.session import get_db
@@ -75,6 +76,7 @@ def optimize_resume(
     if request.user_id is not None:
         require_owner(request.user_id, current_user)
     request = request.model_copy(update={'user_id': current_user.id})
+    consume_ai_quota(db, current_user)
     result = service.optimize_resume(request)
     return success(serialize_model(result), message="简历优化完成")
 

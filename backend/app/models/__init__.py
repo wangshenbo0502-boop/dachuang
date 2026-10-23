@@ -12,6 +12,7 @@ from app.models.application import JobApplication
 from app.models.recruitment import RecruiterProfile, RecruitmentJob, RecruitmentApplication
 from app.models.admin_receipt import BusinessAdminReceipt
 from app.models.activity import GrowthTask, ResourceEvent
+from app.models.ai_usage import AIUsageDaily
 
 __all__ = [
     "User",
@@ -31,6 +32,7 @@ __all__ = [
     "RecruitmentJob",
     "RecruitmentApplication",
     "BusinessAdminReceipt",
+    "AIUsageDaily",
 ]
 
 from app.models.account import Account, EmailCode

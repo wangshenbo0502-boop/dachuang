@@ -20,8 +20,14 @@ class Settings:
 
     def __init__(self) -> None:
         # ── 应用基础 ──
-        self.APP_ENV: Environment = os.getenv("APP_ENV", "development")  # type: ignore[assignment]
-        self.APP_DEBUG: bool = os.getenv("APP_DEBUG", "true").lower() == "true"
+        # 未设置 APP_ENV 时按生产环境处理，避免漏配后静默打开调试、关闭限流。
+        app_env = os.getenv("APP_ENV", "production").strip().lower()
+        if app_env not in ("development", "production", "testing"):
+            raise ValueError(f"APP_ENV 只能是 development / production / testing，当前为 {app_env!r}")
+        self.APP_ENV: Environment = app_env  # type: ignore[assignment]
+        self.APP_DEBUG: bool = not self.is_prod and os.getenv(
+            "APP_DEBUG", "true" if self.is_dev else "false"
+        ).lower() == "true"
         self.APP_NAME: str = os.getenv("APP_NAME", "IT求职与技术成长系统")
         self.APP_VERSION: str = os.getenv("APP_VERSION", "1.2.0")
 
@@ -74,6 +80,8 @@ class Settings:
         self.AI_COST_WARNING_THRESHOLD: float = float(
             os.getenv("AI_COST_WARNING_THRESHOLD", "0.8")
         )  # 预算告警阈值(80%)
+        # 每个学生每天可发起的 AI 请求次数，0 表示不限制；仅在接入真实模型时生效
+        self.AI_USER_DAILY_LIMIT: int = max(0, int(os.getenv("AI_USER_DAILY_LIMIT", "50")))
 
         # ── 限流 ──
         self.RATE_LIMIT_ENABLED: bool = (
@@ -81,6 +89,10 @@ class Settings:
         )
         self.RATE_LIMIT_REQUESTS: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
         self.RATE_LIMIT_WINDOW: int = int(os.getenv("RATE_LIMIT_WINDOW", "60"))  # 秒
+        # 登录、注册、发送验证码、重置密码共用的更严格额度（每个IP每个窗口）
+        self.RATE_LIMIT_AUTH_REQUESTS: int = int(os.getenv("RATE_LIMIT_AUTH_REQUESTS", "10"))
+        # 部署在 nginx 等反向代理之后时开启，按 X-Forwarded-For 识别真实客户端IP
+        self.RATE_LIMIT_TRUST_PROXY: bool = os.getenv("RATE_LIMIT_TRUST_PROXY", "false").lower() == "true"
 
         # ── 日志 ──
         self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "DEBUG" if self.is_dev else "INFO")
@@ -100,6 +112,18 @@ class Settings:
     @property
     def is_testing(self) -> bool:
         return self.APP_ENV == "testing"
+
+    def validate_runtime(self) -> None:
+        """生产环境启动前检查关键配置，缺失时拒绝启动而不是带病运行。"""
+        if not self.is_prod:
+            return
+        problems = []
+        if len(self.JWT_SECRET) < 32:
+            problems.append("JWT_SECRET 未配置或少于 32 个字符")
+        if "*" in self.CORS_ORIGINS:
+            problems.append("CORS_ORIGINS 不能包含 *")
+        if problems:
+            raise RuntimeError("生产环境配置不完整：" + "；".join(problems))
 
     @property
     def ai_enabled(self) -> bool:

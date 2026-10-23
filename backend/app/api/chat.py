@@ -1,13 +1,15 @@
 """AI 求职助手：开放咨询、档案访谈与档案同步。"""
 
 import json
+import logging
 from typing import Any
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
-from app.ai.deepseek_client import DeepSeekClient
+from app.ai.deepseek_client import AIServiceError, DeepSeekClient
+from app.ai.quota import consume_ai_quota
 from app.auth.dependencies import get_current_user, require_owner
 from app.models.user import User
 from app.database.session import get_db
@@ -21,6 +23,7 @@ from app.schemas.user import UserProfileResponse
 from app.services.user_service import UserService
 from app.utils.response import success
 
+logger = logging.getLogger(__name__)
 router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/chat", tags=["AI对话式求职助手"])
 
 
@@ -66,6 +69,7 @@ def _sse_event(event: str, payload: dict[str, Any]) -> str:
 def chat_conversation_stream(request: ChatConversationRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> StreamingResponse:
     """Stream an open-ended consultation response as SSE."""
     require_owner(request.user_id, current_user)
+    consume_ai_quota(db, current_user)
     messages = _conversation_messages(db, request)
     action = _suggested_action(request)
 
@@ -75,8 +79,13 @@ def chat_conversation_stream(request: ChatConversationRequest, db: Session = Dep
             for chunk in DeepSeekClient.instance().chat_stream(messages, temperature=0.65, max_tokens=1800):
                 yield _sse_event("chunk", {"type": "chunk", "content": chunk})
             yield _sse_event("complete", {"type": "complete", "result": {"suggested_action": action}})
-        except Exception as exc:
-            yield _sse_event("error", {"type": "error", "message": f"AI 服务异常：{exc}"})
+        except AIServiceError as exc:
+            message = exc.message if exc.error_type == AIServiceError.TYPE_BUDGET_EXCEEDED else "AI 服务暂时不可用，请稍后重试"
+            logger.warning("conversation stream failed: %s", exc.message)
+            yield _sse_event("error", {"type": "error", "message": message})
+        except Exception:
+            logger.exception("conversation stream failed")
+            yield _sse_event("error", {"type": "error", "message": "AI 服务暂时不可用，请稍后重试"})
 
     return StreamingResponse(
         generate(),
@@ -89,6 +98,7 @@ def chat_conversation_stream(request: ChatConversationRequest, db: Session = Dep
 def profile_turn(request: ChatTurnRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)) -> dict[str, Any]:
     """通过不限轮数的轻量访谈补全就业档案，结果只作为待审核草稿返回。"""
     require_owner(request.user_id, current_user)
+    consume_ai_quota(db, current_user)
     context = _user_context(db, request.user_id)
     question_number = sum(1 for m in request.messages if m.role == "user")
     system = """你是大学生就业服务平台的档案助手。你的任务是通过自然对话，帮用户补全和优化就业档案，用户可以回答任意轮数。

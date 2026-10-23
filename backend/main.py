@@ -3,6 +3,7 @@
 文件作用：FastAPI 项目启动入口，负责创建应用实例、注册路由以及配置中间件。
 """
 
+import logging
 import os
 from contextlib import asynccontextmanager
 
@@ -19,7 +20,7 @@ from app.database.bootstrap import initialize_database_schema
 from app.utils.exceptions import AppException
 from app.utils.middleware import request_logging_middleware, configure_logging
 from app.utils.response import error, success, ErrorCode
-from app.ai.deepseek_client import DeepSeekClient
+from app.ai.deepseek_client import AIServiceError, DeepSeekClient
 from app.api.recruitment import recruiter_router, student_router
 from app.api.internal_admin import router as internal_admin_router
 
@@ -27,6 +28,7 @@ load_dotenv()
 
 # 初始化配置和日志
 settings = get_settings()
+settings.validate_runtime()
 configure_logging()
 
 
@@ -42,6 +44,10 @@ app = FastAPI(
     version=settings.APP_VERSION,
     debug=settings.APP_DEBUG,
     lifespan=lifespan,
+    # 生产环境不公开接口文档，避免向匿名访问者暴露完整接口清单
+    docs_url=None if settings.is_prod else "/docs",
+    redoc_url=None if settings.is_prod else "/redoc",
+    openapi_url=None if settings.is_prod else "/openapi.json",
 )
 
 # ── 中间件注册 ──
@@ -63,6 +69,21 @@ async def handle_app_exception(_: Request, exc: AppException) -> JSONResponse:
     return JSONResponse(
         status_code=exc.status_code,
         content=error(code=exc.code, message=exc.message),
+    )
+
+
+@app.exception_handler(AIServiceError)
+async def handle_ai_service_error(_: Request, exc: AIServiceError) -> JSONResponse:
+    # 上游错误详情只写日志，不返回给客户端
+    logging.getLogger(__name__).warning("AI service error (%s): %s", exc.error_type, exc.message)
+    if exc.error_type == AIServiceError.TYPE_BUDGET_EXCEEDED:
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content=error(code=ErrorCode.AI_BUDGET_EXCEEDED.value, message=exc.message),
+        )
+    return JSONResponse(
+        status_code=status.HTTP_502_BAD_GATEWAY,
+        content=error(code=ErrorCode.AI_SERVICE_ERROR.value, message="AI 服务暂时不可用，请稍后重试"),
     )
 
 
