@@ -3,6 +3,7 @@
  * 文件作用：Vue 3 应用构建配置与 /api 后端代理。
  */
 
+/// <reference types="vitest" />
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from "node:url";
@@ -13,6 +14,10 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
+  },
+  test: {
+    environment: "jsdom",
+    include: ["src/**/*.spec.ts"],
   },
   server: {
     host: "0.0.0.0",

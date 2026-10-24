@@ -22,8 +22,12 @@ import { useUserStore } from "@/stores/user";
 import {
   createAssistantId,
   createAssistantSession,
-  readAssistantSessionStore,
-  writeAssistantSessionStore,
+  listAssistantSessions,
+  loadAssistantSession,
+  migrateLegacyAssistantStorage,
+  normalizeSession,
+  registerAssistantSession,
+  saveAssistantSession,
   type AssistantMessage,
   type AssistantMode,
   type AssistantSession,
@@ -38,9 +42,12 @@ const route = useRoute();
 const router = useRouter();
 const user = useUserStore();
 const profiles = useProfileStore();
-const sessions = ref<AssistantSession[]>([]);
-const activeId = ref("");
+// 只在内存里持有当前打开的对话；完整历史保存在服务器，按登录账号隔离
+const current = ref<AssistantSession | null>(null);
+const activeId = computed(() => current.value?.id || "");
 const transientSession = ref(createAssistantSession(route.query.mode === "profile" ? "profile" : "consult"));
+const restoring = ref(true);
+const saveFailed = ref(false);
 const input = ref("");
 const reviewInput = ref("");
 const loading = ref(false);
@@ -60,7 +67,7 @@ const actionLabels = {
 const actionPaths = {
   profile: "/coach?mode=profile", resume: "/resume", analysis: "/analysis", growth: "/growth", jobs: "/jobs",
 } as const;
-const activeSession = computed(() => sessions.value.find(item => item.id === activeId.value) || transientSession.value);
+const activeSession = computed(() => current.value || transientSession.value);
 const mode = computed<AssistantMode>({
   get: () => activeSession.value.mode,
   set: value => {
@@ -102,36 +109,6 @@ function createMessage(role: ChatMessage["role"], content: string, failed = fals
   return { role, content, failed, id: createAssistantId(), createdAt: new Date().toISOString() };
 }
 
-function normalizeMessages(value: unknown): AssistantMessage[] {
-  if (!Array.isArray(value)) return [];
-  return value.flatMap(item => {
-    if (!item || typeof item !== "object") return [];
-    const raw = item as Partial<AssistantMessage>;
-    if ((raw.role !== "user" && raw.role !== "assistant") || typeof raw.content !== "string") return [];
-    const normalized = createMessage(raw.role, raw.content, Boolean(raw.failed));
-    if (typeof raw.id === "string" && raw.id) normalized.id = raw.id;
-    if (typeof raw.createdAt === "string" && raw.createdAt) normalized.createdAt = raw.createdAt;
-    return [normalized];
-  });
-}
-
-function normalizeSession(value: Partial<AssistantSession>): AssistantSession {
-  const fallback = createAssistantSession(value.mode === "profile" ? "profile" : "consult");
-  return {
-    ...fallback,
-    id: typeof value.id === "string" && value.id ? value.id : fallback.id,
-    title: typeof value.title === "string" && value.title.trim() ? value.title.trim().slice(0, 28) : "新对话",
-    mode: value.mode === "profile" ? "profile" : "consult",
-    target: typeof value.target === "string" ? value.target : "",
-    consultMessages: normalizeMessages(value.consultMessages),
-    profileMessages: normalizeMessages(value.profileMessages),
-    draft: value.draft && typeof value.draft === "object" ? value.draft : {},
-    suggestedAction: value.suggestedAction || null,
-    createdAt: typeof value.createdAt === "string" ? value.createdAt : fallback.createdAt,
-    updatedAt: typeof value.updatedAt === "string" ? value.updatedAt : fallback.updatedAt,
-  };
-}
-
 function ensureProfileGreeting() {
   if (!profileMessages.value.length) {
     profileMessages.value.push(createMessage(
@@ -151,9 +128,15 @@ function updateSessionTitle(content: string) {
   if (title) activeSession.value.title = title.length > 22 ? `${title.slice(0, 22)}…` : title;
 }
 
+/** 保存当前对话到服务器；失败时在页面上提示，下一次变更会再次尝试保存。 */
 function persist() {
-  if (!user.userId || !sessions.value.length) return;
-  writeAssistantSessionStore(user.userId, { version: 3, activeId: activeId.value, sessions: sessions.value });
+  if (!current.value) return;
+  // 还没有任何用户消息的新对话不写入服务器，避免切换模式等操作产生空记录
+  const hasUserMessage = [...current.value.consultMessages, ...current.value.profileMessages].some(item => item.role === "user");
+  if (!hasUserMessage) return;
+  saveAssistantSession(current.value)
+    .then(() => { saveFailed.value = false; })
+    .catch(() => { saveFailed.value = true; });
 }
 
 function syncRoute() {
@@ -163,78 +146,66 @@ function syncRoute() {
   router.replace({ path: "/coach", query });
 }
 
-function restore() {
-  if (!user.userId) return;
-  const saved = readAssistantSessionStore(user.userId);
-  if (saved?.sessions.length) {
-    sessions.value = saved.sessions.map(normalizeSession);
-    const requestedId = typeof route.query.session === "string" ? route.query.session : "";
-    activeId.value = sessions.value.some(item => item.id === requestedId)
-      ? requestedId
-      : sessions.value.some(item => item.id === saved.activeId) ? saved.activeId : sessions.value[0].id;
-  } else {
-    const migrated = createAssistantSession(route.query.mode === "profile" ? "profile" : "consult");
-    try {
-      const old = JSON.parse(localStorage.getItem(`ai-career-assistant-v2-${user.userId}`) || "null");
-      const legacy = JSON.parse(localStorage.getItem(`career-copilot-chat-${user.userId}`) || "null");
-      if (old?.version === 2) {
-        migrated.mode = old.mode === "profile" ? "profile" : "consult";
-        migrated.target = old.consult?.target || "";
-        migrated.consultMessages = normalizeMessages(old.consult?.messages);
-        migrated.profileMessages = normalizeMessages(old.profile?.messages);
-        migrated.draft = old.profile?.draft && typeof old.profile.draft === "object" ? old.profile.draft : {};
-        migrated.suggestedAction = old.consult?.suggestedAction || null;
-      } else if (legacy) {
-        migrated.target = legacy.target || "";
-        migrated.consultMessages = normalizeMessages(legacy.messages);
-      }
-    } catch {
-      // Invalid legacy data is ignored; a fresh session is still available.
-    }
-    const firstUserMessage = [...migrated.consultMessages, ...migrated.profileMessages].find(item => item.role === "user");
-    if (firstUserMessage) {
-      const title = firstUserMessage.content.replace(/\s+/g, " ").trim();
-      migrated.title = title.length > 22 ? `${title.slice(0, 22)}…` : title || "新对话";
-    }
-    sessions.value = [migrated];
-    activeId.value = migrated.id;
-  }
-  if (route.query.mode === "profile") activeSession.value.mode = "profile";
+function openSession(session: AssistantSession) {
+  current.value = session;
+  input.value = "";
+  reviewInput.value = "";
+  if (route.query.mode === "profile") session.mode = "profile";
   ensureProfileGreeting();
-  persist();
   syncRoute();
+  scrollBottom();
+}
+
+async function restore() {
+  if (!user.userId) return;
+  restoring.value = true;
+  try {
+    // 旧版本把对话存在浏览器里，先上传到本人账号下并从浏览器删除
+    await migrateLegacyAssistantStorage(user.userId).catch(() => undefined);
+    const requestedId = typeof route.query.session === "string" ? route.query.session : "";
+    let session = requestedId ? await loadAssistantSession(requestedId) : null;
+    if (!session && !requestedId) {
+      const [latest] = await listAssistantSessions();
+      if (latest) session = await loadAssistantSession(latest.id);
+    }
+    if (session) openSession(normalizeSession(session));
+    else createConversation(route.query.mode === "profile" ? "profile" : "consult");
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : "对话记录加载失败，请刷新重试");
+    createConversation("consult");
+  } finally {
+    restoring.value = false;
+  }
+}
+
+/** 新对话先只登记在本页，发出第一条消息时才写入服务器，避免产生空对话。 */
+function createConversation(mode: AssistantMode) {
+  stop();
+  const session = createAssistantSession(mode);
+  registerAssistantSession(session);
+  openSession(session);
 }
 
 function startNewConversation() {
-  stop();
-  const session = createAssistantSession("consult");
-  sessions.value.unshift(session);
-  activeId.value = session.id;
-  input.value = "";
-  reviewInput.value = "";
-  persist();
-  syncRoute();
-  scrollBottom();
+  createConversation("consult");
 }
 
-function activateSession(id: string) {
+async function activateSession(id: string) {
   if (!id || id === activeId.value) return;
-  const local = sessions.value.find(item => item.id === id);
-  if (!local && user.userId) {
-    const saved = readAssistantSessionStore(user.userId);
-    if (saved) sessions.value = saved.sessions.map(normalizeSession);
-  }
-  const next = sessions.value.find(item => item.id === id);
-  if (!next) return;
   stop();
-  activeId.value = next.id;
-  input.value = "";
-  reviewInput.value = "";
-  if (route.query.mode === "profile") next.mode = "profile";
-  ensureProfileGreeting();
-  persist();
-  syncRoute();
-  scrollBottom();
+  try {
+    const next = await loadAssistantSession(id);
+    // 加载期间用户可能又切换了对话
+    if (route.query.session !== id) return;
+    if (!next) {
+      ElMessage.warning("对话不存在或已被删除");
+      createConversation("consult");
+      return;
+    }
+    openSession(normalizeSession(next));
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : "对话加载失败，请稍后重试");
+  }
 }
 
 function mergeDraft(next: Record<string, unknown>, targetDraft = draft.value) {
@@ -378,7 +349,7 @@ async function sendProfile(content: string): Promise<boolean> {
 
 async function send(content?: string) {
   const text = (content ?? input.value).trim();
-  if (!text || loading.value) return;
+  if (!text || loading.value || restoring.value || !current.value) return;
   input.value = "";
   if (mode.value === "consult") await sendConsult(text);
   else await sendProfile(text);
@@ -510,7 +481,7 @@ watch(() => route.query.mode, value => {
 
 onBeforeRouteLeave(() => {
   if (!hasDraft.value) return true;
-  return window.confirm("档案草稿还没有写入正式档案。离开后草稿仍会保存在当前浏览器，确定离开吗？");
+  return window.confirm("档案草稿还没有写入正式档案。离开后草稿会随对话保存在你的账号中，确定离开吗？");
 });
 
 onMounted(async () => {
@@ -554,8 +525,9 @@ onBeforeUnmount(() => {
           <el-button v-else class="mobile-draft-button" :icon="EditPen" @click="draftDrawer = true">查看草稿</el-button>
         </header>
 
-        <div ref="chatBody" class="assistant-chat-body">
-          <div v-if="mode === 'consult' && !consultMessages.length" class="conversation-empty">
+        <div ref="chatBody" class="assistant-chat-body" :aria-busy="restoring">
+          <div v-if="restoring" class="conversation-empty"><p>正在加载对话记录…</p></div>
+          <div v-else-if="mode === 'consult' && !consultMessages.length" class="conversation-empty">
             <div class="conversation-empty-icon"><img src="/images/assistant-robot.webp" alt="" /></div>
             <h3>今天想聊什么？</h3>
             <p>可以从一个具体问题开始，也可以直接讲讲你的经历和目标。</p>
@@ -566,7 +538,7 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
-          <div v-for="(message, index) in messages" :key="message.id" class="chat-message" :class="[message.role, { failed: message.failed }]">
+          <div v-for="(message, index) in (restoring ? [] : messages)" :key="message.id" class="chat-message" :class="[message.role, { failed: message.failed }]">
             <div class="message-avatar"><img v-if="message.role === 'assistant'" src="/images/assistant-robot.webp" alt="" /><el-icon v-else><UserFilled /></el-icon></div>
             <div class="message-content">
               <div v-if="message.content" class="message-bubble">{{ message.content }}</div>
@@ -605,7 +577,7 @@ onBeforeUnmount(() => {
             {{ actionLabels[suggestedAction] }}
           </button>
         </div>
-        <p class="conversation-footnote">对话会保存在这个浏览器中，可从左侧最近对话继续上次的内容。</p>
+        <p class="conversation-footnote" :class="{ 'is-error': saveFailed }" role="status">{{ saveFailed ? "对话暂未保存到服务器，网络恢复后发送下一条消息时会重新保存。" : "对话仅保存在你的账号中，其他用户无法查看，可从左侧历史对话继续。" }}</p>
       </section>
 
       <aside v-if="mode === 'profile'" class="profile-draft-panel desktop-draft-panel">

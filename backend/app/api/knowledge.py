@@ -5,6 +5,8 @@ performed through scripts/seed_knowledge.py, not through the student API.
 """
 from __future__ import annotations
 
+import logging
+
 from fastapi import APIRouter, Depends, Path, Query
 from fastapi.responses import JSONResponse
 
@@ -14,6 +16,7 @@ from app.schemas.knowledge import KnowledgeSearchRequest
 from app.utils.exceptions import AppException, ResourceNotFoundError
 from app.utils.response import success
 
+logger = logging.getLogger(__name__)
 router = APIRouter(dependencies=[Depends(get_current_user)], prefix="/api/knowledge", tags=["知识库"])
 
 
@@ -22,7 +25,9 @@ def _service() -> KnowledgeService:
 
 
 def _knowledge_error(exc: Exception) -> AppException:
-    return AppException(message=f"知识库服务暂不可用：{exc}", code=3101, status_code=503)
+    # 异常原文可能包含数据库地址等内部信息，只写日志不返回给前端
+    logger.warning("knowledge service unavailable: %s", exc, exc_info=exc)
+    return AppException(message="知识库服务暂不可用，请稍后重试", code=3101, status_code=503)
 
 
 @router.get("")
@@ -47,6 +52,9 @@ def search_knowledge(body: KnowledgeSearchRequest) -> dict:
 @router.get("/health")
 def knowledge_health() -> dict:
     result = _service().health()
+    if "error" in result:
+        logger.warning("knowledge health check failed: %s", result["error"])
+        result = {key: value for key, value in result.items() if key != "error"}
     payload = success(result, message="知识库健康检查完成")
     if result.get("status") == "failed":
         return JSONResponse(status_code=503, content=payload)

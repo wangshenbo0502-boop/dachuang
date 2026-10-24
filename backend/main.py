@@ -22,6 +22,7 @@ from app.utils.middleware import request_logging_middleware, configure_logging
 from app.utils.response import error, success, ErrorCode
 from app.ai.deepseek_client import AIServiceError, DeepSeekClient
 from app.api.recruitment import recruiter_router, student_router
+from app.api.assistant_sessions import router as assistant_sessions_router
 from app.api.internal_admin import router as internal_admin_router
 
 load_dotenv()
@@ -165,6 +166,7 @@ app.include_router(resume.router)
 app.include_router(activity.router)
 app.include_router(growth.router)
 app.include_router(knowledge.router)
+app.include_router(assistant_sessions_router)
 app.include_router(chat.router)
 app.include_router(application.router)
 if settings.INTERNAL_ADMIN_ENABLED:

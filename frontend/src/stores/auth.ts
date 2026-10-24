@@ -1,6 +1,8 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { api } from "@/api";
+import { ApiError } from "@/api/request";
+import { clearAssistantSessionCache } from "@/utils/assistantSessions";
 import type { StudentProfile } from "@/types/api";
 import { clearAuthToken, getAuthToken, setAuthToken } from "@/utils/authSession";
 import type { AccountRole } from "@/utils/authSession";
@@ -18,6 +20,8 @@ export const useAuthStore = defineStore("auth", () => {
   let hydrated = false;
 
   async function establish(payload: { access_token: string; user: AccountIdentity }) {
+    // 切换账号时不能沿用上一个账号留在内存里的对话
+    clearAssistantSessionCache();
     setAuthToken(payload.access_token);
     token.value = payload.access_token;
     account.value = payload.user;
@@ -40,6 +44,7 @@ export const useAuthStore = defineStore("auth", () => {
   function clearLocal() {
     token.value = null; account.value = null; user.value = null; hydrated = false;
     clearAuthToken();
+    clearAssistantSessionCache();
   }
   async function fetchMe() {
     if (!token.value) return null;
@@ -48,7 +53,14 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = account.value.role === "student" ? await api.getUser(account.value.profile_id) : null;
       hydrated = true;
       return account.value;
-    } catch { clearLocal(); return null; }
+    } catch (error) {
+      // 只有凭证确实失效才退出登录；网络波动或服务端 5xx 时保留登录态，交给调用方提示重试
+      if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+        clearLocal();
+        return null;
+      }
+      throw error;
+    }
   }
   async function hydrate() {
     if (hydrated && account.value) return account.value;

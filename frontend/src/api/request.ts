@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import type { ApiEnvelope } from "@/types/api";
-import { getAuthToken, clearAuthToken } from "@/utils/authSession";
+import { getAuthToken, handleUnauthorized } from "@/utils/authSession";
 export class ApiError extends Error {
   constructor(message: string, public code?: number, public status?: number) {
     super(message);
@@ -26,13 +26,9 @@ request.interceptors.response.use(
   (error: AxiosError<ApiEnvelope<unknown>>) => {
     if (axios.isCancel(error)) return Promise.reject(error);
     const status = error.response?.status;
-    const activeToken = getAuthToken();
-    if (status === 401 && activeToken && error.config?.headers?.Authorization === `Bearer ${activeToken}`) {
-      clearAuthToken();
-      if (!["/login", "/register", "/forgot-password"].includes(window.location.pathname)) {
-        const redirect = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-        window.location.assign(`/login?redirect=${encodeURIComponent(redirect)}`);
-      }
+    if (status === 401) {
+      const sent = String(error.config?.headers?.Authorization || "").replace(/^Bearer /, "");
+      handleUnauthorized(sent || null);
     }
     const code = error.response?.data?.code;
     const validationMessage = Array.isArray(error.response?.data?.data)

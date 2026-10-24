@@ -6,6 +6,7 @@ import { safeInternalRedirect } from "@/utils/authSession";
 const routes=[
   {path:"/login",name:"login",component:()=>import("@/views/login/LoginView.vue"),meta:{title:"登录",public:true}},
   {path:"/register",name:"register",component:()=>import("@/views/login/RegisterView.vue"),meta:{title:"注册",public:true}},
+  {path:"/offline",name:"offline",component:()=>import("@/views/ServiceUnavailableView.vue"),meta:{title:"服务暂不可用",offline:true}},
   {path:"/forgot-password",name:"forgot-password",component:()=>import("@/views/login/ForgotPasswordView.vue"),meta:{title:"重置密码",public:true}},
   {path:"/",component:MainLayout,redirect:"/dashboard",children:[
     {path:"recruiter",name:"recruiter",component:()=>import("@/views/recruiter/RecruiterView.vue"),meta:{title:"招聘工作台",role:"recruiter"}},
@@ -34,7 +35,14 @@ const router=createRouter({history:createWebHistory(),routes,scrollBehavior:()=>
 router.beforeEach(async to => {
   const u = useUserStore();
   document.title = `${String(to.meta.title || "")} - IT 求职成长系统`;
-  const identity = await u.hydrate();
+  if (to.meta.offline) return true;
+  let identity;
+  try {
+    identity = await u.hydrate();
+  } catch {
+    // 网络或服务端故障时不清除登录态，提示稍后重试
+    return {path: "/offline", query: {redirect: to.fullPath}};
+  }
   if (to.meta.public) return identity ? safeInternalRedirect(to.query.redirect, identity.role) : true;
   if (!identity) return {path: "/login", query: {redirect: to.fullPath, role: to.meta.role === "recruiter" ? "recruiter" : "student"}};
   if (to.path !== "/settings") {

@@ -75,3 +75,5 @@
   .conversation-next-step { flex-direction: column; align-items: flex-start; padding-inline: 16px; }
   .mobile-draft-button { align-self: flex-start; }
 }
+
+.conversation-footnote.is-error { color: var(--el-color-danger, #f56c6c); }

@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import BrandMark from "@/components/layout/BrandMark.vue";
 import { useAppStore } from "@/stores/app";
 import { useUserStore } from "@/stores/user";
 import {
+  cachedSessionSummaries,
   createAssistantSession,
-  readAssistantSessionStore,
-  writeAssistantSessionStore,
-  type AssistantSession,
+  deleteAssistantSession,
+  listAssistantSessions,
+  registerAssistantSession,
+  type AssistantSessionSummary,
 } from "@/utils/assistantSessions";
 import {
   ArrowLeft,
@@ -34,7 +36,7 @@ const route = useRoute();
 const router = useRouter();
 const app = useAppStore();
 const user = useUserStore();
-const recentSessions = ref<AssistantSession[]>([]);
+const recentSessions = ref<AssistantSessionSummary[]>([]);
 const sessionSearch = ref("");
 const isMobile = ref(window.matchMedia("(max-width: 900px)").matches);
 const isCompact = computed(() => app.sidebarCollapsed && !isMobile.value);
@@ -75,36 +77,37 @@ function handleViewport(event: MediaQueryListEvent) {
   if (!event.matches) closeMobile();
 }
 
-function loadRecentSessions() {
+function refreshFromCache() {
+  recentSessions.value = user.userId ? [...cachedSessionSummaries()] : [];
+}
+
+async function loadRecentSessions() {
   if (!user.userId) {
     recentSessions.value = [];
     return;
   }
-  const store = readAssistantSessionStore(user.userId);
-  recentSessions.value = [...(store?.sessions || [])]
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  try {
+    recentSessions.value = [...await listAssistantSessions()];
+  } catch {
+    // 列表加载失败不影响其他功能，进入 AI 求职助手时会再次加载
+  }
 }
 
 function newConversation() {
   if (!user.userId) return;
   const session = createAssistantSession("consult");
-  const existing = readAssistantSessionStore(user.userId);
-  writeAssistantSessionStore(user.userId, {
-    version: 3,
-    activeId: session.id,
-    sessions: [session, ...(existing?.sessions || [])],
-  });
+  registerAssistantSession(session);
   router.push({ path: "/coach", query: { session: session.id } });
   sessionSearch.value = "";
   closeMobile();
 }
 
-function openSession(session: AssistantSession) {
+function openSession(session: AssistantSessionSummary) {
   router.push({ path: "/coach", query: { session: session.id, ...(session.mode === "profile" ? { mode: "profile" } : {}) } });
   closeMobile();
 }
 
-async function removeSession(session: AssistantSession) {
+async function removeSession(session: AssistantSessionSummary) {
   if (!user.userId) return;
   try {
     await ElMessageBox.confirm(`删除“${session.title}”的聊天记录？`, "删除对话", {
@@ -115,14 +118,21 @@ async function removeSession(session: AssistantSession) {
   } catch {
     return;
   }
-  const store = readAssistantSessionStore(user.userId);
-  if (!store) return;
-  const remaining = store.sessions.filter(item => item.id !== session.id);
-  const next = remaining.find(item => item.id === store.activeId) || remaining[0] || createAssistantSession("consult");
-  const sessions = remaining.length ? remaining : [next];
-  writeAssistantSessionStore(user.userId, { version: 3, activeId: next.id, sessions });
+  try {
+    await deleteAssistantSession(session.id);
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : "删除失败，请稍后重试");
+    return;
+  }
   if (route.path === "/coach" && activeSessionId.value === session.id) {
-    router.replace({ path: "/coach", query: { session: next.id, ...(next.mode === "profile" ? { mode: "profile" } : {}) } });
+    const next = recentSessions.value.find(item => item.id !== session.id);
+    if (next) {
+      router.replace({ path: "/coach", query: { session: next.id, ...(next.mode === "profile" ? { mode: "profile" } : {}) } });
+    } else {
+      const fresh = createAssistantSession("consult");
+      registerAssistantSession(fresh);
+      router.replace({ path: "/coach", query: { session: fresh.id } });
+    }
   }
 }
 
@@ -156,13 +166,11 @@ watch(() => route.fullPath, closeMobile);
 onMounted(() => {
   loadRecentSessions();
   viewport.addEventListener("change", handleViewport);
-  window.addEventListener("assistant-sessions-updated", loadRecentSessions);
-  window.addEventListener("storage", loadRecentSessions);
+  window.addEventListener("assistant-sessions-updated", refreshFromCache);
 });
 onBeforeUnmount(() => {
   viewport.removeEventListener("change", handleViewport);
-  window.removeEventListener("assistant-sessions-updated", loadRecentSessions);
-  window.removeEventListener("storage", loadRecentSessions);
+  window.removeEventListener("assistant-sessions-updated", refreshFromCache);
 });
 </script>
 
